@@ -25,7 +25,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   List<Map<String, String>> displayexercisecat = [];
   List<Image> displaycategoryimages = [];
   String? selectedValue;
-  Widget customSearchBar = const Text('Exercise');
+  Widget customSearchBar = const Text('Exercise',style: TextStyle(color: Colors.black),);
   String value = '';
   void find(String str) {
     String i = '';
@@ -65,6 +65,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     return Scaffold(
       appBar: AppBar(
         title: customSearchBar,
+        backgroundColor: Colors.white,
         actions: [
           AnimatedSearchBar(
             shadow: const [
@@ -72,6 +73,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   color: Colors.black38, blurRadius: 6, offset: Offset(0, 6))
             ],
             backgroundColor: Colors.blue[100],
+            failMessage: 'No Items found',
+
+            //hideSearchBoxWhenItemSelected: true,
             buttonColor: Colors.blue,
             width: w * 0.55,
             submitButtonColor: Colors.blue,
@@ -127,8 +131,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 children: const [
                   Icon(
                     Icons.filter_alt_rounded,
-                    size: 16,
-                    color: Colors.white,
+                    size: 25,
+                    color: Colors.blue,
                   ),
                   SizedBox(
                     width: 4,
@@ -158,6 +162,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               },
               icon: const Icon(
                 Icons.arrow_forward_ios_outlined,
+                color: Colors.blue,
               ),
               iconSize: 14,
               iconEnabledColor: Colors.yellow,
@@ -166,7 +171,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               buttonWidth: 50,
               //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
               buttonDecoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Colors.white,
               ),
               buttonElevation: 2,
               itemHeight: 40,

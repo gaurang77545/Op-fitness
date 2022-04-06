@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
+import 'package:op_fitnessapp/measurescreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -662,9 +663,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text('Hello Again 233'),
       ),
       ExerciseScreen(exercisecat, categoryimages,combinedtypesofcategory,exercisenames),
-      Center(
-        child: Text('Hello Again 4'),
-      ),
+      MeasureScreen(),
     ];
   }
 
