@@ -55,22 +55,40 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   Widget listitem(String title, String val) {
     return val == ''
-        ? Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
-          )
-        : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        ? InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                title,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
-              ),
-              Text(
-                val,
-                style: TextStyle(fontSize: 20),
-              ),
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
+                ),
+                Icon(Icons.arrow_circle_right_outlined,color: Colors.blueAccent,size: 25,)
             ],
-          );
+          ),
+          onTap: (){},
+        )
+        : InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
+                    ),
+                    Text(
+                      val,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+                 Icon(Icons.arrow_circle_right_outlined,color: Colors.blueAccent,size: 25)
+            ],
+          ),
+          onTap: (){},
+        );
   }
 }

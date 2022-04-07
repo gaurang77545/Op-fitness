@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
+import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -572,7 +575,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List<Image> categoryimages = [];
   PersistentTabController _controller =
-      PersistentTabController(initialIndex: 3);
+      PersistentTabController(initialIndex: 2);
 
   void mapstuff() {
     for (int i = 0; i < exercisenames.length; i++) {
@@ -629,7 +632,7 @@ class _MyHomePageState extends State<MyHomePage> {
       exercisecat
           .add({'name': exercisenames[i], 'type': exercisecategories[i]});
     }
-   // print(categoryimages);
+    // print(categoryimages);
     // print(exercisecat);
     //print(exercisecat.length);
   }
@@ -656,13 +659,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      Center(
-        child: Text('Hello Again 2'),
-      ),
-      Center(
-        child: Text('Hello Again 233'),
-      ),
-      ExerciseScreen(exercisecat, categoryimages,combinedtypesofcategory,exercisenames),
+      WeightChart(),
+      WeightChart(),
+      ExerciseScreen(
+          exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
     ];
   }
@@ -702,47 +702,44 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     h = size.height;
     w = size.width;
     return Scaffold(
-        
         body: PersistentTabView(
-          context,
-          controller: _controller,
-          screens: _buildScreens(),
-          items: _navBarsItems(),
-          confineInSafeArea: true,
-          backgroundColor: Colors.white, // Default is Colors.white.
-          handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset:
-              true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-          stateManagement: true, // Default is true.
-          hideNavigationBarWhenKeyboardShows:
-              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-          decoration: NavBarDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            colorBehindNavBar: Colors.white,
-          ),
-          popAllScreensOnTapOfSelectedTab: true,
-          popActionScreens: PopActionScreensType.all,
-          itemAnimationProperties: ItemAnimationProperties(
-            // Navigation Bar's items animation properties.
-            duration: Duration(milliseconds: 200),
-            curve: Curves.ease,
-          ),
-          screenTransitionAnimation: ScreenTransitionAnimation(
-            // Screen transition animation on change of selected tab.
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
-          navBarStyle: NavBarStyle
-              .style1, // Choose the nav bar style with this property.
-        ));
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: Colors.white, // Default is Colors.white.
+      handleAndroidBackButtonPress: true, // Default is true.
+      resizeToAvoidBottomInset:
+          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+      stateManagement: true, // Default is true.
+      hideNavigationBarWhenKeyboardShows:
+          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      decoration: NavBarDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        colorBehindNavBar: Colors.white,
+      ),
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: ItemAnimationProperties(
+        // Navigation Bar's items animation properties.
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      ),
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        // Screen transition animation on change of selected tab.
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle:
+          NavBarStyle.style1, // Choose the nav bar style with this property.
+    ));
   }
 }
