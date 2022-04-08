@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart.dart';
+import 'package:op_fitnessapp/weightchart.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -27,7 +30,10 @@ class _MeasureScreenState extends State<MeasureScreen> {
     w = size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Measure',style: TextStyle(color: Colors.black),),
+        title: Text(
+          'Measure',
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -38,46 +44,62 @@ class _MeasureScreenState extends State<MeasureScreen> {
             SizedBox(
               height: h * 0.1,
             ),
-            listitem('Weight', weight),
+            listitem('Weight', weight, WeightChart()),
             SizedBox(
               height: h * 0.05,
             ),
-            listitem('Body Fat Percentage', bodyfatpercentage),
+            listitem('Body Fat Percentage', bodyfatpercentage,
+                BodyFatPercentageChart()),
             SizedBox(
               height: h * 0.05,
             ),
-            listitem('Caloric intake', calorieintake),
+            listitem('Caloric intake', calorieintake, CalorieIntakeChart()),
           ],
         ),
       ),
     );
   }
 
-  Widget listitem(String title, String val) {
+  Widget listitem(String title, String val, Widget screen) {
     return val == ''
         ? InkWell(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 25,
+                      letterSpacing: 2),
                 ),
-                Icon(Icons.arrow_circle_right_outlined,color: Colors.blueAccent,size: 25,)
-            ],
-          ),
-          onTap: (){},
-        )
+                Icon(
+                  Icons.arrow_circle_right_outlined,
+                  color: Colors.blueAccent,
+                  size: 25,
+                )
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => screen),
+              );
+            },
+          )
         : InkWell(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25,letterSpacing: 2),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 25,
+                          letterSpacing: 2),
                     ),
                     Text(
                       val,
@@ -85,10 +107,16 @@ class _MeasureScreenState extends State<MeasureScreen> {
                     ),
                   ],
                 ),
-                 Icon(Icons.arrow_circle_right_outlined,color: Colors.blueAccent,size: 25)
-            ],
-          ),
-          onTap: (){},
-        );
+                Icon(Icons.arrow_circle_right_outlined,
+                    color: Colors.blueAccent, size: 25)
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => screen),
+              );
+            },
+          );
   }
 }

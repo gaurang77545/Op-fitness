@@ -660,7 +660,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       WeightChart(),
-      WeightChart(),
+      CalorieIntakeChart(),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
