@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/weighthelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WeightChart extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class _WeightChartState extends State<WeightChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<WeightData> data = [
     // WeightData(formattedate( DateTime.now()), 35),
     // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
@@ -24,13 +27,16 @@ class _WeightChartState extends State<WeightChart> {
     // WeightData('23 Jan', 40),
     // WeightData('6 Jan', 2),
   ];
+  final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
   String weight = '';
   TextEditingController weightcontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
-
+    dbHelper.database;
+    _query();
+    // _delete();
     // data.add(WeightData(formattedate(DateTime.now()), 35));
     // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
     // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
@@ -71,8 +77,8 @@ class _WeightChartState extends State<WeightChart> {
             Container(
               height: h * 0.45,
               margin: EdgeInsets.all(5),
-              decoration:
-                  BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.grey)),
               width: w,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: SfCartesianChart(
@@ -101,7 +107,7 @@ class _WeightChartState extends State<WeightChart> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left:8.0,right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -110,19 +116,20 @@ class _WeightChartState extends State<WeightChart> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         showDialog(
                             context: context,
                             builder: (ctx) {
                               String date = DateFormat('yyyy-MM-dd')
                                   .format(DateTime.now())
                                   .toString();
-                              return StatefulBuilder(builder: (context, setState) {
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
                                 weight = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(32.0))),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(32.0))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -134,18 +141,27 @@ class _WeightChartState extends State<WeightChart> {
                                       )
                                     ],
                                   ),
-                                  content: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: weightcontroller,
-                                    decoration: InputDecoration(
-                                      hintText: 'kg',
+                                  content: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: weightcontroller,
+                                      decoration: InputDecoration(
+                                        hintText: 'kg',
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Please enter some text';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (val) {
+                                        setState() {
+                                          weight = val;
+                                          print(weight);
+                                        }
+                                      },
                                     ),
-                                    onChanged: (val) {
-                                      setState() {
-                                        weight = val;
-                                        print(weight);
-                                      }
-                                    },
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
@@ -156,10 +172,22 @@ class _WeightChartState extends State<WeightChart> {
                                     ),
                                     FlatButton(
                                       onPressed: () async {
-                                        await _showDatePicker();
-                                        print(weightcontroller.text);
-                                        Navigator.of(ctx)
-                                            .pop(weightcontroller.text);
+                                        if (_formKey.currentState!.validate()) {
+                                          bool x = await _showDatePicker();
+                                          if (x) {
+                                            print(weightcontroller.text
+                                                .toString());
+                                            _insert(
+                                                dater,
+                                                weightcontroller.text
+                                                    .toString());
+                                            sort();
+                                            // print(weightcontroller.text);
+                                            print(dater.toString());
+                                          }
+                                          Navigator.of(ctx)
+                                              .pop(weightcontroller.text);
+                                        }
                                       },
                                       child: Text("SAVE"),
                                     ),
@@ -171,11 +199,9 @@ class _WeightChartState extends State<WeightChart> {
                           setState(() {
                             weight = value;
                           });
-                          // print(weight + dater.toString());
-                          data.add(WeightData(dater, double.parse(weight)));
-                          sort();
-                          //print(data[0].month+data[0].weight.toString());
                         });
+                        // int id = await dbHelper.delete(8);
+                        // print(id);
                       },
                       icon: Icon(Icons.add))
                 ],
@@ -185,20 +211,58 @@ class _WeightChartState extends State<WeightChart> {
               height: h * 0.01,
             ),
             Container(
-              height: h*0.45,
-              padding: EdgeInsets.only(left: 8,right: 8),
-              child: ListView.builder(itemBuilder: (ctx,item)
-              {
-                  return historyrecord(data[item].month, data[item].weight.toString());
-              },
-              itemCount: data.length,
+              height: h * 0.45,
+              padding: EdgeInsets.only(left: 8, right: 8),
+              child: ListView.builder(
+                itemBuilder: (ctx, item) {
+                  return historyrecord(
+                      data[item].month, data[item].weight.toString());
+                },
+                itemCount: data.length,
               ),
             )
-           // historyrecord(DateTime.now(), '1726')
           ],
         ),
       ),
     );
+  }
+
+  void _insert(DateTime dt, String weight) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnDate:
+          int.parse(Timestamp.fromDate(dt).seconds.toString()),
+      DatabaseHelper.columnWeight: weight,
+      //DatabaseHelper.columnExperience:'Flutter Developer'
+    };
+    // print(row);
+    final id = await dbHelper.insert(row);
+    print('inserted row id: $id');
+    _query();
+  }
+
+  void _query() async {
+    final allRows = await dbHelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    data = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              data.add(WeightData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['weight'].toString())));
+            });
+          })
+        : [];
+    sort();
+  }
+
+  void _delete() async {
+    // Assuming that the number of rows is the id for the last row.
+    final id = await dbHelper.queryRowCount();
+    final rowsDeleted = await dbHelper.delete(id);
+    print('deleted $rowsDeleted row(s): row $id');
   }
 
   String formattedate(DateTime date) {
@@ -223,7 +287,7 @@ class _WeightChartState extends State<WeightChart> {
     return num_month;
   }
 
-  Future<void> _showDatePicker() async {
+  Future<bool> _showDatePicker() async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -233,7 +297,9 @@ class _WeightChartState extends State<WeightChart> {
       setState(() {
         dater = picked;
       });
+      return true;
     }
+    return false;
     //print(weight);
     //
     //print(data);
