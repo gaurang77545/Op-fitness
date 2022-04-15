@@ -35,6 +35,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

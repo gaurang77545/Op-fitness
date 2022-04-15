@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/bodyfatpercentage.dart';
 import 'package:op_fitnessapp/calorieintakechart.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
+import 'package:op_fitnessapp/newworkouttemplate.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
+import 'package:op_fitnessapp/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -660,7 +662,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       CalorieIntakeChart(),
-      WeightChart(),
+      WorkoutTemplateScreen(),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
