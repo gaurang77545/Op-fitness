@@ -9,12 +9,17 @@ import 'package:op_fitnessapp/measurescreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class WorkoutTemplateScreen extends StatefulWidget {
+class AddedExerciseScreen extends StatefulWidget {
+  List<Map<String, List<Map<String, dynamic>>>> chosenExercises = [];
+  String workoutname = '';
+  AddedExerciseScreen(
+      {required this.chosenExercises, required this.workoutname});
+
   @override
-  State<WorkoutTemplateScreen> createState() => _WorkoutTemplateScreenState();
+  State<AddedExerciseScreen> createState() => _AddedExerciseScreenState();
 }
 
-class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
+class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
@@ -529,6 +534,7 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
     'Legs'
   ];
   List<Map<String, String>> exercisecat = [];
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<String> combinedtypesofcategory = [
     'All',
     'Core',
@@ -595,23 +601,63 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => ExerciseScreen(
-                    //           exercisecat,
-                    //           categoryimages,
-                    //           combinedtypesofcategory,
-                    //           exercisenames)),
-                    // );
-                  },
+                  onPressed: () {},
                   child: const Text('ADD EXERCISE',
                       style: TextStyle(color: Colors.blue))),
             ],
           )
         ]),
       ),
+    );
+  }
+
+  Widget exercisename(String name, List<Map<String, dynamic>> l) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: TextStyle(color: Colors.blue),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'SET',
+              style: TextStyle(color: Colors.grey.shade400),
+            ),
+            Text(
+              'KG',
+              style: TextStyle(color: Colors.grey.shade400),
+            ),
+            Text(
+              'REPS',
+              style: TextStyle(color: Colors.grey.shade400),
+            )
+          ],
+        ),
+        ListView.builder(
+          itemBuilder: (ctx, item) {
+            return Row(
+              children: [
+                Text(
+                  item.toString(),
+                  style: TextStyle(color: Colors.grey.shade400),
+                ),
+                Container(
+                  width: w * 0.3,
+                  child: Form(
+                    key: _formKey,
+                    
+                                  ),
+                  ),
+                )
+              ],
+            );
+          },
+          itemCount: l.length,
+        )
+      ],
     );
   }
 }

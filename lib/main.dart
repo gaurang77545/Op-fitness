@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/bodyfatpercentage.dart';
 import 'package:op_fitnessapp/calorieintakechart.dart';
+import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
 import 'package:op_fitnessapp/weightchart.dart';
@@ -662,7 +663,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       CalorieIntakeChart(),
-      WorkoutTemplateScreen(),
+      ExerciseChooseScreen(
+          exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
