@@ -26,7 +26,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   List<Map<String, String>> displayexercisecat = [];
-  List<Map<String, List<Map<String, dynamic>>>> chosenExercises = [];
+  List<Map<String, Map<String, dynamic>>> chosenExercises = [];
   List<Image> displaycategoryimages = [];
   List<bool> selected = [];
   String? selectedValue;
@@ -223,14 +223,14 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddedExerciseScreen(
-                            chosenExercises: chosenExercises,
-                            workoutname: 'Evening Workout',
-                          )),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => AddedExerciseScreen(
+                //             chosenExercises: chosenExercises,
+                //             workoutname: 'Evening Workout',
+                //           )),
+                // );
               },
               child: Icon(Icons.keyboard_arrow_right_outlined)),
     );
@@ -292,7 +292,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         });
         if (selected[index] == true) {
           setState(() {
-            chosenExercises.add({name: []});
+            chosenExercises.add({name: {'sets':1}});
           });
           print(chosenExercises);
         }

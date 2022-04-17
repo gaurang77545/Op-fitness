@@ -628,7 +628,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const WorkoutTemplateScreen()),
+                          builder: (context) =>  WorkoutTemplateScreen()),
                     );
                   },
                   icon: Icon(Icons.add),
