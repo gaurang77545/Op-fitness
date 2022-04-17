@@ -600,138 +600,158 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'New Workout Template',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          SizedBox(
-            height: h * 0.02,
-          ),
-          Container(
-            height: h * 0.05,
-            child: TextField(
-              decoration: InputDecoration(
-                  labelText: 'Workout note',
-                  fillColor: Colors.grey.shade300,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  )),
-              onChanged: (val) {
-                setState(() {
-                  workoutname = val;
-                });
-              },
+        child: SingleChildScrollView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              'New Workout Template',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {},
-                  child: const Text('ADD EXERCISE',
-                      style: TextStyle(color: Colors.blue))),
-            ],
-          ),
-          exercisename('Evening Workout', chosenExercises)
-        ]),
+            SizedBox(
+              height: h * 0.02,
+            ),
+            Container(
+              height: h * 0.05,
+              child: TextField(
+                decoration: InputDecoration(
+                    labelText: 'Workout note',
+                    fillColor: Colors.grey.shade300,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      // borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    )),
+                onChanged: (val) {
+                  setState(() {
+                    workoutname = val;
+                  });
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {},
+                    child: const Text('ADD EXERCISE',
+                        style: TextStyle(color: Colors.blue))),
+              ],
+            ),
+            exercisename('Evening Workout', chosenExercises)
+          ]),
+        ),
       ),
     );
   }
 
   Widget exercisename(String name, List<Map<String, Map<String, dynamic>>> l) {
-    return  SingleChildScrollView(
-      child: Expanded(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: TextStyle(color: Colors.blue),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (ctx, itemer) {
-                    print('Outside Loop' + itemer.toString());
-                    return Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                            l[itemer].keys.toList()[0],
-                            style: TextStyle(color: Colors.grey.shade400),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                'SET',
-                                style: TextStyle(color: Colors.grey.shade400),
-                              ),
-                              Text(
-                                'KG',
-                                style: TextStyle(color: Colors.grey.shade400),
-                              ),
-                              Text(
-                                'REPS',
-                                style: TextStyle(color: Colors.grey.shade400),
-                              )
-                            ],
-                          ),
-                           Form(
-                              //key: _formKey,
-                              child: Expanded(
-                                child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemBuilder: (ctx, item) {
-                                      print('Inside Loop+' + item.toString());
-                                      return Row(
-                                        children: [
-                                          Text(
-                                            itemer.toString(),
-                                            style: TextStyle(color: Colors.grey.shade400),
-                                          ),
-                                          Container(
-                                            width: w * 0.05,
-                                            child: TextFormField(
-                                              onChanged: ((value) {}),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: w * 0.05,
-                                            child: TextFormField(
-                                              onChanged: ((value) {}),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                    itemCount: l[itemer].values.toList()[0]['Sets'],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: TextStyle(color: Colors.blue),
+          ),
+          Container(
+            height: h,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (ctx, itemer) {
+                print('Outside Loop' + itemer.toString());
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l[itemer].keys.toList()[0],
+                      style: TextStyle(color: Colors.grey.shade400),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'SET',
+                          style: TextStyle(color: Colors.grey.shade400),
+                        ),
+                        Text(
+                          'KG',
+                          style: TextStyle(color: Colors.grey.shade400),
+                        ),
+                        Text(
+                          'REPS',
+                          style: TextStyle(color: Colors.grey.shade400),
+                        ),
+                        SizedBox(
+                          width: w * 0.01,
+                        )
+                      ],
+                    ),
+                    Form(
+                      //key: _formKey,
+                      child: Container(
+                        height: 50.0 * l[itemer].values.toList()[0]['Sets'],
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemBuilder: (ctx, item) {
+                            print('Inside Loop+' + item.toString());
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Text(
+                                          (item + 1).toString(),
+                                          style: TextStyle(
+                                              color: Colors.grey.shade400),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: w * 0.05,
+                                        child: TextFormField(
+                                          onChanged: ((value) {}),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: w * 0.05,
+                                        child: TextFormField(
+                                          onChanged: ((value) {}),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                              ),
-                              
-                            ),
-                          
-                        ],
+                                ),
+                                IconButton(
+                                    onPressed: () {}, icon: Icon(Icons.add))
+                              ],
+                            );
+                          },
+                          itemCount: l[itemer].values.toList()[0]['Sets'],
+                        ),
                       ),
-                    );
-                  },
-                  itemCount: l.length,
-                ),
-              )
-            ],
-          
-        ),
+                    ),
+                  ],
+                );
+              },
+              itemCount: l.length,
+            ),
+          )
+        ],
       ),
     );
   }
