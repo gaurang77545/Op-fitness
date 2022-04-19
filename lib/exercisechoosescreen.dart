@@ -9,13 +9,16 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
 
 class ExerciseChooseScreen extends StatefulWidget {
+  String workoutname;
   List<Map<String, String>> exercisecat;
+  List<Map<String, dynamic>> templates = [];
+  List<Map<String, Map<String, dynamic>>> chosenExercises = [];
   List<Image> categoryimages = [];
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
 
-  ExerciseChooseScreen(this.exercisecat, this.categoryimages,
-      this.combinedtypesofcategory, this.exercisenames);
+  ExerciseChooseScreen(this.templates,this.chosenExercises, this.workoutname, this.exercisecat,
+      this.categoryimages, this.combinedtypesofcategory, this.exercisenames);
 
   @override
   State<ExerciseChooseScreen> createState() => _ExerciseChooseScreenState();
@@ -38,6 +41,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    chosenExercises = widget.chosenExercises;
     displayexercisecat = List.from(widget.exercisecat);
     displaycategoryimages = List.from(widget.categoryimages);
     selected = List.generate(widget.exercisenames.length, (index) => false);
@@ -223,14 +227,18 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => AddedExerciseScreen(
-                //             chosenExercises: chosenExercises,
-                //             workoutname: 'Evening Workout',
-                //           )),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddedExerciseScreen(
+                        widget.templates,
+                          chosenExercises,
+                          widget.workoutname,
+                          widget.exercisecat,
+                          widget.categoryimages,
+                          widget.combinedtypesofcategory,
+                          widget.exercisenames)),
+                );
               },
               child: Icon(Icons.keyboard_arrow_right_outlined)),
     );
@@ -292,7 +300,14 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         });
         if (selected[index] == true) {
           setState(() {
-            chosenExercises.add({name: {'sets':1}});
+            chosenExercises.add({
+              name: {
+                'Sets': 1,
+                'RepWeight': [
+                  {'kg': 0, 'reps': 0}
+                ]
+              }
+            });
           });
           print(chosenExercises);
         }

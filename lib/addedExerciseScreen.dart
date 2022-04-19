@@ -6,10 +6,26 @@ import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
+import 'package:op_fitnessapp/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddedExerciseScreen extends StatefulWidget {
+  List<Map<String, Map<String, dynamic>>> chosenExercises;
+  String workoutname;
+  List<Map<String, String>> exercisecat;
+  List<Map<String, dynamic>> templates = [];
+  List<Image> categoryimages = [];
+  List<String> exercisenames = [];
+  List<String> combinedtypesofcategory = [];
+  AddedExerciseScreen(
+      this.templates,
+      this.chosenExercises,
+      this.workoutname,
+      this.exercisecat,
+      this.categoryimages,
+      this.combinedtypesofcategory,
+      this.exercisenames);
   // List<Map<String, Map<String, dynamic>>> chosenExercises = [
   //   {
   //     'Dumbell': {
@@ -544,32 +560,35 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
   ];
   List<Map<String, String>> exercisecat = [];
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<Map<String, Map<String, dynamic>>> chosenExercises = [
-    {
-      'Dumbell': {
-        'Sets': 2,
-        'RepWeight': [
-          {'weight': 25, 'kg': 20}
-        ]
-      }
-    },
-    {
-      'Dumbell': {
-        'Sets': 2,
-        'RepWeight': [
-          {'weight': 25, 'kg': 20}
-        ]
-      }
-    },
-    {
-      'Dumbell': {
-        'Sets': 2,
-        'RepWeight': [
-          {'weight': 25, 'kg': 20}
-        ]
-      }
-    }
-  ];
+  List<Map<String, Map<String, dynamic>>> chosenExercises = [];
+  List<Map<String, dynamic>> templates = [];
+
+  //  [
+  //   {
+  //     'Dumbell': {
+  //       'Sets': 1,
+  //       'RepWeight': [
+  //         {'kg': 25, 'reps': 20}
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     'Dumbell': {
+  //       'Sets': 1,
+  //       'RepWeight': [
+  //         {'kg': 25, 'reps': 20}
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     'Dumbell': {
+  //       'Sets': 1,
+  //       'RepWeight': [
+  //         {'kg': 25, 'reps': 20}
+  //       ]
+  //     }
+  //   }
+  // ];
   List<String> combinedtypesofcategory = [
     'All',
     'Core',
@@ -585,6 +604,13 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
   ];
   String workoutname = '';
   @override
+  void initState() {
+    chosenExercises = widget.chosenExercises;
+    templates = widget.templates;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     h = size.height;
@@ -596,6 +622,30 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
+        actions: [
+          TextButton.icon(
+            // <-- TextButton
+            onPressed: () {
+              addtemplate(templates);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WorkoutScreen(
+                          templates,
+                          widget.workoutname,
+                          chosenExercises,
+                          widget.exercisecat,
+                          widget.categoryimages,
+                          widget.combinedtypesofcategory,
+                          widget.exercisenames)));
+            },
+            icon: Icon(
+              Icons.save,
+              size: 24.0,
+            ),
+            label: Text('Save'),
+          )
+        ],
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -603,18 +653,16 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              'New Workout Template',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
             SizedBox(
               height: h * 0.02,
             ),
             Container(
               height: h * 0.05,
-              child: TextField(
+              child: TextFormField(
+                initialValue: widget.workoutname,
                 decoration: InputDecoration(
-                    labelText: 'Workout note',
+                    //labelText: 'Workout note',
+
                     fillColor: Colors.grey.shade300,
                     filled: true,
                     border: OutlineInputBorder(
@@ -626,7 +674,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                     )),
                 onChanged: (val) {
                   setState(() {
-                    workoutname = val;
+                    widget.workoutname = val;
                   });
                 },
               ),
@@ -638,19 +686,54 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ExerciseChooseScreen(
+                                templates,
+                                chosenExercises,
+                                widget.workoutname,
+                                widget.exercisecat,
+                                widget.categoryimages,
+                                widget.combinedtypesofcategory,
+                                widget.exercisenames)),
+                      );
+                    },
                     child: const Text('ADD EXERCISE',
                         style: TextStyle(color: Colors.blue))),
               ],
             ),
-            exercisename('Evening Workout', chosenExercises)
+            exercisename(widget.workoutname, chosenExercises)
           ]),
         ),
       ),
     );
   }
 
+  void addtemplate(List<Map<String, dynamic>> templates) {
+    if (chosenExercises.length != 0) {
+      List<exercise> l = [];
+      for (int i = 0; i < chosenExercises.length; i++) {
+        setState(() {
+          l.add(exercise(
+            chosenExercises[i].values.toList()[0]['Sets'],
+            chosenExercises[i].keys.toList()[0],
+          ));
+        });
+      }
+      setState(() {
+        templates.add(
+            {'name': widget.workoutname, 'last_performed': '0', 'list': l});
+      });
+    }
+  }
+
   Widget exercisename(String name, List<Map<String, Map<String, dynamic>>> l) {
+    int totsets = 0;
+    for (int i = 0; i < l.length; i++) {
+      totsets += l[i].values.toList()[0]['Sets'] as int;
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -660,7 +743,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
             style: TextStyle(color: Colors.blue),
           ),
           Container(
-            height: h,
+            height: 450 + totsets * 20.0,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -671,26 +754,24 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                   children: [
                     Text(
                       l[itemer].keys.toList()[0],
-                      style: TextStyle(color: Colors.grey.shade400),
+                      style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           'SET',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'KG',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'REPS',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(
-                          width: w * 0.01,
-                        )
+                        
                       ],
                     ),
                     Form(
@@ -703,47 +784,74 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                           itemBuilder: (ctx, item) {
                             print('Inside Loop+' + item.toString());
                             return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Text(
-                                          (item + 1).toString(),
-                                          style: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: w * 0.05,
-                                        child: TextFormField(
-                                          onChanged: ((value) {}),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: w * 0.05,
-                                        child: TextFormField(
-                                          onChanged: ((value) {}),
-                                        ),
-                                      ),
-                                    ],
+                                Container(
+                                  margin: const EdgeInsets.only(top: 10.0),
+                                  child: Text(
+                                    (item + 1).toString(),
+                                    style:
+                                        TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                IconButton(
-                                    onPressed: () {}, icon: Icon(Icons.add))
+                                Container(
+                                  width: w * 0.05,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    onChanged: ((value) {
+                                      setState(() {
+                                        l[itemer].values.toList()[0]
+                                                ['RepWeight'][item]['kg'] =
+                                            int.parse(value);
+                                      });
+                                      print(l);
+                                    }),
+                                  ),
+                                ),
+                                Container(
+                                  width: w * 0.05,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    onChanged: ((value) {
+                                      setState(() {
+                                        l[itemer].values.toList()[0]
+                                                ['RepWeight'][item]['reps'] =
+                                            int.parse(value);
+                                      });
+                                      print(l);
+                                    }),
+                                  ),
+                                ),
                               ],
                             );
                           },
                           itemCount: l[itemer].values.toList()[0]['Sets'],
                         ),
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            style: TextButton.styleFrom(
+                              textStyle: const TextStyle(fontSize: 15),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                l[itemer].values.toList()[0]['Sets'] += 1;
+                                print(l[itemer].values.toList()[0]['RepWeight']
+                                    [0]);
+                                l[itemer]
+                                    .values
+                                    .toList()[0]['RepWeight']
+                                    .add({'kg': 0, 'reps': 0});
+                              });
+                              print(l);
+                            },
+                            child: const Text('ADD SET',
+                                style: TextStyle(color: Colors.blue))),
+                      ],
                     ),
                   ],
                 );
