@@ -16,7 +16,7 @@ class WorkoutScreen extends StatefulWidget {
   List<Image> categoryimages = [];
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
- List<Map<String, dynamic>> templates = [
+  List<Map<String, dynamic>> templates = [
     // {
     //   'name': 'Evening Workout',
     //   'last_performed': '14',
@@ -46,8 +46,14 @@ class WorkoutScreen extends StatefulWidget {
     //   ]
     // },
   ];
-  WorkoutScreen(this.templates,this.workoutname, this.newtemplates, this.exercisecat,
-      this.categoryimages, this.combinedtypesofcategory, this.exercisenames);
+  WorkoutScreen(
+      this.templates,
+      this.workoutname,
+      this.newtemplates,
+      this.exercisecat,
+      this.categoryimages,
+      this.combinedtypesofcategory,
+      this.exercisenames);
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
@@ -57,11 +63,12 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  
+
   @override
   void didChangeDependencies() {
-   // addtemplate(widget.templates);
+    // addtemplate(widget.templates);
     print(widget.templates);
+    print(widget.newtemplates);
     super.didChangeDependencies();
   }
 
@@ -148,7 +155,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 
   void addtemplate(List<Map<String, dynamic>> templates) {
-
     if (widget.newtemplates.length != 0) {
       List<exercise> l = [];
       for (int i = 0; i < widget.newtemplates.length; i++) {

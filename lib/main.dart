@@ -7,6 +7,8 @@ import 'package:op_fitnessapp/demoscreen.dart';
 import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
+import 'package:op_fitnessapp/timer.dart';
+import 'package:op_fitnessapp/timer2.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
 import 'package:op_fitnessapp/workoutscreen.dart';
@@ -664,10 +666,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      bodyfatChart(),
+      
       // ExerciseChooseScreen(
       //     exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
-      WorkoutScreen([],'',[],exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
+      
+      TimerNew(),
+      //WorkoutScreen([],'',[],exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
+      DemoScreen(),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
