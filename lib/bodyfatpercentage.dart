@@ -1,45 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/bodyfathelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BodyFatPercentageChart extends StatefulWidget {
+class bodyfatChart extends StatefulWidget {
   @override
-  State<BodyFatPercentageChart> createState() => _BodyFatPercentageChartState();
+  State<bodyfatChart> createState() => _bodyfatChartState();
 }
 
-class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
+class _bodyfatChartState extends State<bodyfatChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  List<BodyFatData> data = [
-    // BodyFatData(formattedate( DateTime.now()), 35),
-    // BodyFatData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
-    // BodyFatData(DateTime.now().add(Duration(days: 2)), 34),
-    // BodyFatData(DateTime.now().add(Duration(days: 3)), 32),
-    // BodyFatData(DateTime.now().add(Duration(days: 4)), 40),
-    // BodyFatData(DateTime.now().add(Duration(days: 5)), 40),
-    // BodyFatData('17 Jan', 40),
-    // BodyFatData('19 Jan', 40),
-    // BodyFatData('21 Jan', 40),
-    // BodyFatData('23 Jan', 40),
-    // BodyFatData('6 Jan', 2),
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<bodyfatData> data = [
+    // bodyfatData(formattedate( DateTime.now()), 35),
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
+    // bodyfatData(DateTime.now().add(Duration(days: 2)), 34),
+    // bodyfatData(DateTime.now().add(Duration(days: 3)), 32),
+    // bodyfatData(DateTime.now().add(Duration(days: 4)), 40),
+    // bodyfatData(DateTime.now().add(Duration(days: 5)), 40),
+    // bodyfatData('17 Jan', 40),
+    // bodyfatData('19 Jan', 40),
+    // bodyfatData('21 Jan', 40),
+    // bodyfatData('23 Jan', 40),
+    // bodyfatData('6 Jan', 2),
   ];
+  final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
-  String weight = '';
-  TextEditingController weightcontroller = TextEditingController();
+  String bodyfat = '';
+  TextEditingController bodyfatcontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
-
-    // data.add(BodyFatData(formattedate(DateTime.now()), 35));
-    // BodyFatData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
-    // BodyFatData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
+    dbHelper.database;
+    _query();
+    // _delete();
+    // data.add(bodyfatData(formattedate(DateTime.now()), 35));
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
     super.initState();
   }
 
   @override
   void dispose() {
-    weightcontroller.dispose();
+    bodyfatcontroller.dispose();
     super.dispose();
   }
 
@@ -60,7 +66,7 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Body Fat %"),
+        title: Text("Body Fat"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -71,8 +77,8 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
             Container(
               height: h * 0.45,
               margin: EdgeInsets.all(5),
-              decoration:
-                  BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.grey)),
               width: w,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: SfCartesianChart(
@@ -80,28 +86,28 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
                     title: AxisTitle(text: 'Date'),
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
                 primaryYAxis: NumericAxis(
-                    title: AxisTitle(text: 'BodyFat %'),
+                    title: AxisTitle(text: 'Body Fat'),
                     decimalPlaces: 0,
                     desiredIntervals: 8,
                     maximum: 100,
                     labelFormat: '{value}%',
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
-                //title: ChartTitle(text: 'Weight(kg)'),
+                //title: ChartTitle(text: 'bodyfat(%)'),
                 tooltipBehavior: TooltipBehavior(enable: true),
-                series: <ChartSeries<BodyFatData, String>>[
-                  LineSeries<BodyFatData, String>(
+                series: <ChartSeries<bodyfatData, String>>[
+                  LineSeries<bodyfatData, String>(
                     dataSource: data,
-                    xValueMapper: (BodyFatData weight, _) =>
-                        formattedate(weight.month),
-                    yValueMapper: (BodyFatData weight, _) => weight.bodyfat,
-                    name: 'Body Fat %',
+                    xValueMapper: (bodyfatData bodyfat, _) =>
+                        formattedate(bodyfat.month),
+                    yValueMapper: (bodyfatData bodyfat, _) => bodyfat.bodyfat,
+                    name: 'Body Fat',
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left:8.0,right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -110,42 +116,52 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         showDialog(
                             context: context,
                             builder: (ctx) {
                               String date = DateFormat('yyyy-MM-dd')
                                   .format(DateTime.now())
                                   .toString();
-                              return StatefulBuilder(builder: (context, setState) {
-                                weight = '';
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                bodyfat = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(32.0))),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(32.0))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("BodyFat %"),
+                                      Text("Body Fat"),
                                       FlatButton(
                                         onPressed: () {},
                                         child: Text(date),
                                       )
                                     ],
                                   ),
-                                  content: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: weightcontroller,
-                                    decoration: InputDecoration(
-                                      hintText: '%',
+                                  content: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: bodyfatcontroller,
+                                      decoration: InputDecoration(
+                                        hintText: '%',
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Please enter some text';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (val) {
+                                        setState() {
+                                          bodyfat = val;
+                                          print(bodyfat);
+                                        }
+                                      },
                                     ),
-                                    onChanged: (val) {
-                                      setState() {
-                                        weight = val;
-                                        print(weight);
-                                      }
-                                    },
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
@@ -156,10 +172,22 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
                                     ),
                                     FlatButton(
                                       onPressed: () async {
-                                        await _showDatePicker();
-                                        print(weightcontroller.text);
-                                        Navigator.of(ctx)
-                                            .pop(weightcontroller.text);
+                                        if (_formKey.currentState!.validate()) {
+                                          bool x = await _showDatePicker();
+                                          if (x) {
+                                            print(bodyfatcontroller.text
+                                                .toString());
+                                            _insert(
+                                                dater,
+                                                bodyfatcontroller.text
+                                                    .toString());
+                                            sort();
+                                            // print(bodyfatcontroller.text);
+                                            print(dater.toString());
+                                          }
+                                          Navigator.of(ctx)
+                                              .pop(bodyfatcontroller.text);
+                                        }
                                       },
                                       child: Text("SAVE"),
                                     ),
@@ -169,13 +197,11 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
                             }).then((value) {
                           //print(value);
                           setState(() {
-                            weight = value;
+                            bodyfat = value;
                           });
-                          // print(weight + dater.toString());
-                          data.add(BodyFatData(dater, double.parse(weight)));
-                          sort();
-                          //print(data[0].month+data[0].weight.toString());
                         });
+                        // int id = await dbHelper.delete(8);
+                        // print(id);
                       },
                       icon: Icon(Icons.add))
                 ],
@@ -185,20 +211,58 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
               height: h * 0.01,
             ),
             Container(
-              height: h*0.45,
-              padding: EdgeInsets.only(left: 8,right: 8),
-              child: ListView.builder(itemBuilder: (ctx,item)
-              {
-                  return historyrecord(data[item].month, data[item].bodyfat.toString());
-              },
-              itemCount: data.length,
+              height: h * 0.45,
+              padding: EdgeInsets.only(left: 8, right: 8),
+              child: ListView.builder(
+                itemBuilder: (ctx, item) {
+                  return historyrecord(
+                      data[item].month, data[item].bodyfat.toString());
+                },
+                itemCount: data.length,
               ),
             )
-           // historyrecord(DateTime.now(), '1726')
           ],
         ),
       ),
     );
+  }
+
+  void _insert(DateTime dt, String bodyfat) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnDate:
+          int.parse(Timestamp.fromDate(dt).seconds.toString()),
+      DatabaseHelper.columnbodyfat: bodyfat,
+      //DatabaseHelper.columnExperience:'Flutter Developer'
+    };
+    // print(row);
+    final id = await dbHelper.insert(row);
+    print('inserted row id: $id');
+    _query();
+  }
+
+  void _query() async {
+    final allRows = await dbHelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    data = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              data.add(bodyfatData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['bodyfat'].toString())));
+            });
+          })
+        : [];
+    sort();
+  }
+
+  void _delete() async {
+    // Assuming that the number of rows is the id for the last row.
+    final id = await dbHelper.queryRowCount();
+    final rowsDeleted = await dbHelper.delete(id);
+    print('deleted $rowsDeleted row(s): row $id');
   }
 
   String formattedate(DateTime date) {
@@ -223,7 +287,7 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
     return num_month;
   }
 
-  Future<void> _showDatePicker() async {
+  Future<bool> _showDatePicker() async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -233,8 +297,10 @@ class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
       setState(() {
         dater = picked;
       });
+      return true;
     }
-    //print(weight);
+    return false;
+    //print(bodyfat);
     //
     //print(data);
     // print(dater);
@@ -284,78 +350,9 @@ Widget historyrecord(DateTime date, String cal) {
   );
 }
 
-class BodyFatData {
+class bodyfatData {
   final DateTime month;
   final double bodyfat;
 
-  BodyFatData(this.month, this.bodyfat);
+  bodyfatData(this.month, this.bodyfat);
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:syncfusion_flutter_charts/charts.dart';
-
-// class BodyFatPercentageChart extends StatefulWidget {
-//   @override
-//   State<BodyFatPercentageChart> createState() => _BodyFatPercentageChartState();
-// }
-
-// class _BodyFatPercentageChartState extends State<BodyFatPercentageChart> {
-//   double h = 0.0, w = 0.0;
-//   double kh = 1 / 759.2727272727273;
-//   double kw = 1 / 392.72727272727275;
-//   List<SalesData> data = [
-//     SalesData('6 Jan', 35),
-//     SalesData('7 Jan', 28),
-//     SalesData('9 Jan', 34),
-//     SalesData('11 Jan', 32),
-//     SalesData('13 Jan', 40),
-//     SalesData('15 Jan', 40),
-//     SalesData('17 Jan', 40),
-//     SalesData('19 Jan', 40),
-//     SalesData('21 Jan', 40),
-//     SalesData('23 Jan', 40),
-
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var size = MediaQuery.of(context).size;
-//     h = size.height;
-//     w = size.width;
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Body Fat %"),
-//         centerTitle: true,
-//         backgroundColor: Colors.green[700],
-//         brightness: Brightness.dark,
-//       ),
-//       body: Container(
-//         height: h*0.50,
-//         width: w,
-//         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-//         child: SfCartesianChart(
-//           primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Date'),edgeLabelPlacement: EdgeLabelPlacement.shift),
-//           primaryYAxis: NumericAxis(title: AxisTitle(text: 'Body fat %'),labelFormat: '{value}%',edgeLabelPlacement: EdgeLabelPlacement.shift),
-//          // title: ChartTitle(text: 'Body Fat Percentage(%)'),
-//           tooltipBehavior: TooltipBehavior(enable: true),
-//           series: <ChartSeries<SalesData, String>>[
-//             LineSeries<SalesData, String>(  
-//               dataSource: data,
-//               xValueMapper: (SalesData sales, _) => sales.month,
-//               yValueMapper: (SalesData sales, _) => sales.sales,
-//               name: 'Body Fat %',
-//               dataLabelSettings: DataLabelSettings(isVisible: true),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class SalesData {
-//   final String month;
-//   final double sales;
-
-//   SalesData(this.month, this.sales);
-// }

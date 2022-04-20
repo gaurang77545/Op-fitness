@@ -664,7 +664,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      CalorieIntakeChart(),
+      bodyfatChart(),
       // ExerciseChooseScreen(
       //     exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       WorkoutScreen([],'',[],exercisecat, categoryimages, combinedtypesofcategory, exercisenames),

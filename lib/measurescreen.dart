@@ -50,11 +50,11 @@ class _MeasureScreenState extends State<MeasureScreen> {
               height: h * 0.05,
             ),
             listitem('Body Fat Percentage', bodyfatpercentage,
-                BodyFatPercentageChart()),
+                bodyfatChart()),
             SizedBox(
               height: h * 0.05,
             ),
-            listitem('Caloric intake', calorieintake, CalorieIntakeChart()),
+            listitem('Caloric intake', calorieintake, caloricintakeChart()),
           ],
         ),
       ),

@@ -1,45 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/caloricintakehelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CalorieIntakeChart extends StatefulWidget {
+class caloricintakeChart extends StatefulWidget {
   @override
-  State<CalorieIntakeChart> createState() => _CalorieIntakeChartState();
+  State<caloricintakeChart> createState() => _caloricintakeChartState();
 }
 
-class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
+class _caloricintakeChartState extends State<caloricintakeChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  List<CalorieIntakeData> data = [
-    // CalorieIntakeData(formattedate( DateTime.now()), 35),
-    // CalorieIntakeData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
-    // CalorieIntakeData(DateTime.now().add(Duration(days: 2)), 34),
-    // CalorieIntakeData(DateTime.now().add(Duration(days: 3)), 32),
-    // CalorieIntakeData(DateTime.now().add(Duration(days: 4)), 40),
-    // CalorieIntakeData(DateTime.now().add(Duration(days: 5)), 40),
-    // CalorieIntakeData('17 Jan', 40),
-    // CalorieIntakeData('19 Jan', 40),
-    // CalorieIntakeData('21 Jan', 40),
-    // CalorieIntakeData('23 Jan', 40),
-    // CalorieIntakeData('6 Jan', 2),
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<caloricintakeData> data = [
+    // caloricintakeData(formattedate( DateTime.now()), 35),
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
+    // caloricintakeData(DateTime.now().add(Duration(days: 2)), 34),
+    // caloricintakeData(DateTime.now().add(Duration(days: 3)), 32),
+    // caloricintakeData(DateTime.now().add(Duration(days: 4)), 40),
+    // caloricintakeData(DateTime.now().add(Duration(days: 5)), 40),
+    // caloricintakeData('17 Jan', 40),
+    // caloricintakeData('19 Jan', 40),
+    // caloricintakeData('21 Jan', 40),
+    // caloricintakeData('23 Jan', 40),
+    // caloricintakeData('6 Jan', 2),
   ];
+  final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
-  String weight = '';
-  TextEditingController weightcontroller = TextEditingController();
+  String caloricintake = '';
+  TextEditingController caloricintakecontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
-
-    // data.add(CalorieIntakeData(formattedate(DateTime.now()), 35));
-    // CalorieIntakeData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
-    // CalorieIntakeData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
+    dbHelper.database;
+    _query();
+    // _delete();
+    // data.add(caloricintakeData(formattedate(DateTime.now()), 35));
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
     super.initState();
   }
 
   @override
   void dispose() {
-    weightcontroller.dispose();
+    caloricintakecontroller.dispose();
     super.dispose();
   }
 
@@ -60,7 +66,7 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Calorie Intake"),
+        title: Text("Caloric Intake"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -71,8 +77,8 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
             Container(
               height: h * 0.45,
               margin: EdgeInsets.all(5),
-              decoration:
-                  BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.grey)),
               width: w,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: SfCartesianChart(
@@ -80,28 +86,28 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
                     title: AxisTitle(text: 'Date'),
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
                 primaryYAxis: NumericAxis(
-                    title: AxisTitle(text: 'Calorie Intake'),
+                    title: AxisTitle(text: 'Caloric Intake'),
                     decimalPlaces: 0,
                     desiredIntervals: 8,
                     maximum: 100,
                     labelFormat: '{value}kcal',
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
-                //title: ChartTitle(text: 'Weight(kg)'),
+                //title: ChartTitle(text: 'caloricintake(kcal)'),
                 tooltipBehavior: TooltipBehavior(enable: true),
-                series: <ChartSeries<CalorieIntakeData, String>>[
-                  LineSeries<CalorieIntakeData, String>(
+                series: <ChartSeries<caloricintakeData, String>>[
+                  LineSeries<caloricintakeData, String>(
                     dataSource: data,
-                    xValueMapper: (CalorieIntakeData weight, _) =>
-                        formattedate(weight.month),
-                    yValueMapper: (CalorieIntakeData weight, _) => weight.bodyfat,
-                    name: 'Calorie Intake',
+                    xValueMapper: (caloricintakeData caloricintake, _) =>
+                        formattedate(caloricintake.month),
+                    yValueMapper: (caloricintakeData caloricintake, _) => caloricintake.caloricintake,
+                    name: 'caloricintake',
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left:8.0,right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -110,42 +116,52 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         showDialog(
                             context: context,
                             builder: (ctx) {
                               String date = DateFormat('yyyy-MM-dd')
                                   .format(DateTime.now())
                                   .toString();
-                              return StatefulBuilder(builder: (context, setState) {
-                                weight = '';
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                caloricintake = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(32.0))),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(32.0))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Calorie Intake"),
+                                      Text("caloricintake"),
                                       FlatButton(
                                         onPressed: () {},
                                         child: Text(date),
                                       )
                                     ],
                                   ),
-                                  content: TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller: weightcontroller,
-                                    decoration: InputDecoration(
-                                      hintText: 'kcal',
+                                  content: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: caloricintakecontroller,
+                                      decoration: InputDecoration(
+                                        hintText: 'kcal',
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Please enter some text';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (val) {
+                                        setState() {
+                                          caloricintake = val;
+                                          print(caloricintake);
+                                        }
+                                      },
                                     ),
-                                    onChanged: (val) {
-                                      setState() {
-                                        weight = val;
-                                        print(weight);
-                                      }
-                                    },
                                   ),
                                   actions: <Widget>[
                                     FlatButton(
@@ -156,10 +172,22 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
                                     ),
                                     FlatButton(
                                       onPressed: () async {
-                                        await _showDatePicker();
-                                        print(weightcontroller.text);
-                                        Navigator.of(ctx)
-                                            .pop(weightcontroller.text);
+                                        if (_formKey.currentState!.validate()) {
+                                          bool x = await _showDatePicker();
+                                          if (x) {
+                                            print(caloricintakecontroller.text
+                                                .toString());
+                                            _insert(
+                                                dater,
+                                                caloricintakecontroller.text
+                                                    .toString());
+                                            sort();
+                                            // print(caloricintakecontroller.text);
+                                            print(dater.toString());
+                                          }
+                                          Navigator.of(ctx)
+                                              .pop(caloricintakecontroller.text);
+                                        }
                                       },
                                       child: Text("SAVE"),
                                     ),
@@ -169,13 +197,11 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
                             }).then((value) {
                           //print(value);
                           setState(() {
-                            weight = value;
+                            caloricintake = value;
                           });
-                          // print(weight + dater.toString());
-                          data.add(CalorieIntakeData(dater, double.parse(weight)));
-                          sort();
-                          //print(data[0].month+data[0].weight.toString());
                         });
+                        // int id = await dbHelper.delete(8);
+                        // print(id);
                       },
                       icon: Icon(Icons.add))
                 ],
@@ -185,20 +211,58 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
               height: h * 0.01,
             ),
             Container(
-              height: h*0.45,
-              padding: EdgeInsets.only(left: 8,right: 8),
-              child: ListView.builder(itemBuilder: (ctx,item)
-              {
-                  return historyrecord(data[item].month, data[item].bodyfat.toString());
-              },
-              itemCount: data.length,
+              height: h * 0.45,
+              padding: EdgeInsets.only(left: 8, right: 8),
+              child: ListView.builder(
+                itemBuilder: (ctx, item) {
+                  return historyrecord(
+                      data[item].month, data[item].caloricintake.toString());
+                },
+                itemCount: data.length,
               ),
             )
-           // historyrecord(DateTime.now(), '1726')
           ],
         ),
       ),
     );
+  }
+
+  void _insert(DateTime dt, String caloricintake) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnDate:
+          int.parse(Timestamp.fromDate(dt).seconds.toString()),
+      DatabaseHelper.columncaloricintake: caloricintake,
+      //DatabaseHelper.columnExperience:'Flutter Developer'
+    };
+    // print(row);
+    final id = await dbHelper.insert(row);
+    print('inserted row id: $id');
+    _query();
+  }
+
+  void _query() async {
+    final allRows = await dbHelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    data = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              data.add(caloricintakeData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['caloricintake'].toString())));
+            });
+          })
+        : [];
+    sort();
+  }
+
+  void _delete() async {
+    // Assuming that the number of rows is the id for the last row.
+    final id = await dbHelper.queryRowCount();
+    final rowsDeleted = await dbHelper.delete(id);
+    print('deleted $rowsDeleted row(s): row $id');
   }
 
   String formattedate(DateTime date) {
@@ -223,7 +287,7 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
     return num_month;
   }
 
-  Future<void> _showDatePicker() async {
+  Future<bool> _showDatePicker() async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -233,8 +297,10 @@ class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
       setState(() {
         dater = picked;
       });
+      return true;
     }
-    //print(weight);
+    return false;
+    //print(caloricintake);
     //
     //print(data);
     // print(dater);
@@ -284,78 +350,9 @@ Widget historyrecord(DateTime date, String cal) {
   );
 }
 
-class CalorieIntakeData {
+class caloricintakeData {
   final DateTime month;
-  final double bodyfat;
+  final double caloricintake;
 
-  CalorieIntakeData(this.month, this.bodyfat);
+  caloricintakeData(this.month, this.caloricintake);
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:syncfusion_flutter_charts/charts.dart';
-
-// class CalorieIntakeChart extends StatefulWidget {
-//   @override
-//   State<CalorieIntakeChart> createState() => _CalorieIntakeChartState();
-// }
-
-// class _CalorieIntakeChartState extends State<CalorieIntakeChart> {
-//   double h = 0.0, w = 0.0;
-//   double kh = 1 / 759.2727272727273;
-//   double kw = 1 / 392.72727272727275;
-//   List<SalesData> data = [
-//     SalesData('6 Jan', 35),
-//     SalesData('7 Jan', 28),
-//     SalesData('9 Jan', 34),
-//     SalesData('11 Jan', 32),
-//     SalesData('13 Jan', 40),
-//     SalesData('15 Jan', 40),
-//     SalesData('17 Jan', 40),
-//     SalesData('19 Jan', 40),
-//     SalesData('21 Jan', 40),
-//     SalesData('23 Jan', 40),
-
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var size = MediaQuery.of(context).size;
-//     h = size.height;
-//     w = size.width;
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Body Fat %"),
-//         centerTitle: true,
-//         backgroundColor: Colors.green[700],
-//         brightness: Brightness.dark,
-//       ),
-//       body: Container(
-//         height: h*0.50,
-//         width: w,
-//         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-//         child: SfCartesianChart(
-//           primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Date'),edgeLabelPlacement: EdgeLabelPlacement.shift),
-//           primaryYAxis: NumericAxis(title: AxisTitle(text: 'Body fat %'),labelFormat: '{value}%',edgeLabelPlacement: EdgeLabelPlacement.shift),
-//          // title: ChartTitle(text: 'Body Fat Percentage(%)'),
-//           tooltipBehavior: TooltipBehavior(enable: true),
-//           series: <ChartSeries<SalesData, String>>[
-//             LineSeries<SalesData, String>(  
-//               dataSource: data,
-//               xValueMapper: (SalesData sales, _) => sales.month,
-//               yValueMapper: (SalesData sales, _) => sales.sales,
-//               name: 'Body Fat %',
-//               dataLabelSettings: DataLabelSettings(isVisible: true),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class SalesData {
-//   final String month;
-//   final double sales;
-
-//   SalesData(this.month, this.sales);
-// }
