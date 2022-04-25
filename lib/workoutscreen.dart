@@ -417,16 +417,19 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           for (int j = 0;
               j < chosenExercises[i].values.toList()[0]['Sets'];
               j++) {
-            chosenExercises[i].values.toList()[0]['RepWeight'][j]['performed'] = 0;
+            chosenExercises[i].values.toList()[0]['RepWeight'][j]['performed'] =
+                0;
           }
         }
         print(chosenExercises);
+        print('TEMPLATE LIST');
+        print(templateslistall);
         await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => StartWorkoutScreen(
                 chosenExercises,
-                workoutname,
+                templateslistall[index]['name'],
                 exercisecat,
                 categoryimages,
                 combinedtypesofcategory,
