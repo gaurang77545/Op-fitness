@@ -7,7 +7,7 @@ import 'package:op_fitnessapp/demoscreen.dart';
 import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
-import 'package:op_fitnessapp/timer.dart';
+import 'package:op_fitnessapp/startworkoutscreen.dart';
 import 'package:op_fitnessapp/timer2.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
@@ -666,13 +666,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      
-      // ExerciseChooseScreen(
-      //     exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
-      
       TimerNew(),
-      //WorkoutScreen([],'',[],exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
-      DemoScreen(),
+      // ExerciseChooseScreen([], [], 'hahah', exercisecat, categoryimages,
+      //     combinedtypesofcategory, exercisenames,1),
+      WorkoutScreen([], 'Evening', [], exercisecat, categoryimages,
+          combinedtypesofcategory, exercisenames),
+      // StartWorkoutScreen([
+      //   {
+      //     'Around the World': {
+      //       'Sets': 3,
+      //       'RepWeight': [
+      //         {'kg': 1, 'reps': 0},
+      //         {'kg': 12, 'reps': 1},
+      //         {'kg': 2, 'reps': 2}
+      //       ]
+      //     }
+      //   },
+      //   {
+      //     'Back Extension': {
+      //       'Sets': 1,
+      //       'RepWeight': [
+      //         {'kg': 3, 'reps': 0}
+      //       ]
+      //     }
+      //   }
+      // ], 'Evening', exercisecat, categoryimages, combinedtypesofcategory,
+      //     exercisenames),
+
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),

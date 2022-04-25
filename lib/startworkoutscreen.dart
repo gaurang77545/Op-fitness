@@ -6,20 +6,24 @@ import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
+import 'package:op_fitnessapp/workouthelper.dart';
 import 'package:op_fitnessapp/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AddedExerciseScreen extends StatefulWidget {
+class StartWorkoutScreen extends StatefulWidget {
   List<Map<String, Map<String, dynamic>>> chosenExercises;
   String workoutname;
   List<Map<String, String>> exercisecat;
-  List<Map<String, dynamic>> templates = [];
+  //List<Map<String, dynamic>> templates = [];
   List<Image> categoryimages = [];
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
-  AddedExerciseScreen(
-      this.templates,
+  StartWorkoutScreen(
+      //this.templates,
       this.chosenExercises,
       this.workoutname,
       this.exercisecat,
@@ -37,14 +41,14 @@ class AddedExerciseScreen extends StatefulWidget {
   //   }
   // ];
   // String workoutname = '';
-  // AddedExerciseScreen(
+  // StartWorkoutScreen(
   //     {required this.chosenExercises, required this.workoutname});
 
   @override
-  State<AddedExerciseScreen> createState() => _AddedExerciseScreenState();
+  State<StartWorkoutScreen> createState() => _StartWorkoutScreenState();
 }
 
-class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
+class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
@@ -603,11 +607,71 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
     'Other'
   ];
   String workoutname = '';
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer();
+  final _isHours = true;
+  final dbHelper = DatabaseHelper.instance;
+  String exercisecombined = '';
+  String repweightcombined = '';
+  String currtime = '';
   @override
   void initState() {
     chosenExercises = widget.chosenExercises;
-    templates = widget.templates;
+    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    //templates = widget.templates;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _stopWatchTimer.dispose();
+    super.dispose();
+  }
+
+  void format(List<Map<String, dynamic>> templateser) {
+    print(templateser.length);
+    setState(() {
+      for (int i = 0; i < templateser.length; i++) {
+        // print(i);
+        exercisecombined += templateser[i].keys.toList()[0];
+        for (int j = 0; j < templateser[i].values.toList()[0]['Sets']; j++) {
+          repweightcombined += 'kg' +
+              templateser[i]
+                  .values
+                  .toList()[0]['RepWeight'][j]['kg']
+                  .toString() +
+              'reps' +
+              templateser[i]
+                  .values
+                  .toList()[0]['RepWeight'][j]['reps']
+                  .toString();
+        }
+        if (i != templateser.length - 1) {
+          repweightcombined += '\n';
+          exercisecombined += '\n';
+        }
+        //repweightcombined+=
+      }
+    });
+    //  print(exercisecombined);
+    // print(repweightcombined);
+    //print(templates[1].values.toList()[0]['Sets']);
+    //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
+  }
+
+  Future<void> _insert() async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columncombinedexercise: exercisecombined,
+      DatabaseHelper.columncombinedweightreps: repweightcombined,
+      DatabaseHelper.workoutname: widget.workoutname,
+      DatabaseHelper.columndate:
+          int.parse(Timestamp.fromDate(DateTime.now()).seconds.toString()),
+      DatabaseHelper.columnworkouttime: int.parse(currtime)
+      //DatabaseHelper.columnExperience:'Flutter Developer'
+    };
+    print(row);
+    final id = await dbHelper.insert(row);
+    print('inserted row id: $id');
   }
 
   @override
@@ -625,8 +689,10 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
         actions: [
           TextButton.icon(
             // <-- TextButton
-            onPressed: () {
+            onPressed: () async {
               addtemplate(templates);
+              format(chosenExercises);
+              await _insert();
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -697,12 +763,37 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                 widget.exercisecat,
                                 widget.categoryimages,
                                 widget.combinedtypesofcategory,
-                                widget.exercisenames)),
+                                widget.exercisenames,
+                                1)),
                       );
                     },
                     child: const Text('ADD EXERCISE',
                         style: TextStyle(color: Colors.blue))),
               ],
+            ),
+            StreamBuilder<int>(
+              stream: _stopWatchTimer.rawTime,
+              initialData: _stopWatchTimer.rawTime.value,
+              builder: (context, snapshot) {
+                final value = snapshot.data;
+                final displayTime =
+                    StopWatchTimer.getDisplayTime(value!, hours: _isHours);
+
+                currtime = StopWatchTimer.getDisplayTime(value,
+                    hours: false,
+                    minute: false,
+                    milliSecond: false,
+                    second: true);
+                // print(currtime);
+
+                return Text(
+                  displayTime,
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                );
+              },
             ),
             exercisename(widget.workoutname, chosenExercises)
           ]),
@@ -785,6 +876,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                           shrinkWrap: true,
                           itemBuilder: (ctx, item) {
                             print('Inside Loop+' + item.toString());
+                            Color color = Colors.black;
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -808,6 +900,9 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                         width: w * 0.05,
                                         child: TextFormField(
                                           keyboardType: TextInputType.number,
+                                          initialValue:
+                                              l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['kg'].toString(),
                                           onChanged: ((value) {
                                             setState(() {
                                               l[itemer].values.toList()[0]
@@ -822,6 +917,9 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                         width: w * 0.05,
                                         child: TextFormField(
                                           keyboardType: TextInputType.number,
+                                          initialValue:
+                                              l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['reps'].toString(),
                                           onChanged: ((value) {
                                             setState(() {
                                               l[itemer].values.toList()[0]
@@ -836,7 +934,26 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                    onPressed: () {}, icon: Icon(Icons.add))
+                                  onPressed: () {
+                                    setState(() {
+                                      l[itemer].values.toList()[0]['RepWeight']
+                                              [item]['performed'] =
+                                          1 -
+                                              l[itemer].values.toList()[0]
+                                                      ['RepWeight'][item]
+                                                  ['performed'];
+                                      print(chosenExercises);
+                                    });
+                                  },
+                                  icon: Icon(
+                                      Icons.check_circle_outline_outlined,
+                                      color: l[itemer].values.toList()[0]
+                                                      ['RepWeight'][item]
+                                                  ['performed'] ==
+                                              1
+                                          ? Colors.green
+                                          : Colors.black),
+                                )
                               ],
                             );
                           },

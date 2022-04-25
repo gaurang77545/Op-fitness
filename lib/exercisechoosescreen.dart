@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/addedExerciseScreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
+import 'package:op_fitnessapp/startworkoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -9,16 +10,24 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
 
 class ExerciseChooseScreen extends StatefulWidget {
-  String workoutname;
-  List<Map<String, String>> exercisecat;
+  int navig = 0;
+  String workoutname = '';
+  List<Map<String, String>> exercisecat = [];
   List<Map<String, dynamic>> templates = [];
   List<Map<String, Map<String, dynamic>>> chosenExercises = [];
   List<Image> categoryimages = [];
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
 
-  ExerciseChooseScreen(this.templates,this.chosenExercises, this.workoutname, this.exercisecat,
-      this.categoryimages, this.combinedtypesofcategory, this.exercisenames);
+  ExerciseChooseScreen(
+      this.templates,
+      this.chosenExercises,
+      this.workoutname,
+      this.exercisecat,
+      this.categoryimages,
+      this.combinedtypesofcategory,
+      this.exercisenames,
+      [this.navig = 0]);
 
   @override
   State<ExerciseChooseScreen> createState() => _ExerciseChooseScreenState();
@@ -227,18 +236,32 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddedExerciseScreen(
-                        widget.templates,
-                          chosenExercises,
-                          widget.workoutname,
-                          widget.exercisecat,
-                          widget.categoryimages,
-                          widget.combinedtypesofcategory,
-                          widget.exercisenames)),
-                );
+                if (widget.navig == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StartWorkoutScreen(
+                            chosenExercises,
+                            widget.workoutname,
+                            widget.exercisecat,
+                            widget.categoryimages,
+                            widget.combinedtypesofcategory,
+                            widget.exercisenames)),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddedExerciseScreen(
+                            widget.templates,
+                            chosenExercises,
+                            widget.workoutname,
+                            widget.exercisecat,
+                            widget.categoryimages,
+                            widget.combinedtypesofcategory,
+                            widget.exercisenames)),
+                  );
+                }
               },
               child: Icon(Icons.keyboard_arrow_right_outlined)),
     );
@@ -300,14 +323,26 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         });
         if (selected[index] == true) {
           setState(() {
-            chosenExercises.add({
-              name: {
-                'Sets': 1,
-                'RepWeight': [
-                  {'kg': 0, 'reps': 0}
-                ]
-              }
-            });
+            print(widget.navig);
+            if (widget.navig == 1) {
+              chosenExercises.add({
+                name: {
+                  'Sets': 1,
+                  'RepWeight': [
+                    {'kg': 0, 'reps': 0, 'performed': 0}
+                  ]
+                }
+              });
+            } else {
+              chosenExercises.add({
+                name: {
+                  'Sets': 1,
+                  'RepWeight': [
+                    {'kg': 0, 'reps': 0}
+                  ]
+                }
+              });
+            }
           });
           print(chosenExercises);
         }
