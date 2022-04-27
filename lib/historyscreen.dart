@@ -5,14 +5,13 @@ import 'package:op_fitnessapp/calorieintakechart.dart';
 import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
-import 'package:op_fitnessapp/startworkoutscreen.dart';
 import 'package:op_fitnessapp/weightchart.dart';
 import 'package:op_fitnessapp/measurescreen.dart';
-import 'package:op_fitnessapp/templateshelper.dart';
+import 'package:op_fitnessapp/workouthelper.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class WorkoutScreen extends StatefulWidget {
+class HistoryScreen extends StatefulWidget {
   String workoutname;
   List<Map<String, Map<String, dynamic>>> newtemplates = [];
   List<Map<String, String>> exercisecat;
@@ -50,7 +49,7 @@ class WorkoutScreen extends StatefulWidget {
     // },
   ];
 
-  WorkoutScreen(
+  HistoryScreen(
       this.templates,
       this.workoutname,
       this.newtemplates,
@@ -60,18 +59,20 @@ class WorkoutScreen extends StatefulWidget {
       this.exercisenames);
 
   @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
+  State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
+class _HistoryScreenState extends State<HistoryScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   final dbHelper = DatabaseHelper.instance;
-  List<Map<String, dynamic>> templateslistall = [];
-  List<Map<String, Map<String, dynamic>>> templatesdummy = [];
+  List<Map<String, dynamic>> workouthistorylist = [];
+  List<Map<String, Map<String, dynamic>>> historydummy = [];
   String exercisecombined = '';
   String repweightcombined = '';
+  String perfcombined = '';
+  bool loading = true;
   @override
   void initState() {
     gettemplates();
@@ -81,6 +82,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   @override
   void didChangeDependencies() {
     // addtemplate(widget.templates);
+     gettemplates();
     print(widget.templates);
     print(widget.newtemplates);
     super.didChangeDependencies();
@@ -88,33 +90,57 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   Future<void> gettemplates() async {
     final allRows = await dbHelper.queryAllRows();
-    print('query all rows:');
+    print('query all rows: WORKOUT SCREEN');
     print(allRows);
     repweightcombined = '';
     exercisecombined = '';
+    workouthistorylist = [];
     allRows.forEach((row) {
       setState(() {
         repweightcombined =
             row['combinedweightreps'] == null ? '' : row['combinedweightreps'];
         exercisecombined =
             row['combinedexercise'] == null ? '' : row['combinedexercise'];
-        if (repweightcombined != '' || exercisecombined != '') {
+        perfcombined = row['performed'] == null ? '' : row['performed'];
+        if (repweightcombined != '' ||
+            exercisecombined != '' ||
+            perfcombined != '') {
           seperate();
-          if (templatesdummy.length != 0) {
+
+          if (historydummy.length != 0) {
             List<exercise> l = [];
-            for (int i = 0; i < templatesdummy.length; i++) {
+            //bool workoutperformed = false;
+            for (int i = 0; i < historydummy.length; i++) {
+              int sets = 0;
+              for (int j = 0;
+                  j < historydummy[i].values.toList()[0]['Sets'];
+                  j++) {
+                // print(historydummy[i].values.toList()[0]['RepWeight'][j]
+                //     ['performed']);
+                if (historydummy[i].values.toList()[0]['RepWeight'][j]
+                        ['performed'] ==
+                    1) {
+                  setState(() {
+                    sets++;
+                  });
+                  // print('REACHED');
+                }
+              }
               setState(() {
                 l.add(exercise(
-                  templatesdummy[i].values.toList()[0]['Sets'],
-                  templatesdummy[i].keys.toList()[0],
+                  //historydummy[i].values.toList()[0]['Sets'],
+                  sets,
+                  historydummy[i].keys.toList()[0],
                 ));
               });
             }
-            templatesdummy = [];
+
+            historydummy = [];
             setState(() {
-              templateslistall.add({
+              workouthistorylist.add({
                 'name': row['workoutname'],
-               
+                'time': row['workouttime'].toString(),
+                'date': DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
                 'list': l
               });
             });
@@ -122,6 +148,32 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         }
       });
     });
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  String formattedate(DateTime date) {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    String num = date.day.toString();
+    String month = months[date.month - 1].substring(0, 3);
+    String num_month = num + '  ' + month + '    ';
+    String time = date.hour.toString() + ":" + date.minute.toString();
+    return num_month;
   }
 
   Future<void> gettemplatesindex(int i) async {
@@ -131,32 +183,18 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     // print(allRows);
     repweightcombined = '';
     exercisecombined = '';
+    perfcombined = '';
     var row = allRows[i];
     setState(() {
       repweightcombined =
           row['combinedweightreps'] == null ? '' : row['combinedweightreps'];
       exercisecombined =
           row['combinedexercise'] == null ? '' : row['combinedexercise'];
-      if (repweightcombined != '' || exercisecombined != '') {
+      perfcombined = row['performed'] == null ? '' : row['performed'];
+      if (repweightcombined != '' ||
+          exercisecombined != '' ||
+          perfcombined != '') {
         seperate();
-        // print('TEMPLATES DUMMYYYYY');
-        // print(templatesdummy);
-        // if (templatesdummy.length != 0) {
-        //   List<exercise> l = [];
-        //   for (int i = 0; i < templatesdummy.length; i++) {
-        //     setState(() {
-        //       l.add(exercise(
-        //         templatesdummy[i].values.toList()[0]['Sets'],
-        //         templatesdummy[i].keys.toList()[0],
-        //       ));
-        //     });
-        //   }
-        //   templatesdummy = [];
-        //   // setState(() {
-        //   //   templateslistall.add(
-        //   //       {'name': row['workoutname'], 'last_performed': '0', 'list': l});
-        //   // });
-        // }
       }
     });
   }
@@ -165,15 +203,21 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     var arr = exercisecombined.split('\n');
     var kgreps = repweightcombined;
     var repsarr = repweightcombined.split('\n');
-    print(arr.length);
+    var perf = perfcombined;
+    var perfarr = perfcombined.split('\n');
+    // print(' PERFarr');
+    // print(perfcombined);
+    //print(arr.length);
     List<int> kg = [];
     for (int i = 0; i < repsarr.length; i++) {
       String name = arr[i];
-      print(name);
-      print(repsarr);
+      //print(name);
+      //print(repsarr);
       kgreps = repsarr[i];
+      perf = perfarr[i];
       List<String> kglist = [];
       List<String> repslist = [];
+      List<String> perflist = [];
       for (int index = kgreps.indexOf('kg');
           index >= 0;
           index = kgreps.indexOf('kg', index + 1)) {
@@ -192,25 +236,38 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         repslist.add(reps);
         // print('reps' + reps);
       }
+
+      for (int index = perf.indexOf('performed');
+          index >= 0;
+          index = perf.indexOf('performed', index + 1)) {
+        int perfindex = perf.indexOf('performed', index + 1) == -1
+            ? perf.length
+            : perf.indexOf('performed', index + 1);
+        //print(perfindex);
+        String performed = perf.substring(index + 9, perfindex);
+
+        perflist.add(performed);
+        // print('kg' + kg);
+      }
+      // print(perflist);
       List<Map<String, int>> kgrepslist = [];
       // print(kgreps);
+      // print('PERFLISTTTTT');
+      // print(perflist);
       for (int i = 0; i < kglist.length; i++) {
-        kgrepslist
-            .add({'kg': int.parse(kglist[i]), 'reps': int.parse(repslist[i])});
+        kgrepslist.add({
+          'kg': int.parse(kglist[i]),
+          'reps': int.parse(repslist[i]),
+          'performed': perflist[i] == null ? 0 : int.parse(perflist[i])
+        });
       }
-      print(kgrepslist);
-      templatesdummy.add({
+      //print(kgrepslist);
+      historydummy.add({
         name: {'Sets': kgrepslist.length, 'RepWeight': kgrepslist}
       });
-
       setState(() {});
-      print('\n');
+      //print('\n');
     }
-    // print('TEMPLATES DUMMY');
-    // print(templatesdummy);
-    // }
-    //  print(arr);
-    // print(kgreps);
   }
 
   @override
@@ -222,105 +279,45 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Workout',
+          'History',
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'QUICK START',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-            ),
-            SizedBox(
-              height: h * 0.005,
-            ),
-            Container(
-              width: w,
-              child: TextButton(
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                ),
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExerciseChooseScreen([], [],
-                          widget.workoutname,
-                          widget.exercisecat,
-                          widget.categoryimages,
-                          widget.combinedtypesofcategory,
-                          widget.exercisenames,
-                          1),
-                    ),
-                  );
-                },
-                child: Text('START AN EMPTY WORKOUT'),
+      body: loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: h * 0.005,
+                  ),
+
+                  //template('Evening Workout', '14', l)
+                  templatelist(
+                    workouthistorylist,
+                    historydummy,
+                    widget.workoutname,
+                    widget.exercisecat,
+                    widget.categoryimages,
+                    widget.combinedtypesofcategory,
+                    widget.exercisenames,
+                  )
+                ],
               ),
             ),
-            SizedBox(
-              height: h * 0.005,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'MY TEMPLATES',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WorkoutTemplateScreen(
-                            templateslistall,
-                            widget.exercisecat,
-                            widget.categoryimages,
-                            widget.combinedtypesofcategory,
-                            widget.exercisenames),
-                      ),
-                    ).then((value) => gettemplates());
-                    gettemplates();
-                    //print(templates);
-                    //print(widget.templates);
-                    //addtemplate(widget.templates);
-                    //print(widget.templates);
-                  },
-                  icon: Icon(Icons.add),
-                )
-              ],
-            ),
-            SizedBox(
-              height: h * 0.005,
-            ),
-            //template('Evening Workout', '14', l)
-            templatelist(
-              templateslistall,
-              templatesdummy,
-              widget.workoutname,
-              widget.exercisecat,
-              widget.categoryimages,
-              widget.combinedtypesofcategory,
-              widget.exercisenames,
-            )
-          ],
-        ),
-      ),
     );
   }
 
   Widget template(
       String title,
+      String date,
+      String workouttime,
       List<exercise> l,
       List<Map<String, Map<String, dynamic>>> chosenExercises,
       String workoutname,
@@ -350,6 +347,27 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 ),
                 SizedBox(
                   height: h * 0.01,
+                ),
+                Text(
+                  date,
+                  style: TextStyle(fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: h * 0.01,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.timer,
+                      size: 12,
+                    ),
+                    SizedBox(
+                      width: w * 0.02,
+                    ),
+                    Text(workouttime,
+                        style: TextStyle(fontWeight: FontWeight.w700))
+                  ],
                 ),
                 SizedBox(
                   height: h * 0.01,
@@ -405,34 +423,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ),
         ),
       ),
-      onTap: () async {
-        await gettemplatesindex(index);
-        print('CHOSEN EXERCISES');
-        print(chosenExercises);
-        for (int i = 0; i < chosenExercises.length; i++) {
-          for (int j = 0;
-              j < chosenExercises[i].values.toList()[0]['Sets'];
-              j++) {
-            chosenExercises[i].values.toList()[0]['RepWeight'][j]['performed'] =
-                0;
-          }
-        }
-        print(chosenExercises);
-        print('TEMPLATE LIST');
-        print(templateslistall);
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StartWorkoutScreen(
-                chosenExercises,
-                templateslistall[index]['name'],
-                exercisecat,
-                categoryimages,
-                combinedtypesofcategory,
-                exercisenames),
-          ),
-        ).then((value) => templatesdummy = []);
-      },
     );
   }
 
@@ -457,6 +447,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 //     l[item]['list']),
                 template(
                     l[item]['name'],
+                    formattedate(l[item]['date']),
+                    l[item]['time'].toString() + 's',
                     l[item]['list'],
                     chosenExercises,
                     workoutname,

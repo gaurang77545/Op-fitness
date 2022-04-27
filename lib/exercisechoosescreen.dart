@@ -96,6 +96,13 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
       appBar: AppBar(
         title: customSearchBar,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         actions: [
           AnimatedSearchBar(
             shadow: const [

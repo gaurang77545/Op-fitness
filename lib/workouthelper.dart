@@ -5,10 +5,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
-  static final _databaseName = "workouthelper.db";
-  static final _databaseVersion = 4;
+  static final _databaseName = "workouthelperlatest.db";
+  static final _databaseVersion = 6;
 
-  static final table = 'workout';
+  static final table = 'workoutlatest';
 
   static final columnId = '_id';
   static final workoutname = 'workoutname';
@@ -16,6 +16,7 @@ class DatabaseHelper {
   static final columncombinedweightreps = 'combinedweightreps';
   static final columnworkouttime = 'workouttime';
   static final columndate = 'date';
+  static final columnperformed = 'performed';
   // static final columnExperience = 'experience';
 
   // make this a singleton class
@@ -48,7 +49,8 @@ class DatabaseHelper {
             $columncombinedweightreps TEXT NOT NULL,
             $workoutname TEXT NOT NULL,
             $columnworkouttime INTEGER NOT NULL,
-            $columndate INTEGER NOT NULL
+            $columndate INTEGER NOT NULL,
+            $columnperformed TEXT NOT NULL
           )
           ''');
   }

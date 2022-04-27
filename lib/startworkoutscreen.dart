@@ -612,11 +612,28 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
   final dbHelper = DatabaseHelper.instance;
   String exercisecombined = '';
   String repweightcombined = '';
+  String perfcombined = '';
   String currtime = '';
+  int currhour = 0;
   @override
   void initState() {
     chosenExercises = widget.chosenExercises;
     _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    currhour = DateTime.now().hour;
+    if ((currhour >= 0 && currhour <= 4) ||
+        (currhour >= 19 && currhour <= 23) ||
+        currhour == 0) {
+      widget.workoutname = 'Night Workout';
+    }
+    if (currhour > 4 && currhour <= 11) {
+      widget.workoutname = 'Morning Workout';
+    }
+    if (currhour > 11 && currhour <= 16) {
+      widget.workoutname = 'Noon Workout';
+    }
+    if (currhour > 16 && currhour < 19) {
+      widget.workoutname = 'Evening Workout';
+    }
     //templates = widget.templates;
     super.initState();
   }
@@ -628,7 +645,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
   }
 
   void format(List<Map<String, dynamic>> templateser) {
-    print(templateser.length);
+    //print(templateser.length);
     setState(() {
       for (int i = 0; i < templateser.length; i++) {
         // print(i);
@@ -644,21 +661,29 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                   .values
                   .toList()[0]['RepWeight'][j]['reps']
                   .toString();
+          perfcombined += 'performed' +
+              templateser[i]
+                  .values
+                  .toList()[0]['RepWeight'][j]['performed']
+                  .toString();
         }
         if (i != templateser.length - 1) {
           repweightcombined += '\n';
           exercisecombined += '\n';
+          perfcombined += '\n';
         }
         //repweightcombined+=
       }
     });
-    //  print(exercisecombined);
-    // print(repweightcombined);
+    print(exercisecombined);
+    print(repweightcombined);
+    print(perfcombined);
     //print(templates[1].values.toList()[0]['Sets']);
     //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
   }
 
   Future<void> _insert() async {
+    print('WORKOUT NAME IS' + widget.workoutname);
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columncombinedexercise: exercisecombined,
@@ -666,7 +691,8 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
       DatabaseHelper.workoutname: widget.workoutname,
       DatabaseHelper.columndate:
           int.parse(Timestamp.fromDate(DateTime.now()).seconds.toString()),
-      DatabaseHelper.columnworkouttime: int.parse(currtime)
+      DatabaseHelper.columnworkouttime: int.parse(currtime),
+      DatabaseHelper.columnperformed: perfcombined
       //DatabaseHelper.columnExperience:'Flutter Developer'
     };
     print(row);
@@ -685,6 +711,13 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
           'Workout',
           style: TextStyle(color: Colors.black),
         ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         elevation: 0,
         actions: [
           TextButton.icon(
@@ -692,6 +725,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
             onPressed: () async {
               addtemplate(templates);
               format(chosenExercises);
+
               await _insert();
               Navigator.push(
                   context,
@@ -900,9 +934,18 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                         width: w * 0.05,
                                         child: TextFormField(
                                           keyboardType: TextInputType.number,
-                                          initialValue:
-                                              l[itemer].values.toList()[0]
-                                                  ['RepWeight'][item]['kg'].toString(),
+                                          initialValue: l[itemer]
+                                                      .values
+                                                      .toList()[0]['RepWeight']
+                                                          [item]['kg']
+                                                      .toString() ==
+                                                  '0'
+                                              ? null
+                                              : l[itemer]
+                                                  .values
+                                                  .toList()[0]['RepWeight']
+                                                      [item]['kg']
+                                                  .toString(),
                                           onChanged: ((value) {
                                             setState(() {
                                               l[itemer].values.toList()[0]
@@ -917,9 +960,18 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                         width: w * 0.05,
                                         child: TextFormField(
                                           keyboardType: TextInputType.number,
-                                          initialValue:
-                                              l[itemer].values.toList()[0]
-                                                  ['RepWeight'][item]['reps'].toString(),
+                                          initialValue: l[itemer]
+                                                      .values
+                                                      .toList()[0]['RepWeight']
+                                                          [item]['reps']
+                                                      .toString() ==
+                                                  '0'
+                                              ? null
+                                              : l[itemer]
+                                                  .values
+                                                  .toList()[0]['RepWeight']
+                                                      [item]['reps']
+                                                  .toString(),
                                           onChanged: ((value) {
                                             setState(() {
                                               l[itemer].values.toList()[0]
@@ -976,7 +1028,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                 l[itemer]
                                     .values
                                     .toList()[0]['RepWeight']
-                                    .add({'kg': 0, 'reps': 0});
+                                    .add({'kg': 0, 'reps': 0, 'performed': 0});
                               });
                               print(l);
                             },

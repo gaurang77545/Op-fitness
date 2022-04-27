@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:op_fitnessapp/bodyfatpercentage.dart';
 import 'package:op_fitnessapp/calorieintakechart.dart';
 import 'package:op_fitnessapp/exercisechoosescreen.dart';
@@ -15,7 +16,7 @@ class WorkoutTemplateScreen extends StatefulWidget {
   List<Image> categoryimages = [];
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
-  WorkoutTemplateScreen(this.templates,this.exercisecat, this.categoryimages,
+  WorkoutTemplateScreen(this.templates, this.exercisecat, this.categoryimages,
       this.combinedtypesofcategory, this.exercisenames);
   @override
   State<WorkoutTemplateScreen> createState() => _WorkoutTemplateScreenState();
@@ -550,6 +551,8 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
     'Other'
   ];
   String workoutname = '';
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -567,32 +570,36 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          // Text(
-          //   'New Workout Template',
-          //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          // ),
-          // SizedBox(
-          //   height: h * 0.02,
-          // ),
+          
           Container(
             height: h * 0.05,
-            child: TextField(
-              decoration: InputDecoration(
-                  labelText: 'Workout Name',
-                  fillColor: Colors.grey.shade300,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  )),
-              onChanged: (val) {
-                setState(() {
-                  workoutname = val;
-                });
-              },
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                controller: _controller,
+                decoration: InputDecoration(
+                    labelText: 'Workout Name',
+                    fillColor: Colors.grey.shade300,
+                    filled: true,
+                    
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      // borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    )),
+                onChanged: (val) {
+                  setState(() {
+                    workoutname = val;
+                  });
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return null;
+                  }
+                },
+              ),
             ),
           ),
           Row(
@@ -602,19 +609,30 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ExerciseChooseScreen(
-                            widget.templates,
-                            [],
-                              workoutname,
-                              widget.exercisecat,
-                              widget.categoryimages,
-                              widget.combinedtypesofcategory,
-                              widget.exercisenames)),
-                    );
+                  onPressed: () async {
+                    if (_controller.text!='') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ExerciseChooseScreen(
+                                widget.templates,
+                                [],
+                                workoutname,
+                                widget.exercisecat,
+                                widget.categoryimages,
+                                widget.combinedtypesofcategory,
+                                widget.exercisenames)),
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Please enter the template name",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 2,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
                   },
                   child: const Text('ADD EXERCISE',
                       style: TextStyle(color: Colors.blue))),

@@ -6,7 +6,9 @@ import 'package:op_fitnessapp/calorieintakechart.dart';
 import 'package:op_fitnessapp/demoscreen.dart';
 import 'package:op_fitnessapp/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/exercisescreen.dart';
+import 'package:op_fitnessapp/historyscreen.dart';
 import 'package:op_fitnessapp/newworkouttemplate.dart';
+import 'package:op_fitnessapp/profilescreen.dart';
 import 'package:op_fitnessapp/startworkoutscreen.dart';
 import 'package:op_fitnessapp/timer2.dart';
 import 'package:op_fitnessapp/weightchart.dart';
@@ -652,25 +654,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      Center(
-        child: CircleAvatar(
-          backgroundColor: Colors.grey[200],
-          radius: 35,
-          child: CircleAvatar(
-            radius: 30.0,
-            child: Image.asset(
-              'icons/arms.webp',
-              color: Colors.lightBlue[200],
-            ),
-            backgroundColor: Colors.transparent,
-          ),
-        ),
-      ),
-      TimerNew(),
+      // Center(
+      //   child: CircleAvatar(
+      //     backgroundColor: Colors.grey[200],
+      //     radius: 35,
+      //     child: CircleAvatar(
+      //       radius: 30.0,
+      //       child: Image.asset(
+      //         'icons/arms.webp',
+      //         color: Colors.lightBlue[200],
+      //       ),
+      //       backgroundColor: Colors.transparent,
+      //     ),
+      //   ),
+      // ),
+      ProfileScreen(),
+      //TimerNew(),
       // ExerciseChooseScreen([], [], 'hahah', exercisecat, categoryimages,
       //     combinedtypesofcategory, exercisenames,1),
-      WorkoutScreen([], 'Evening', [], exercisecat, categoryimages,
+      HistoryScreen([], '', [], exercisecat, categoryimages,
           combinedtypesofcategory, exercisenames),
+      WorkoutScreen([], '', [], exercisecat, categoryimages,
+          combinedtypesofcategory, exercisenames),
+      // ProfileScreen(),
+      // DemoScreen(),
       // StartWorkoutScreen([
       //   {
       //     'Around the World': {

@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
+import 'package:op_fitnessapp/caloricintakehelper.dart' as ci;
 import 'package:op_fitnessapp/weightchart.dart';
+import 'package:op_fitnessapp/weighthelper.dart' as wd;
+import 'package:op_fitnessapp/bodyfathelper.dart' as bf;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
+
+import 'caloricintakehelper.dart';
+import 'calorieintakechart.dart';
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);
@@ -20,9 +25,33 @@ class _MeasureScreenState extends State<MeasureScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  String weight = '92';
-  String bodyfatpercentage = '92';
+  String weight = '';
+  String bodyfatpercentage = '';
   String calorieintake = '';
+  List<WeightData> weightdata = [];
+  List<caloricintakeData> caloricintakedata = [];
+  List<bodyfatData> bodyfatdata = [];
+  final dbweightHelper = wd.DatabaseHelper.instance;
+  final dbcaloricintakehelper = ci.DatabaseHelper.instance;
+  final dbbodyfathelper = bf.DatabaseHelper.instance;
+  @override
+  void initState() {
+    _weightquery();
+    _bodyfatquery();
+    _caloricintakequery();
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _weightquery();
+    _bodyfatquery();
+    _caloricintakequery();
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -49,8 +78,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
             SizedBox(
               height: h * 0.05,
             ),
-            listitem('Body Fat Percentage', bodyfatpercentage,
-                bodyfatChart()),
+            listitem('Body Fat Percentage', bodyfatpercentage, bodyfatChart()),
             SizedBox(
               height: h * 0.05,
             ),
@@ -59,6 +87,96 @@ class _MeasureScreenState extends State<MeasureScreen> {
         ),
       ),
     );
+  }
+
+  void weightsort() {
+    weightdata.sort((a, b) {
+      var adate = a.month; //before -> var adate = a.expiry;
+      var bdate = b.month; //before -> var bdate = b.expiry;
+      return adate.compareTo(
+          bdate); //to get the order other way just switch `adate & bdate`
+    });
+    weight = weightdata.last.weight.toString();
+    setState(() {});
+  }
+
+  void bodyfatsort() {
+    weightdata.sort((a, b) {
+      var adate = a.month; //before -> var adate = a.expiry;
+      var bdate = b.month; //before -> var bdate = b.expiry;
+      return adate.compareTo(
+          bdate); //to get the order other way just switch `adate & bdate`
+    });
+    bodyfatpercentage = bodyfatdata.last.bodyfat.toString();
+    setState(() {});
+  }
+
+  void calorificsort() {
+    weightdata.sort((a, b) {
+      var adate = a.month; //before -> var adate = a.expiry;
+      var bdate = b.month; //before -> var bdate = b.expiry;
+      return adate.compareTo(
+          bdate); //to get the order other way just switch `adate & bdate`
+    });
+    calorieintake = caloricintakedata.last.caloricintake.toString();
+    setState(() {});
+  }
+
+  void _weightquery() async {
+    final allRows = await dbweightHelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    weightdata = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              weightdata.add(WeightData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['weight'].toString())));
+            });
+          })
+        : [];
+    if (allRows.isNotEmpty) {
+      weightsort();
+    }
+  }
+
+  void _bodyfatquery() async {
+    final allRows = await dbbodyfathelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    bodyfatdata = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              bodyfatdata.add(bodyfatData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['bodyfat'].toString())));
+            });
+          })
+        : [];
+    if (allRows.isNotEmpty) {
+      bodyfatsort();
+    }
+  }
+
+  void _caloricintakequery() async {
+    final allRows = await dbcaloricintakehelper.queryAllRows();
+    print(allRows);
+    print('query all rows:');
+    caloricintakedata = [];
+    allRows.isNotEmpty
+        ? allRows.forEach((row) {
+            setState(() {
+              caloricintakedata.add(caloricintakeData(
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  double.parse(row['caloricintake'].toString())));
+            });
+          })
+        : [];
+    if (allRows.isNotEmpty) {
+      calorificsort();
+    }
   }
 
   Widget listitem(String title, String val, Widget screen) {
@@ -116,7 +234,11 @@ class _MeasureScreenState extends State<MeasureScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => screen),
-              );
+              ).then((value) {
+                _weightquery();
+                _bodyfatquery();
+                _caloricintakequery();
+              });
             },
           );
   }

@@ -23,9 +23,9 @@ class _DemoScreenState extends State<DemoScreen> {
       'Around the World': {
         'Sets': 3,
         'RepWeight': [
-          {'kg': 1, 'reps': 0},
-          {'kg': 12, 'reps': 1},
-          {'kg': 2, 'reps': 2}
+          {'kg': 1, 'reps': 0, 'performed': 1},
+          {'kg': 12, 'reps': 1, 'performed': 1},
+          {'kg': 2, 'reps': 2, 'performed': 0}
         ]
       }
     },
@@ -33,7 +33,7 @@ class _DemoScreenState extends State<DemoScreen> {
       'Back Extension': {
         'Sets': 1,
         'RepWeight': [
-          {'kg': 3, 'reps': 0}
+          {'kg': 3, 'reps': 0, 'performed': 0}
         ]
       }
     }
@@ -41,30 +41,41 @@ class _DemoScreenState extends State<DemoScreen> {
 
   String exercisecombined = '';
   String repweightcombined = '';
-  void format() {
-    print(templates.length);
+  String perfcombined = '';
+  void format(List<Map<String, dynamic>> templateser) {
+    print(templateser.length);
     setState(() {
-      for (int i = 0; i < templates.length; i++) {
+      for (int i = 0; i < templateser.length; i++) {
         // print(i);
-        exercisecombined += templates[i].keys.toList()[0];
-        for (int j = 0; j < templates[i].values.toList()[0]['Sets']; j++) {
+        exercisecombined += templateser[i].keys.toList()[0];
+        for (int j = 0; j < templateser[i].values.toList()[0]['Sets']; j++) {
           repweightcombined += 'kg' +
-              templates[i].values.toList()[0]['RepWeight'][j]['kg'].toString() +
+              templateser[i]
+                  .values
+                  .toList()[0]['RepWeight'][j]['kg']
+                  .toString() +
               'reps' +
-              templates[i]
+              templateser[i]
                   .values
                   .toList()[0]['RepWeight'][j]['reps']
                   .toString();
+          perfcombined += 'performed' +
+              templateser[i]
+                  .values
+                  .toList()[0]['RepWeight'][j]['performed']
+                  .toString();
         }
-        if (i != templates.length - 1) {
+        if (i != templateser.length - 1) {
           repweightcombined += '\n';
           exercisecombined += '\n';
+          perfcombined += '\n';
         }
         //repweightcombined+=
       }
     });
-    //  print(exercisecombined);
-    // print(repweightcombined);
+    print(exercisecombined);
+    print(repweightcombined);
+    print(perfcombined);
     //print(templates[1].values.toList()[0]['Sets']);
     //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
   }
@@ -74,9 +85,8 @@ class _DemoScreenState extends State<DemoScreen> {
     var arr = exercisecombined.split('\n');
     var kgreps = repweightcombined;
     var repsarr = repweightcombined.split('\n');
-    // for (int i = 0; i < arr.length; i++) {
-    //  String reps = kgreps[i];
-    //  String name = arr[i];
+    var perf = perfcombined;
+    var perfarr = perfcombined.split('\n');
     print(arr.length);
     List<int> kg = [];
     for (int i = 0; i < repsarr.length; i++) {
@@ -84,8 +94,10 @@ class _DemoScreenState extends State<DemoScreen> {
       print(name);
       print(repsarr);
       kgreps = repsarr[i];
+      perf = perfarr[i];
       List<String> kglist = [];
       List<String> repslist = [];
+      List<String> perflist = [];
       for (int index = kgreps.indexOf('kg');
           index >= 0;
           index = kgreps.indexOf('kg', index + 1)) {
@@ -104,30 +116,46 @@ class _DemoScreenState extends State<DemoScreen> {
         repslist.add(reps);
         // print('reps' + reps);
       }
+      // print('INDEX');
+      // int index = perf.indexOf('performed');
+      // print(perf.indexOf('performed'));
+
+      for (int index = perf.indexOf('performed');
+          index >= 0;
+          index = perf.indexOf('performed', index + 1)) {
+        int perfindex = perf.indexOf('performed', index + 1) == -1
+            ? perf.length
+            : perf.indexOf('performed', index + 1);
+        print(perfindex);
+        String performed = perf.substring(index + 9, perfindex);
+
+        perflist.add(performed);
+        // print('kg' + kg);
+      }
+      print(perflist);
       List<Map<String, int>> kgrepslist = [];
       // print(kgreps);
       for (int i = 0; i < kglist.length; i++) {
-        kgrepslist
-            .add({'kg': int.parse(kglist[i]), 'reps': int.parse(repslist[i])});
+        kgrepslist.add({
+          'kg': int.parse(kglist[i]),
+          'reps': int.parse(repslist[i]),
+          'performed': int.parse(perflist[i])
+        });
       }
       print(kgrepslist);
       templatesdummy.add({
         name: {'Sets': kgrepslist.length, 'RepWeight': kgrepslist}
       });
+
+      setState(() {});
       print('\n');
     }
     print(templatesdummy);
-    print(templates);
-    if (templatesdummy.contains(templates)) {
-      print('HOOOOOOOOOORAYYYYYYY');
-    } // }
-    //  print(arr);
-    // print(kgreps);
   }
 
   @override
   void initState() {
-    format();
+    format(templates);
     seperate();
     super.initState();
   }
