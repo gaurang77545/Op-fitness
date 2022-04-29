@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/workouthelper.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         brightness: Brightness.dark,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0*kh*h),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -112,12 +112,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    radius: 30,
+                    radius: 30*kh*h,
                     backgroundColor: Colors.grey,
                     child: Icon(
                       Icons.person,
                       color: Colors.white,
-                      size: 55,
+                      size: 55*kh*h,
                     ),
                   ),
                   SizedBox(
@@ -129,12 +129,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         profilename,
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 22),
+                            fontWeight: FontWeight.w600, fontSize: 22*kh*h),
                       ),
                       Text(
                         workoutcount.toString() + '  workouts',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 22),
+                            fontWeight: FontWeight.w600, fontSize: 22*kh*h),
                       ),
                     ],
                   ),
@@ -223,9 +223,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: h * 0.45,
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.grey)),
+                    border: Border.all(width: 1*kw*w, color: Colors.grey)),
                 width: w,
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10*kw*w, vertical: 20*kh*h),
                 child: SfCartesianChart(
                   title: ChartTitle(text: 'Workouts Performed'),
                   legend: Legend(isVisible: true),

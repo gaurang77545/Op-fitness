@@ -68,9 +68,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         backgroundColor: Colors.white,
         actions: [
           AnimatedSearchBar(
-            shadow: const [
+            shadow:  [
               BoxShadow(
-                  color: Colors.black38, blurRadius: 6, offset: Offset(0, 6))
+                  color: Colors.black38, blurRadius: 6*kh*h, offset: Offset(0, 6))
             ],
             backgroundColor: Colors.blue[100],
             failMessage: 'No Items found',
@@ -102,10 +102,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             }).toList(),
             textController: textController,
             overlaySearchListItemBuilder: (dynamic item) => Container(
-              padding: const EdgeInsets.all(8),
+              padding:  EdgeInsets.all(8*kh*h),
               child: Text(
                 item,
-                style: const TextStyle(fontSize: 15, color: Colors.black),
+                style:  TextStyle(fontSize: 15*kh*h, color: Colors.black),
               ),
             ),
             onItemSelected: (dynamic item) {
@@ -128,14 +128,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             child: DropdownButton2(
               isExpanded: true,
               hint: Row(
-                children: const [
+                children:  [
                   Icon(
                     Icons.filter_alt_rounded,
-                    size: 25,
+                    size: 25*kh*h,
                     color: Colors.blue,
                   ),
                   SizedBox(
-                    width: 4,
+                    width: 4*kw*w,
                   ),
                 ],
               ),
@@ -144,8 +144,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         value: item,
                         child: Text(
                           item,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style:  TextStyle(
+                            fontSize: 14*kh*h,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -164,28 +164,28 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 Icons.arrow_forward_ios_outlined,
                 color: Colors.blue,
               ),
-              iconSize: 14,
+              iconSize: 14*kh*h,
               iconEnabledColor: Colors.yellow,
               iconDisabledColor: Colors.grey,
-              buttonHeight: 50,
-              buttonWidth: 50,
+              buttonHeight: 50*kh*h,
+              buttonWidth: 50*kw*w,
               //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
               buttonDecoration: BoxDecoration(
                 color: Colors.white,
               ),
               buttonElevation: 2,
-              itemHeight: 40,
-              itemPadding: const EdgeInsets.only(left: 14, right: 14),
-              dropdownMaxHeight: 200,
-              dropdownWidth: 200,
+              itemHeight: 40*kh*h,
+              itemPadding:  EdgeInsets.only(left: 14*kw*w, right: 14*kw*w),
+              dropdownMaxHeight: 200*kh*h,
+              dropdownWidth: 200*kw*w,
               dropdownPadding: null,
               dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(14*kh*h),
                 //color: Colors.redAccent,
               ),
               dropdownElevation: 8,
-              scrollbarRadius: const Radius.circular(40),
-              scrollbarThickness: 6,
+              scrollbarRadius:  Radius.circular(40*kh*h),
+              scrollbarThickness: 6*kw*w,
               scrollbarAlwaysShow: true,
               offset: const Offset(-20, 0),
             ),
@@ -224,7 +224,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               backgroundColor: Colors.grey[200],
               radius: 35,
               child: CircleAvatar(
-                radius: 30.0,
+                radius: 30.0*kh*h,
                 child: image,
                 backgroundColor: Colors.transparent,
               ),
@@ -245,7 +245,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 ),
                 Text(
                   type,
-                  style: TextStyle(letterSpacing: 1),
+                  style: TextStyle(letterSpacing: 1*kw*w),
                 ),
               ],
             )

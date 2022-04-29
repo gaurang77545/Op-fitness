@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
-import 'package:op_fitnessapp/exercisechoosescreen.dart';
-import 'package:op_fitnessapp/exercisescreen.dart';
-import 'package:op_fitnessapp/templateshelper.dart';
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/measurescreen.dart';
-import 'package:op_fitnessapp/workoutscreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/templateshelper.dart';
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -619,7 +620,6 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -636,33 +636,38 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
           TextButton.icon(
             // <-- TextButton
             onPressed: () async {
-              addtemplate(templates);
-              // print('TEMPLATES');
-              // print(templates);
-              format(chosenExercises);
-              // print(repweightcombined);
-              // print(exercisecombined);
-              //seperate();
-              await _insert();
-              //  print('WORKOUT NAME');
-              // print(widget.workoutname);
-              //print('DUMMY TEMPLATESS');
-              //print(templatesdummy);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WorkoutScreen(
-                          templates,
-                          widget.workoutname,
-                          chosenExercises,
-                          widget.exercisecat,
-                          widget.categoryimages,
-                          widget.combinedtypesofcategory,
-                          widget.exercisenames)));
+              if (setsrepallfilled() == true) {
+                addtemplate(templates);
+
+                format(chosenExercises);
+
+                await _insert();
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WorkoutScreen(
+                            templates,
+                            widget.workoutname,
+                            chosenExercises,
+                            widget.exercisecat,
+                            widget.categoryimages,
+                            widget.combinedtypesofcategory,
+                            widget.exercisenames)));
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Kg and reps field can't be left empty",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 2,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0*kh*h);
+              }
             },
             icon: Icon(
               Icons.save,
-              size: 24.0,
+              size: 24.0*kh*h,
             ),
             label: Text('Save'),
           )
@@ -687,11 +692,11 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                     fillColor: Colors.grey.shade300,
                     filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0*kh*h),
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0*kh*h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -705,7 +710,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
               children: [
                 TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
+                      textStyle:  TextStyle(fontSize: 20.0*kh*h),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -732,10 +737,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
     );
   }
 
-
-
   Future<void> addtemplate(List<Map<String, dynamic>> templates) async {
-    
     if (chosenExercises.length != 0) {
       List<exercise> l = [];
       for (int i = 0; i < chosenExercises.length; i++) {
@@ -748,7 +750,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
       }
       setState(() {
         templates.add(
-            {'name': widget.workoutname, 'last_performed': '0', 'list': l});
+            {'name': widget.workoutname, 'list': l});
       });
     }
   }
@@ -782,6 +784,21 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
     // print(repweightcombined);
     //print(templates[1].values.toList()[0]['Sets']);
     //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
+  }
+
+  bool setsrepallfilled() {
+    int sum = 0;
+    for (int i = 0; i < chosenExercises.length; i++) {
+      for (int j = 0; j < chosenExercises[i].values.toList()[0]['Sets']; j++) {
+        if ((chosenExercises[i].values.toList()[0]['RepWeight'][j]['kg'] ==
+                0) ||
+            chosenExercises[i].values.toList()[0]['RepWeight'][j]['reps'] ==
+                0) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   Future<void> _insert() async {
@@ -862,7 +879,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.only(top: 10.0),
+                                  margin:  EdgeInsets.only(top: 10.0*kh*h),
                                   child: Text(
                                     (item + 1).toString(),
                                     style: TextStyle(
@@ -876,9 +893,14 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                     keyboardType: TextInputType.number,
                                     onChanged: ((value) {
                                       setState(() {
-                                        l[itemer].values.toList()[0]
-                                                ['RepWeight'][item]['kg'] =
-                                            int.parse(value);
+                                        if (value == '') {
+                                          l[itemer].values.toList()[0]
+                                              ['RepWeight'][item]['kg'] = 0;
+                                        } else {
+                                          l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['kg'] =
+                                              int.parse(value);
+                                        }
                                       });
                                       print(l);
                                     }),
@@ -890,9 +912,14 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                     keyboardType: TextInputType.number,
                                     onChanged: ((value) {
                                       setState(() {
-                                        l[itemer].values.toList()[0]
-                                                ['RepWeight'][item]['reps'] =
-                                            int.parse(value);
+                                        if (value == '') {
+                                          l[itemer].values.toList()[0]
+                                              ['RepWeight'][item]['reps'] = 0;
+                                        } else {
+                                          l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['reps'] =
+                                              int.parse(value);
+                                        }
                                       });
                                       print(l);
                                     }),
@@ -910,7 +937,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                       children: [
                         TextButton(
                             style: TextButton.styleFrom(
-                              textStyle: const TextStyle(fontSize: 15),
+                              textStyle: TextStyle(fontSize: 15*kh*h),
                             ),
                             onPressed: () {
                               setState(() {

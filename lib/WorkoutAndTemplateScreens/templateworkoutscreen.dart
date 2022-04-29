@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
-import 'package:op_fitnessapp/exercisechoosescreen.dart';
-import 'package:op_fitnessapp/exercisescreen.dart';
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/measurescreen.dart';
-import 'package:op_fitnessapp/workouthelper.dart';
-import 'package:op_fitnessapp/workoutscreen.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -707,7 +707,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
             },
             icon: Icon(
               Icons.save,
-              size: 24.0,
+              size: 24.0 * kh * h,
             ),
             label: Text('Save'),
           )
@@ -715,7 +715,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0 * kh * h),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -732,11 +732,11 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
                     fillColor: Colors.grey.shade300,
                     filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0 * kh * h),
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0 * kh * h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -750,7 +750,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
               children: [
                 TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
+                      textStyle: TextStyle(fontSize: 20 * kh * h),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -788,8 +788,8 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
 
                 return Text(
                   displayTime,
-                  style: const TextStyle(
-                      fontSize: 20,
+                  style:  TextStyle(
+                      fontSize: 20*kh*h,
                       fontWeight: FontWeight.bold,
                       color: Colors.green),
                 );
@@ -814,8 +814,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
         });
       }
       setState(() {
-        templates.add(
-            {'name': widget.workoutname, 'last_performed': '0', 'list': l});
+        templates.add({'name': widget.workoutname, 'list': l});
       });
     }
   }
@@ -902,9 +901,15 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
                                           keyboardType: TextInputType.number,
                                           onChanged: ((value) {
                                             setState(() {
-                                              l[itemer].values.toList()[0]
-                                                      ['RepWeight'][item]
-                                                  ['kg'] = int.parse(value);
+                                              if (value == '') {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['kg'] = 0;
+                                              } else {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['kg'] = int.parse(value);
+                                              }
                                             });
                                             print(l);
                                           }),
@@ -916,9 +921,15 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
                                           keyboardType: TextInputType.number,
                                           onChanged: ((value) {
                                             setState(() {
-                                              l[itemer].values.toList()[0]
-                                                      ['RepWeight'][item]
-                                                  ['reps'] = int.parse(value);
+                                              if (value == '') {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['reps'] = 0;
+                                              } else {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['reps'] = int.parse(value);
+                                              }
                                             });
                                             print(l);
                                           }),

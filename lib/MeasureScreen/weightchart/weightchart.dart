@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfathelper.dart';
+import 'package:op_fitnessapp/weightchart/weighthelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class bodyfatChart extends StatefulWidget {
+class WeightChart extends StatefulWidget {
   @override
-  State<bodyfatChart> createState() => _bodyfatChartState();
+  State<WeightChart> createState() => _WeightChartState();
 }
 
-class _bodyfatChartState extends State<bodyfatChart> {
+class _WeightChartState extends State<WeightChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<bodyfatData> data = [
-    // bodyfatData(formattedate( DateTime.now()), 35),
-    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
-    // bodyfatData(DateTime.now().add(Duration(days: 2)), 34),
-    // bodyfatData(DateTime.now().add(Duration(days: 3)), 32),
-    // bodyfatData(DateTime.now().add(Duration(days: 4)), 40),
-    // bodyfatData(DateTime.now().add(Duration(days: 5)), 40),
-    // bodyfatData('17 Jan', 40),
-    // bodyfatData('19 Jan', 40),
-    // bodyfatData('21 Jan', 40),
-    // bodyfatData('23 Jan', 40),
-    // bodyfatData('6 Jan', 2),
+  List<WeightData> data = [
+    // WeightData(formattedate( DateTime.now()), 35),
+    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
+    // WeightData(DateTime.now().add(Duration(days: 2)), 34),
+    // WeightData(DateTime.now().add(Duration(days: 3)), 32),
+    // WeightData(DateTime.now().add(Duration(days: 4)), 40),
+    // WeightData(DateTime.now().add(Duration(days: 5)), 40),
+    // WeightData('17 Jan', 40),
+    // WeightData('19 Jan', 40),
+    // WeightData('21 Jan', 40),
+    // WeightData('23 Jan', 40),
+    // WeightData('6 Jan', 2),
   ];
   final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
-  String bodyfat = '';
-  TextEditingController bodyfatcontroller = TextEditingController();
+  String weight = '';
+  TextEditingController weightcontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     dbHelper.database;
     _query();
     // _delete();
-    // data.add(bodyfatData(formattedate(DateTime.now()), 35));
-    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
-    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
+    // data.add(WeightData(formattedate(DateTime.now()), 35));
+    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
+    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
     super.initState();
   }
 
   @override
   void dispose() {
-    bodyfatcontroller.dispose();
+    weightcontroller.dispose();
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _bodyfatChartState extends State<bodyfatChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Body Fat"),
+        title: Text("Weight"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -76,31 +76,31 @@ class _bodyfatChartState extends State<bodyfatChart> {
           children: [
             Container(
               height: h * 0.45,
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(5*kh*h),
               decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Colors.grey)),
               width: w,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10*kh*h, vertical: 20*kh*h),
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
                     title: AxisTitle(text: 'Date'),
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
                 primaryYAxis: NumericAxis(
-                    title: AxisTitle(text: 'Body Fat'),
+                    title: AxisTitle(text: 'Weight'),
                     decimalPlaces: 0,
                     desiredIntervals: 8,
                     maximum: 100,
-                    labelFormat: '{value}%',
+                    labelFormat: '{value}kg',
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
-                //title: ChartTitle(text: 'bodyfat(%)'),
+                //title: ChartTitle(text: 'Weight(kg)'),
                 tooltipBehavior: TooltipBehavior(enable: true),
-                series: <ChartSeries<bodyfatData, String>>[
-                  LineSeries<bodyfatData, String>(
+                series: <ChartSeries<WeightData, String>>[
+                  LineSeries<WeightData, String>(
                     dataSource: data,
-                    xValueMapper: (bodyfatData bodyfat, _) =>
-                        formattedate(bodyfat.month),
-                    yValueMapper: (bodyfatData bodyfat, _) => bodyfat.bodyfat,
-                    name: 'Body Fat',
+                    xValueMapper: (WeightData weight, _) =>
+                        formattedate(weight.month),
+                    yValueMapper: (WeightData weight, _) => weight.weight,
+                    name: 'Weight',
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                   ),
                 ],
@@ -113,7 +113,7 @@ class _bodyfatChartState extends State<bodyfatChart> {
                 children: [
                   Text(
                     'HISTORY',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12*kh*h),
                   ),
                   IconButton(
                       onPressed: () async {
@@ -125,16 +125,16 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                   .toString();
                               return StatefulBuilder(
                                   builder: (context, setState) {
-                                bodyfat = '';
+                                weight = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(32.0))),
+                                          Radius.circular(32.0*kh*h))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Body Fat"),
+                                      Text("Weight"),
                                       FlatButton(
                                         onPressed: () {},
                                         child: Text(date),
@@ -145,9 +145,9 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                     key: _formKey,
                                     child: TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller: bodyfatcontroller,
+                                      controller: weightcontroller,
                                       decoration: InputDecoration(
-                                        hintText: '%',
+                                        hintText: 'kg',
                                       ),
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -157,8 +157,8 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                       },
                                       onChanged: (val) {
                                         setState() {
-                                          bodyfat = val;
-                                          print(bodyfat);
+                                          weight = val;
+                                          print(weight);
                                         }
                                       },
                                     ),
@@ -175,18 +175,18 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
                                           if (x) {
-                                            print(bodyfatcontroller.text
+                                            print(weightcontroller.text
                                                 .toString());
                                             _insert(
                                                 dater,
-                                                bodyfatcontroller.text
+                                                weightcontroller.text
                                                     .toString());
                                             sort();
-                                            // print(bodyfatcontroller.text);
+                                            // print(weightcontroller.text);
                                             print(dater.toString());
                                           }
                                           Navigator.of(ctx)
-                                              .pop(bodyfatcontroller.text);
+                                              .pop(weightcontroller.text);
                                         }
                                       },
                                       child: Text("SAVE"),
@@ -197,7 +197,7 @@ class _bodyfatChartState extends State<bodyfatChart> {
                             }).then((value) {
                           //print(value);
                           setState(() {
-                            bodyfat = value;
+                            weight = value;
                           });
                         });
                         // int id = await dbHelper.delete(8);
@@ -212,11 +212,11 @@ class _bodyfatChartState extends State<bodyfatChart> {
             ),
             Container(
               height: h * 0.45,
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding: EdgeInsets.only(left: 8*kw*w, right: 8*kw*w),
               child: ListView.builder(
                 itemBuilder: (ctx, item) {
                   return historyrecord(
-                      data[item].month, data[item].bodyfat.toString());
+                      data[item].month, data[item].weight.toString());
                 },
                 itemCount: data.length,
               ),
@@ -227,12 +227,12 @@ class _bodyfatChartState extends State<bodyfatChart> {
     );
   }
 
-  void _insert(DateTime dt, String bodyfat) async {
+  void _insert(DateTime dt, String weight) async {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnDate:
           int.parse(Timestamp.fromDate(dt).seconds.toString()),
-      DatabaseHelper.columnbodyfat: bodyfat,
+      DatabaseHelper.columnWeight: weight,
       //DatabaseHelper.columnExperience:'Flutter Developer'
     };
     // print(row);
@@ -249,9 +249,9 @@ class _bodyfatChartState extends State<bodyfatChart> {
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
-              data.add(bodyfatData(
+              data.add(WeightData(
                   DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
-                  double.parse(row['bodyfat'].toString())));
+                  double.parse(row['weight'].toString())));
             });
           })
         : [];
@@ -300,7 +300,7 @@ class _bodyfatChartState extends State<bodyfatChart> {
       return true;
     }
     return false;
-    //print(bodyfat);
+    //print(weight);
     //
     //print(data);
     // print(dater);
@@ -343,16 +343,16 @@ Widget historyrecord(DateTime date, String cal) {
         ],
       ),
       Text(
-        cal + ' %',
+        cal + ' kg',
         style: TextStyle(fontWeight: FontWeight.w500),
       )
     ],
   );
 }
 
-class bodyfatData {
+class WeightData {
   final DateTime month;
-  final double bodyfat;
+  final double weight;
 
-  bodyfatData(this.month, this.bodyfat);
+  WeightData(this.month, this.weight);
 }

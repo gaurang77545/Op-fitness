@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/addedExerciseScreen.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/addedExerciseScreen.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
 import 'package:op_fitnessapp/demoscreen.dart';
-import 'package:op_fitnessapp/exercisechoosescreen.dart';
-import 'package:op_fitnessapp/exercisescreen.dart';
-import 'package:op_fitnessapp/historyscreen.dart';
-import 'package:op_fitnessapp/newworkouttemplate.dart';
-import 'package:op_fitnessapp/profilescreen.dart';
-import 'package:op_fitnessapp/startworkoutscreen.dart';
-import 'package:op_fitnessapp/timer2.dart';
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/measurescreen.dart';
-import 'package:op_fitnessapp/workoutscreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
+import 'package:op_fitnessapp/HistoryScreen/historyscreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/newworkouttemplate.dart';
+import 'package:op_fitnessapp/ProfileScreen/profilescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/startworkoutscreen.dart';
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -761,7 +760,7 @@ class _MyHomePageState extends State<MyHomePage> {
       hideNavigationBarWhenKeyboardShows:
           true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10.0*kh*h),
         colorBehindNavBar: Colors.white,
       ),
       popAllScreensOnTapOfSelectedTab: true,

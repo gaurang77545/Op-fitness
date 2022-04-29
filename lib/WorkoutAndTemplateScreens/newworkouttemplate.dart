@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
-import 'package:op_fitnessapp/exercisechoosescreen.dart';
-import 'package:op_fitnessapp/exercisescreen.dart';
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/measurescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/addedExerciseScreen.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -566,11 +567,18 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0*kh*h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          
           Container(
             height: h * 0.05,
             child: Form(
@@ -581,13 +589,12 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
                     labelText: 'Workout Name',
                     fillColor: Colors.grey.shade300,
                     filled: true,
-                    
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0*kh*h),
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0*kh*h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -607,10 +614,10 @@ class _WorkoutTemplateScreenState extends State<WorkoutTemplateScreen> {
             children: [
               TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 20),
+                    textStyle:  TextStyle(fontSize: 20*kh*h),
                   ),
                   onPressed: () async {
-                    if (_controller.text!='') {
+                    if (_controller.text != '') {
                       Navigator.push(
                         context,
                         MaterialPageRoute(

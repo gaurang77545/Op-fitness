@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart.dart';
-import 'package:op_fitnessapp/exercisechoosescreen.dart';
-import 'package:op_fitnessapp/exercisescreen.dart';
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/measurescreen.dart';
-import 'package:op_fitnessapp/workouthelper.dart';
-import 'package:op_fitnessapp/workoutscreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.dart';
+import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -723,25 +724,36 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
           TextButton.icon(
             // <-- TextButton
             onPressed: () async {
-              addtemplate(templates);
-              format(chosenExercises);
+              if (didperform() == true) {
+                addtemplate(templates);
+                format(chosenExercises);
 
-              await _insert();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WorkoutScreen(
-                          templates,
-                          widget.workoutname,
-                          chosenExercises,
-                          widget.exercisecat,
-                          widget.categoryimages,
-                          widget.combinedtypesofcategory,
-                          widget.exercisenames)));
+                await _insert();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WorkoutScreen(
+                            templates,
+                            widget.workoutname,
+                            chosenExercises,
+                            widget.exercisecat,
+                            widget.categoryimages,
+                            widget.combinedtypesofcategory,
+                            widget.exercisenames)));
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Please perform some sets to finish workout",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 2,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0*kh*h);
+              }
             },
             icon: Icon(
               Icons.save,
-              size: 24.0,
+              size: 24.0*kh*h,
             ),
             label: Text('Save'),
           )
@@ -749,7 +761,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0*kh*h),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -770,7 +782,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(10.0*kh*h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -784,7 +796,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
               children: [
                 TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 20),
+                      textStyle:  TextStyle(fontSize: 20*kh*h),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -822,8 +834,8 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
 
                 return Text(
                   displayTime,
-                  style: const TextStyle(
-                      fontSize: 20,
+                  style:  TextStyle(
+                      fontSize: 20*kh*h,
                       fontWeight: FontWeight.bold,
                       color: Colors.green),
                 );
@@ -849,9 +861,23 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
       }
       setState(() {
         templates.add(
-            {'name': widget.workoutname, 'last_performed': '0', 'list': l});
+            {'name': widget.workoutname, 'list': l});
       });
     }
+  }
+
+  bool didperform() {
+    int sum = 0;
+    for (int i = 0; i < chosenExercises.length; i++) {
+      for (int j = 0; j < chosenExercises[i].values.toList()[0]['Sets']; j++) {
+        sum += chosenExercises[i].values.toList()[0]['RepWeight'][j]
+            ['performed'] as int;
+      }
+      if (sum > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Widget exercisename(String name, List<Map<String, Map<String, dynamic>>> l) {
@@ -923,7 +949,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                     children: [
                                       Container(
                                         margin:
-                                            const EdgeInsets.only(top: 10.0),
+                                             EdgeInsets.only(top: 10.0*kh*h),
                                         child: Text(
                                           (item + 1).toString(),
                                           style: TextStyle(
@@ -948,9 +974,15 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                                   .toString(),
                                           onChanged: ((value) {
                                             setState(() {
-                                              l[itemer].values.toList()[0]
-                                                      ['RepWeight'][item]
-                                                  ['kg'] = int.parse(value);
+                                              if (value == '') {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['kg'] = 0;
+                                              } else {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['kg'] = int.parse(value);
+                                              }
                                             });
                                             print(l);
                                           }),
@@ -974,9 +1006,15 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                                   .toString(),
                                           onChanged: ((value) {
                                             setState(() {
-                                              l[itemer].values.toList()[0]
-                                                      ['RepWeight'][item]
-                                                  ['reps'] = int.parse(value);
+                                              if (value == '') {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['reps'] = 0;
+                                              } else {
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['reps'] = int.parse(value);
+                                              }
                                             });
                                             print(l);
                                           }),
@@ -988,12 +1026,31 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      l[itemer].values.toList()[0]['RepWeight']
-                                              [item]['performed'] =
-                                          1 -
-                                              l[itemer].values.toList()[0]
-                                                      ['RepWeight'][item]
-                                                  ['performed'];
+                                      if ((l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['reps'] ==
+                                              0) ||
+                                          (l[itemer].values.toList()[0]
+                                                  ['RepWeight'][item]['kg']) ==
+                                              0) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Set cannot be completed with an empty rep or weight field",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 2,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0*kh*h);
+                                      } else {
+                                        l[itemer].values.toList()[0]
+                                                    ['RepWeight'][item]
+                                                ['performed'] =
+                                            1 -
+                                                l[itemer].values.toList()[0]
+                                                        ['RepWeight'][item]
+                                                    ['performed'];
+                                      }
+
                                       print(chosenExercises);
                                     });
                                   },

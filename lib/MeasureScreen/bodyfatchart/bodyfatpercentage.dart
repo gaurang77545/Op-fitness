@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/caloricintakehelper.dart';
+import 'package:op_fitnessapp/bodyfatchart/bodyfathelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class caloricintakeChart extends StatefulWidget {
+class bodyfatChart extends StatefulWidget {
   @override
-  State<caloricintakeChart> createState() => _caloricintakeChartState();
+  State<bodyfatChart> createState() => _bodyfatChartState();
 }
 
-class _caloricintakeChartState extends State<caloricintakeChart> {
+class _bodyfatChartState extends State<bodyfatChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<caloricintakeData> data = [
-    // caloricintakeData(formattedate( DateTime.now()), 35),
-    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
-    // caloricintakeData(DateTime.now().add(Duration(days: 2)), 34),
-    // caloricintakeData(DateTime.now().add(Duration(days: 3)), 32),
-    // caloricintakeData(DateTime.now().add(Duration(days: 4)), 40),
-    // caloricintakeData(DateTime.now().add(Duration(days: 5)), 40),
-    // caloricintakeData('17 Jan', 40),
-    // caloricintakeData('19 Jan', 40),
-    // caloricintakeData('21 Jan', 40),
-    // caloricintakeData('23 Jan', 40),
-    // caloricintakeData('6 Jan', 2),
+  List<bodyfatData> data = [
+    // bodyfatData(formattedate( DateTime.now()), 35),
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
+    // bodyfatData(DateTime.now().add(Duration(days: 2)), 34),
+    // bodyfatData(DateTime.now().add(Duration(days: 3)), 32),
+    // bodyfatData(DateTime.now().add(Duration(days: 4)), 40),
+    // bodyfatData(DateTime.now().add(Duration(days: 5)), 40),
+    // bodyfatData('17 Jan', 40),
+    // bodyfatData('19 Jan', 40),
+    // bodyfatData('21 Jan', 40),
+    // bodyfatData('23 Jan', 40),
+    // bodyfatData('6 Jan', 2),
   ];
   final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
-  String caloricintake = '';
-  TextEditingController caloricintakecontroller = TextEditingController();
+  String bodyfat = '';
+  TextEditingController bodyfatcontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     dbHelper.database;
     _query();
     // _delete();
-    // data.add(caloricintakeData(formattedate(DateTime.now()), 35));
-    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
-    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
+    // data.add(bodyfatData(formattedate(DateTime.now()), 35));
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
+    // bodyfatData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
     super.initState();
   }
 
   @override
   void dispose() {
-    caloricintakecontroller.dispose();
+    bodyfatcontroller.dispose();
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Caloric Intake"),
+        title: Text("Body Fat"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -76,44 +76,44 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
           children: [
             Container(
               height: h * 0.45,
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(5*kh*h),
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey)),
+                  border: Border.all(width: 1*kw*w, color: Colors.grey)),
               width: w,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10*kw*w, vertical: 20*kh*h),
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
                     title: AxisTitle(text: 'Date'),
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
                 primaryYAxis: NumericAxis(
-                    title: AxisTitle(text: 'Caloric Intake'),
+                    title: AxisTitle(text: 'Body Fat'),
                     decimalPlaces: 0,
                     desiredIntervals: 8,
                     maximum: 100,
-                    labelFormat: '{value}kcal',
+                    labelFormat: '{value}%',
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
-                //title: ChartTitle(text: 'caloricintake(kcal)'),
+                //title: ChartTitle(text: 'bodyfat(%)'),
                 tooltipBehavior: TooltipBehavior(enable: true),
-                series: <ChartSeries<caloricintakeData, String>>[
-                  LineSeries<caloricintakeData, String>(
+                series: <ChartSeries<bodyfatData, String>>[
+                  LineSeries<bodyfatData, String>(
                     dataSource: data,
-                    xValueMapper: (caloricintakeData caloricintake, _) =>
-                        formattedate(caloricintake.month),
-                    yValueMapper: (caloricintakeData caloricintake, _) => caloricintake.caloricintake,
-                    name: 'caloricintake',
+                    xValueMapper: (bodyfatData bodyfat, _) =>
+                        formattedate(bodyfat.month),
+                    yValueMapper: (bodyfatData bodyfat, _) => bodyfat.bodyfat,
+                    name: 'Body Fat',
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8),
+              padding:  EdgeInsets.only(left: 8.0*kw*w, right: 8*kw*w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'HISTORY',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12*kh*h),
                   ),
                   IconButton(
                       onPressed: () async {
@@ -125,16 +125,16 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                   .toString();
                               return StatefulBuilder(
                                   builder: (context, setState) {
-                                caloricintake = '';
+                                bodyfat = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(32.0))),
+                                          Radius.circular(32.0*kh*h))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("caloricintake"),
+                                      Text("Body Fat"),
                                       FlatButton(
                                         onPressed: () {},
                                         child: Text(date),
@@ -145,9 +145,9 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                     key: _formKey,
                                     child: TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller: caloricintakecontroller,
+                                      controller: bodyfatcontroller,
                                       decoration: InputDecoration(
-                                        hintText: 'kcal',
+                                        hintText: '%',
                                       ),
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -157,8 +157,8 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                       },
                                       onChanged: (val) {
                                         setState() {
-                                          caloricintake = val;
-                                          print(caloricintake);
+                                          bodyfat = val;
+                                          print(bodyfat);
                                         }
                                       },
                                     ),
@@ -175,18 +175,18 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
                                           if (x) {
-                                            print(caloricintakecontroller.text
+                                            print(bodyfatcontroller.text
                                                 .toString());
                                             _insert(
                                                 dater,
-                                                caloricintakecontroller.text
+                                                bodyfatcontroller.text
                                                     .toString());
                                             sort();
-                                            // print(caloricintakecontroller.text);
+                                            // print(bodyfatcontroller.text);
                                             print(dater.toString());
                                           }
                                           Navigator.of(ctx)
-                                              .pop(caloricintakecontroller.text);
+                                              .pop(bodyfatcontroller.text);
                                         }
                                       },
                                       child: Text("SAVE"),
@@ -197,7 +197,7 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                             }).then((value) {
                           //print(value);
                           setState(() {
-                            caloricintake = value;
+                            bodyfat = value;
                           });
                         });
                         // int id = await dbHelper.delete(8);
@@ -212,11 +212,11 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
             ),
             Container(
               height: h * 0.45,
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding: EdgeInsets.only(left: 8*kw*w, right: 8*kw*w),
               child: ListView.builder(
                 itemBuilder: (ctx, item) {
                   return historyrecord(
-                      data[item].month, data[item].caloricintake.toString());
+                      data[item].month, data[item].bodyfat.toString());
                 },
                 itemCount: data.length,
               ),
@@ -227,12 +227,12 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
     );
   }
 
-  void _insert(DateTime dt, String caloricintake) async {
+  void _insert(DateTime dt, String bodyfat) async {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnDate:
           int.parse(Timestamp.fromDate(dt).seconds.toString()),
-      DatabaseHelper.columncaloricintake: caloricintake,
+      DatabaseHelper.columnbodyfat: bodyfat,
       //DatabaseHelper.columnExperience:'Flutter Developer'
     };
     // print(row);
@@ -249,9 +249,9 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
-              data.add(caloricintakeData(
+              data.add(bodyfatData(
                   DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
-                  double.parse(row['caloricintake'].toString())));
+                  double.parse(row['bodyfat'].toString())));
             });
           })
         : [];
@@ -300,7 +300,7 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
       return true;
     }
     return false;
-    //print(caloricintake);
+    //print(bodyfat);
     //
     //print(data);
     // print(dater);
@@ -343,16 +343,16 @@ Widget historyrecord(DateTime date, String cal) {
         ],
       ),
       Text(
-        cal + ' kcal',
+        cal + ' %',
         style: TextStyle(fontWeight: FontWeight.w500),
       )
     ],
   );
 }
 
-class caloricintakeData {
+class bodyfatData {
   final DateTime month;
-  final double caloricintake;
+  final double bodyfat;
 
-  caloricintakeData(this.month, this.caloricintake);
+  bodyfatData(this.month, this.bodyfat);
 }

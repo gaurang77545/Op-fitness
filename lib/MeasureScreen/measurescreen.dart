@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/caloricintakehelper.dart' as ci;
-import 'package:op_fitnessapp/weightchart.dart';
-import 'package:op_fitnessapp/weighthelper.dart' as wd;
-import 'package:op_fitnessapp/bodyfathelper.dart' as bf;
+import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/calorieintakechart/caloricintakehelper.dart' as ci;
+import 'package:op_fitnessapp/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/weightchart/weighthelper.dart' as wd;
+import 'package:op_fitnessapp/bodyfatchart/bodyfathelper.dart' as bf;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
 
-import 'caloricintakehelper.dart';
-import 'calorieintakechart.dart';
+import '../calorieintakechart/caloricintakehelper.dart';
+import '../calorieintakechart/calorieintakechart.dart';
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);
@@ -189,13 +189,13 @@ class _MeasureScreenState extends State<MeasureScreen> {
                   title,
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 25,
-                      letterSpacing: 2),
+                      fontSize: 25*kh*h,
+                      letterSpacing: 2*kw*w),
                 ),
                 Icon(
                   Icons.arrow_circle_right_outlined,
                   color: Colors.blueAccent,
-                  size: 25,
+                  size: 25*kh*h,
                 )
               ],
             ),
@@ -217,17 +217,17 @@ class _MeasureScreenState extends State<MeasureScreen> {
                       title,
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 25,
-                          letterSpacing: 2),
+                          fontSize: 25*kh*h,
+                          letterSpacing: 2*kw*w),
                     ),
                     Text(
                       val,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20*kh*h),
                     ),
                   ],
                 ),
                 Icon(Icons.arrow_circle_right_outlined,
-                    color: Colors.blueAccent, size: 25)
+                    color: Colors.blueAccent, size: 25*kh*h)
               ],
             ),
             onTap: () {

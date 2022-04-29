@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/weighthelper.dart';
+import 'package:op_fitnessapp/calorieintakechart/caloricintakehelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class WeightChart extends StatefulWidget {
+class caloricintakeChart extends StatefulWidget {
   @override
-  State<WeightChart> createState() => _WeightChartState();
+  State<caloricintakeChart> createState() => _caloricintakeChartState();
 }
 
-class _WeightChartState extends State<WeightChart> {
+class _caloricintakeChartState extends State<caloricintakeChart> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<WeightData> data = [
-    // WeightData(formattedate( DateTime.now()), 35),
-    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
-    // WeightData(DateTime.now().add(Duration(days: 2)), 34),
-    // WeightData(DateTime.now().add(Duration(days: 3)), 32),
-    // WeightData(DateTime.now().add(Duration(days: 4)), 40),
-    // WeightData(DateTime.now().add(Duration(days: 5)), 40),
-    // WeightData('17 Jan', 40),
-    // WeightData('19 Jan', 40),
-    // WeightData('21 Jan', 40),
-    // WeightData('23 Jan', 40),
-    // WeightData('6 Jan', 2),
+  List<caloricintakeData> data = [
+    // caloricintakeData(formattedate( DateTime.now()), 35),
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 28),
+    // caloricintakeData(DateTime.now().add(Duration(days: 2)), 34),
+    // caloricintakeData(DateTime.now().add(Duration(days: 3)), 32),
+    // caloricintakeData(DateTime.now().add(Duration(days: 4)), 40),
+    // caloricintakeData(DateTime.now().add(Duration(days: 5)), 40),
+    // caloricintakeData('17 Jan', 40),
+    // caloricintakeData('19 Jan', 40),
+    // caloricintakeData('21 Jan', 40),
+    // caloricintakeData('23 Jan', 40),
+    // caloricintakeData('6 Jan', 2),
   ];
   final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
-  String weight = '';
-  TextEditingController weightcontroller = TextEditingController();
+  String caloricintake = '';
+  TextEditingController caloricintakecontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     dbHelper.database;
     _query();
     // _delete();
-    // data.add(WeightData(formattedate(DateTime.now()), 35));
-    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
-    // WeightData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
+    // data.add(caloricintakeData(formattedate(DateTime.now()), 35));
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 35);
+    // caloricintakeData(formattedate(DateTime.now().add(Duration(days: 1))), 47);
     super.initState();
   }
 
   @override
   void dispose() {
-    weightcontroller.dispose();
+    caloricintakecontroller.dispose();
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _WeightChartState extends State<WeightChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Weight"),
+        title: Text("Caloric Intake"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -76,44 +76,44 @@ class _WeightChartState extends State<WeightChart> {
           children: [
             Container(
               height: h * 0.45,
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(5*kh*h),
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey)),
+                  border: Border.all(width: 1*kw*w, color: Colors.grey)),
               width: w,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10*kw*w, vertical: 20*kh*h),
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
                     title: AxisTitle(text: 'Date'),
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
                 primaryYAxis: NumericAxis(
-                    title: AxisTitle(text: 'Weight'),
+                    title: AxisTitle(text: 'Caloric Intake'),
                     decimalPlaces: 0,
                     desiredIntervals: 8,
                     maximum: 100,
-                    labelFormat: '{value}kg',
+                    labelFormat: '{value}kcal',
                     edgeLabelPlacement: EdgeLabelPlacement.shift),
-                //title: ChartTitle(text: 'Weight(kg)'),
+                //title: ChartTitle(text: 'caloricintake(kcal)'),
                 tooltipBehavior: TooltipBehavior(enable: true),
-                series: <ChartSeries<WeightData, String>>[
-                  LineSeries<WeightData, String>(
+                series: <ChartSeries<caloricintakeData, String>>[
+                  LineSeries<caloricintakeData, String>(
                     dataSource: data,
-                    xValueMapper: (WeightData weight, _) =>
-                        formattedate(weight.month),
-                    yValueMapper: (WeightData weight, _) => weight.weight,
-                    name: 'Weight',
+                    xValueMapper: (caloricintakeData caloricintake, _) =>
+                        formattedate(caloricintake.month),
+                    yValueMapper: (caloricintakeData caloricintake, _) => caloricintake.caloricintake,
+                    name: 'caloricintake',
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8),
+              padding:  EdgeInsets.only(left: 8.0*kw*w, right: 8*kw*w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'HISTORY',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12*kh*h),
                   ),
                   IconButton(
                       onPressed: () async {
@@ -125,16 +125,16 @@ class _WeightChartState extends State<WeightChart> {
                                   .toString();
                               return StatefulBuilder(
                                   builder: (context, setState) {
-                                weight = '';
+                                caloricintake = '';
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(32.0))),
+                                          Radius.circular(32.0*kh*h))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Weight"),
+                                      Text("caloricintake"),
                                       FlatButton(
                                         onPressed: () {},
                                         child: Text(date),
@@ -145,9 +145,9 @@ class _WeightChartState extends State<WeightChart> {
                                     key: _formKey,
                                     child: TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller: weightcontroller,
+                                      controller: caloricintakecontroller,
                                       decoration: InputDecoration(
-                                        hintText: 'kg',
+                                        hintText: 'kcal',
                                       ),
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -157,8 +157,8 @@ class _WeightChartState extends State<WeightChart> {
                                       },
                                       onChanged: (val) {
                                         setState() {
-                                          weight = val;
-                                          print(weight);
+                                          caloricintake = val;
+                                          print(caloricintake);
                                         }
                                       },
                                     ),
@@ -175,18 +175,18 @@ class _WeightChartState extends State<WeightChart> {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
                                           if (x) {
-                                            print(weightcontroller.text
+                                            print(caloricintakecontroller.text
                                                 .toString());
                                             _insert(
                                                 dater,
-                                                weightcontroller.text
+                                                caloricintakecontroller.text
                                                     .toString());
                                             sort();
-                                            // print(weightcontroller.text);
+                                            // print(caloricintakecontroller.text);
                                             print(dater.toString());
                                           }
                                           Navigator.of(ctx)
-                                              .pop(weightcontroller.text);
+                                              .pop(caloricintakecontroller.text);
                                         }
                                       },
                                       child: Text("SAVE"),
@@ -197,7 +197,7 @@ class _WeightChartState extends State<WeightChart> {
                             }).then((value) {
                           //print(value);
                           setState(() {
-                            weight = value;
+                            caloricintake = value;
                           });
                         });
                         // int id = await dbHelper.delete(8);
@@ -212,11 +212,11 @@ class _WeightChartState extends State<WeightChart> {
             ),
             Container(
               height: h * 0.45,
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding: EdgeInsets.only(left: 8*kw*w, right: 8*kw*w),
               child: ListView.builder(
                 itemBuilder: (ctx, item) {
                   return historyrecord(
-                      data[item].month, data[item].weight.toString());
+                      data[item].month, data[item].caloricintake.toString());
                 },
                 itemCount: data.length,
               ),
@@ -227,12 +227,12 @@ class _WeightChartState extends State<WeightChart> {
     );
   }
 
-  void _insert(DateTime dt, String weight) async {
+  void _insert(DateTime dt, String caloricintake) async {
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnDate:
           int.parse(Timestamp.fromDate(dt).seconds.toString()),
-      DatabaseHelper.columnWeight: weight,
+      DatabaseHelper.columncaloricintake: caloricintake,
       //DatabaseHelper.columnExperience:'Flutter Developer'
     };
     // print(row);
@@ -249,9 +249,9 @@ class _WeightChartState extends State<WeightChart> {
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
-              data.add(WeightData(
+              data.add(caloricintakeData(
                   DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
-                  double.parse(row['weight'].toString())));
+                  double.parse(row['caloricintake'].toString())));
             });
           })
         : [];
@@ -300,7 +300,7 @@ class _WeightChartState extends State<WeightChart> {
       return true;
     }
     return false;
-    //print(weight);
+    //print(caloricintake);
     //
     //print(data);
     // print(dater);
@@ -343,16 +343,16 @@ Widget historyrecord(DateTime date, String cal) {
         ],
       ),
       Text(
-        cal + ' kg',
+        cal + ' kcal',
         style: TextStyle(fontWeight: FontWeight.w500),
       )
     ],
   );
 }
 
-class WeightData {
+class caloricintakeData {
   final DateTime month;
-  final double weight;
+  final double caloricintake;
 
-  WeightData(this.month, this.weight);
+  caloricintakeData(this.month, this.caloricintake);
 }
