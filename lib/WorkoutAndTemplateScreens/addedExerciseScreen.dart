@@ -6,8 +6,11 @@ import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/templateshelper.dart';
 import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../customwidgets/text.dart';
 
 class AddedExerciseScreen extends StatefulWidget {
   List<Map<String, Map<String, dynamic>>> chosenExercises;
@@ -624,9 +627,9 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
     w = size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: TextPlain(
           'Workout',
-          style: TextStyle(color: Colors.black),
+          color: Colors.black,
         ),
         elevation: 0,
         actions: [
@@ -659,20 +662,20 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                     timeInSecForIosWeb: 2,
                     backgroundColor: Colors.grey,
                     textColor: Colors.white,
-                    fontSize: 16.0*kh*h);
+                    fontSize: 16.0 * kh * h);
               }
             },
             icon: Icon(
               Icons.save,
-              size: 24.0*kh*h,
+              size: 24.0 * kh * h,
             ),
-            label: Text('Save'),
+            label: TextPlain('Save'),
           )
         ],
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(Constants.padding),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -689,11 +692,11 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                     fillColor: Colors.grey.shade300,
                     filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0*kh*h),
+                      borderRadius: BorderRadius.circular(10.0 * kh * h),
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0*kh*h),
+                      borderRadius: BorderRadius.circular(10.0 * kh * h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -707,7 +710,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
               children: [
                 TextButton(
                     style: TextButton.styleFrom(
-                      textStyle:  TextStyle(fontSize: 20.0*kh*h),
+                      textStyle: TextStyle(fontSize: 20.0 * kh * h),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -723,8 +726,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                 widget.exercisenames)),
                       );
                     },
-                    child: const Text('ADD EXERCISE',
-                        style: TextStyle(color: Colors.blue))),
+                    child: TextPlain('ADD EXERCISE', color: Colors.blue)),
               ],
             ),
             exercisename(widget.workoutname, chosenExercises)
@@ -746,8 +748,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
         });
       }
       setState(() {
-        templates.add(
-            {'name': widget.workoutname, 'list': l});
+        templates.add({'name': widget.workoutname, 'list': l});
       });
     }
   }
@@ -819,9 +820,9 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          TextPlain(
             name,
-            style: TextStyle(color: Colors.blue),
+            color: Colors.blue,
           ),
           Container(
             height: 450 + totsets * 20.0,
@@ -833,33 +834,21 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l[itemer].keys.toList()[0],
-                      style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    TextPlain(l[itemer].keys.toList()[0],
+                        color: Colors.grey.shade400,
+                        fontWeight: FontWeight.bold),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          'SET',
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'KG',
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'REPS',
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        TextPlain('SET',
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.bold),
+                        TextPlain('KG',
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.bold),
+                        TextPlain('REPS',
+                            color: Colors.grey.shade400,
+                            fontWeight: FontWeight.bold),
                       ],
                     ),
                     Form(
@@ -876,13 +865,10 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  margin:  EdgeInsets.only(top: 10.0*kh*h),
-                                  child: Text(
-                                    (item + 1).toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey.shade400,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  margin: EdgeInsets.only(top: 10.0 * kh * h),
+                                  child: TextPlain((item + 1).toString(),
+                                      color: Colors.grey.shade400,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Container(
                                   width: w * 0.05,
@@ -934,7 +920,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                       children: [
                         TextButton(
                             style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 15*kh*h),
+                              textStyle: TextStyle(fontSize: 15 * kh * h),
                             ),
                             onPressed: () {
                               setState(() {
@@ -948,8 +934,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                               });
                               print(l);
                             },
-                            child: const Text('ADD SET',
-                                style: TextStyle(color: Colors.blue))),
+                            child: TextPlain('ADD SET', color: Colors.blue)),
                       ],
                     ),
                   ],

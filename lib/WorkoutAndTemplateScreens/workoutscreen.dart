@@ -6,8 +6,13 @@ import 'package:op_fitnessapp/WorkoutAndTemplateScreens/newworkouttemplate.dart'
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/startworkoutscreen.dart';
 import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/templateshelper.dart';
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../customwidgets/iconbuttonsimple.dart';
+
+import '../customwidgets/text.dart';
 
 class WorkoutScreen extends StatefulWidget {
   String workoutname;
@@ -19,7 +24,7 @@ class WorkoutScreen extends StatefulWidget {
   List<Map<String, dynamic>> templates = [
     // {
     //   'name': 'Evening Workout',
-    // 
+    //
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -29,7 +34,7 @@ class WorkoutScreen extends StatefulWidget {
     // },
     // {
     //   'name': 'Evening Workout',
-    //  
+    //
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -37,7 +42,7 @@ class WorkoutScreen extends StatefulWidget {
     // },
     // {
     //   'name': 'Evening Workout',
-  
+
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -109,11 +114,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             }
             templatesdummy = [];
             setState(() {
-              templateslistall.add({
-                'name': row['workoutname'],
-               
-                'list': l
-              });
+              templateslistall.add({'name': row['workoutname'], 'list': l});
             });
           }
         }
@@ -136,7 +137,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           row['combinedexercise'] == null ? '' : row['combinedexercise'];
       if (repweightcombined != '' || exercisecombined != '') {
         seperate();
-        
       }
     });
   }
@@ -201,22 +201,22 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: TextPlain(
           'Workout',
-          style: TextStyle(color: Colors.black),
+          color: Colors.black,
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        
       ),
       body: Padding(
-        padding:  EdgeInsets.all(8.0*kh*h),
+        padding: EdgeInsets.all(Constants.padding * kh * h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            TextPlain(
               'QUICK START',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12*kh*h),
+              fontWeight: FontWeight.w400,
+              fontSize: 12 * kh * h,
             ),
             SizedBox(
               height: h * 0.005,
@@ -244,7 +244,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     ),
                   );
                 },
-                child: Text('START AN EMPTY WORKOUT'),
+                child: TextPlain('START AN EMPTY WORKOUT'),
               ),
             ),
             SizedBox(
@@ -253,11 +253,12 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                TextPlain(
                   'MY TEMPLATES',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12*kh*h),
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12 * kh * h,
                 ),
-                IconButton(
+                IconButtonSimple(
                   onPressed: () async {
                     await Navigator.push(
                       context,
@@ -313,20 +314,21 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey,
+              width: Constants.borderwidth,
+              color: Constants.bordercolor,
             ),
             borderRadius: BorderRadius.all(
-              Radius.circular(20*kh*h),
+              Radius.circular(Constants.circularadiussmall * kh * h),
             )),
         child: Padding(
-          padding:  EdgeInsets.all(8.0*kh*h),
+          padding: EdgeInsets.all(8.0 * kh * h),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                TextPlain(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,
                 ),
                 SizedBox(
                   height: h * 0.01,
@@ -342,10 +344,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       //padding: const EdgeInsets.all(10),
                       child: VerticalDivider(
                         color: Colors.black,
-                        thickness: 3*kw*w,
+                        thickness: 3 * kw * w,
                         indent: 0,
                         endIndent: 0,
-                        width: 20*kw*w,
+                        width: 20 * kw * w,
                       ),
                     ),
                     Container(
@@ -356,21 +358,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                           itemBuilder: (ctx, item) {
                             return Row(
                               children: [
-                                Text(
+                                TextPlain(
                                   l[item].count.toString() + ' x ' + '  ',
-                                  style: TextStyle(
-                                      fontSize: 12*kh*h,
-                                      fontWeight: FontWeight.w400),
+                                  fontSize: 12 * kh * h,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                 SizedBox(
                                   width: w * 0.001,
                                 ),
-                                Text(
-                                  l[item].name,
-                                  style: TextStyle(
-                                      fontSize: 12*kh*h,
-                                      fontWeight: FontWeight.w400),
-                                )
+                                TextPlain(l[item].name,
+                                    fontSize: 12 * kh * h,
+                                    fontWeight: FontWeight.w400)
                               ],
                             );
                           },

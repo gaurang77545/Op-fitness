@@ -650,10 +650,10 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildScreens() {
     return [
       // Center(
-      //   child: CircleAvatar(
+      //   child: CircleAvatarSimple(
       //     backgroundColor: Colors.grey[200],
       //     radius: 35,
-      //     child: CircleAvatar(
+      //     child: CircleAvatarSimple(
       //       radius: 30.0,
       //       child: Image.asset(
       //         'icons/arms.webp',
@@ -756,7 +756,7 @@ class _MyHomePageState extends State<MyHomePage> {
       hideNavigationBarWhenKeyboardShows:
           true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0*kh*h),
+        borderRadius: BorderRadius.circular(10.0 * kh * h),
         colorBehindNavBar: Colors.white,
       ),
       popAllScreensOnTapOfSelectedTab: true,

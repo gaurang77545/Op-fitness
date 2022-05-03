@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class IconButtonSimple extends StatefulWidget {
   Icon icon;
-  Function() func;
-  IconButtonSimple(this.icon, this.func);
+  final VoidCallback? onPressed;
+  IconButtonSimple({required this.icon, this.onPressed});
 
   @override
   State<IconButtonSimple> createState() => _IconButtonSimpleState();
@@ -15,8 +15,8 @@ class _IconButtonSimpleState extends State<IconButtonSimple> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon:widget.icon,
-      onPressed: widget.func,
+      icon: widget.icon,
+      onPressed: widget.onPressed,
     );
   }
 }

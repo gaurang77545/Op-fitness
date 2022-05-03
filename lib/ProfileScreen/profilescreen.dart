@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.dart';
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../customwidgets/circleavatarsimple.dart';
+import '../customwidgets/flatbuttonsimple.dart';
+import '../customwidgets/iconbuttonsimple.dart';
+import '../customwidgets/text.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -94,13 +100,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: TextPlain("Profile"),
         centerTitle: true,
         // backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
       ),
       body: Padding(
-        padding:  EdgeInsets.all(8.0*kh*h),
+        padding: EdgeInsets.all(Constants.padding* kh * h),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -111,13 +117,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 30*kh*h,
+                  CircleAvatarSimple(
+                    radius: 30 * kh * h,
                     backgroundColor: Colors.grey,
                     child: Icon(
                       Icons.person,
                       color: Colors.white,
-                      size: 55*kh*h,
+                      size: 55 * kh * h,
                     ),
                   ),
                   SizedBox(
@@ -126,15 +132,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      TextPlain(
                         profilename,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 22*kh*h),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22 * kh * h,
                       ),
-                      Text(
+                      TextPlain(
                         workoutcount.toString() + '  workouts',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 22*kh*h),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22 * kh * h,
                       ),
                     ],
                   ),
@@ -142,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
+                        IconButtonSimple(
                             onPressed: () async {
                               showDialog(
                                   context: context,
@@ -153,13 +159,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(32.0))),
+                                                Radius.circular(Constants.circularradiusbig*kh*h))),
                                         title: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("User Name"),
-                                            Text(profilename),
+                                            TextPlain("User Name"),
+                                            TextPlain(profilename),
                                           ],
                                         ),
                                         content: Form(
@@ -180,14 +186,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: ()async {
+                                          FlatButtonSimple(
+                                            onPressed: () async {
                                               await getStringValuesSF();
-                                              Navigator.of(ctx).pop(profilename);
+                                              Navigator.of(ctx)
+                                                  .pop(profilename);
                                             },
-                                            child: Text("CANCEL"),
+                                            child: TextPlain("CANCEL"),
                                           ),
-                                          FlatButton(
+                                          FlatButtonSimple(
                                             onPressed: () async {
                                               if (_formKey.currentState!
                                                   .validate()) {
@@ -196,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     profilenamecontroller.text);
                                               }
                                             },
-                                            child: Text("SAVE"),
+                                            child: TextPlain("SAVE"),
                                           ),
                                         ],
                                       );
@@ -223,9 +230,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: h * 0.45,
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                    border: Border.all(width: 1*kw*w, color: Colors.grey)),
+                    border: Border.all(width: Constants.borderwidth * kw * w, color: Constants.bordercolor)),
                 width: w,
-                padding: EdgeInsets.symmetric(horizontal: 10*kw*w, vertical: 20*kh*h),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 10 * kw * w, vertical: 20 * kh * h),
                 child: SfCartesianChart(
                   title: ChartTitle(text: 'Workouts Performed'),
                   legend: Legend(isVisible: true),
@@ -335,19 +343,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
+            TextPlain(
               num_month,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.bold,
             ),
-            // Text(
+            //TextPlain(
             //   time,
             //   style: TextStyle(fontWeight: FontWeight.w300),
             // )
           ],
         ),
-        Text(
+        TextPlain(
           cal + ' ',
-          style: TextStyle(fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w500,
         )
       ],
     );

@@ -4,6 +4,11 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../customwidgets/constants.dart';
+import '../../customwidgets/flatbuttonsimple.dart';
+import '../../customwidgets/iconbuttonsimple.dart';
+import '../../customwidgets/text.dart';
+
 class WeightChart extends StatefulWidget {
   @override
   State<WeightChart> createState() => _WeightChartState();
@@ -66,7 +71,7 @@ class _WeightChartState extends State<WeightChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Weight"),
+        title: TextPlain("Weight"),
         centerTitle: true,
         backgroundColor: Colors.green[700],
         brightness: Brightness.dark,
@@ -76,11 +81,12 @@ class _WeightChartState extends State<WeightChart> {
           children: [
             Container(
               height: h * 0.45,
-              margin: EdgeInsets.all(5*kh*h),
+              margin: EdgeInsets.all(5 * kh * h),
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey)),
+                  border: Border.all(width: Constants.borderwidth*kw*w, color: Constants.bordercolor)),
               width: w,
-              padding: EdgeInsets.symmetric(horizontal: 10*kh*h, vertical: 20*kh*h),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 10 * kh * h, vertical: 20 * kh * h),
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(
                     title: AxisTitle(text: 'Date'),
@@ -111,11 +117,12 @@ class _WeightChartState extends State<WeightChart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  TextPlain(
                     'HISTORY',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12*kh*h),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12 * kh * h,
                   ),
-                  IconButton(
+                  IconButtonSimple(
                       onPressed: () async {
                         showDialog(
                             context: context,
@@ -129,15 +136,15 @@ class _WeightChartState extends State<WeightChart> {
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(32.0*kh*h))),
+                                          Radius.circular(Constants.circularradiusbig * kh * h))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Weight"),
-                                      FlatButton(
+                                      TextPlain("Weight"),
+                                      FlatButtonSimple(
                                         onPressed: () {},
-                                        child: Text(date),
+                                        child: TextPlain(date),
                                       )
                                     ],
                                   ),
@@ -164,13 +171,13 @@ class _WeightChartState extends State<WeightChart> {
                                     ),
                                   ),
                                   actions: <Widget>[
-                                    FlatButton(
+                                    FlatButtonSimple(
                                       onPressed: () {
                                         Navigator.of(ctx).pop();
                                       },
-                                      child: Text("CANCEL"),
+                                      child: TextPlain("CANCEL"),
                                     ),
-                                    FlatButton(
+                                    FlatButtonSimple(
                                       onPressed: () async {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
@@ -189,7 +196,7 @@ class _WeightChartState extends State<WeightChart> {
                                               .pop(weightcontroller.text);
                                         }
                                       },
-                                      child: Text("SAVE"),
+                                      child: TextPlain("SAVE"),
                                     ),
                                   ],
                                 );
@@ -212,7 +219,7 @@ class _WeightChartState extends State<WeightChart> {
             ),
             Container(
               height: h * 0.45,
-              padding: EdgeInsets.only(left: 8*kw*w, right: 8*kw*w),
+              padding: EdgeInsets.only(left: Constants.padding * kw * w, right: Constants.padding * kw * w),
               child: ListView.builder(
                 itemBuilder: (ctx, item) {
                   return historyrecord(
@@ -332,19 +339,16 @@ Widget historyrecord(DateTime date, String cal) {
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            num_month,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          // Text(
+          TextPlain(num_month, fontWeight: FontWeight.bold),
+          //TextPlain(
           //   time,
           //   style: TextStyle(fontWeight: FontWeight.w300),
           // )
         ],
       ),
-      Text(
+      TextPlain(
         cal + ' kg',
-        style: TextStyle(fontWeight: FontWeight.w500),
+        fontWeight: FontWeight.w500,
       )
     ],
   );

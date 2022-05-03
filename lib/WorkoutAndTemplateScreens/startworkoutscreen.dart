@@ -6,11 +6,15 @@ import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
 import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/workoutscreen.dart';
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../customwidgets/iconbuttonsimple.dart';
+import '../customwidgets/text.dart';
 
 class StartWorkoutScreen extends StatefulWidget {
   List<Map<String, Map<String, dynamic>>> chosenExercises;
@@ -705,11 +709,11 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
     w = size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: TextPlain(
           'Workout',
-          style: TextStyle(color: Colors.black),
+          color: Colors.black,
         ),
-        leading: IconButton(
+        leading: IconButtonSimple(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.black,
@@ -745,20 +749,20 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                     timeInSecForIosWeb: 2,
                     backgroundColor: Colors.grey,
                     textColor: Colors.white,
-                    fontSize: 16.0*kh*h);
+                    fontSize: 16.0 * kh * h);
               }
             },
             icon: Icon(
               Icons.save,
-              size: 24.0*kh*h,
+              size: 24.0 * kh * h,
             ),
-            label: Text('Save'),
+            label: TextPlain('Save'),
           )
         ],
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding:  EdgeInsets.all(8.0*kh*h),
+        padding: EdgeInsets.all(Constants.padding * kh * h),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -779,7 +783,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       // borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0*kh*h),
+                      borderRadius: BorderRadius.circular(10.0 * kh * h),
                     )),
                 onChanged: (val) {
                   setState(() {
@@ -793,7 +797,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
               children: [
                 TextButton(
                     style: TextButton.styleFrom(
-                      textStyle:  TextStyle(fontSize: 20*kh*h),
+                      textStyle: TextStyle(fontSize: 20 * kh * h),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -810,8 +814,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                 1)),
                       );
                     },
-                    child: const Text('ADD EXERCISE',
-                        style: TextStyle(color: Colors.blue))),
+                    child: TextPlain('ADD EXERCISE', color: Colors.blue)),
               ],
             ),
             StreamBuilder<int>(
@@ -829,13 +832,10 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                     second: true);
                 // print(currtime);
 
-                return Text(
-                  displayTime,
-                  style:  TextStyle(
-                      fontSize: 20*kh*h,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green),
-                );
+                return TextPlain(displayTime,
+                    fontSize: 20 * kh * h,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green);
               },
             ),
             exercisename(widget.workoutname, chosenExercises)
@@ -857,8 +857,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
         });
       }
       setState(() {
-        templates.add(
-            {'name': widget.workoutname, 'list': l});
+        templates.add({'name': widget.workoutname, 'list': l});
       });
     }
   }
@@ -886,10 +885,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            name,
-            style: TextStyle(color: Colors.blue),
-          ),
+          TextPlain(name, color: Colors.blue),
           Container(
             height: 450 + totsets * 20.0,
             child: ListView.builder(
@@ -900,24 +896,24 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    TextPlain(
                       l[itemer].keys.toList()[0],
-                      style: TextStyle(color: Colors.grey.shade400),
+                      color: Colors.grey.shade400,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
+                        TextPlain(
                           'SET',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          color: Colors.grey.shade400,
                         ),
-                        Text(
+                        TextPlain(
                           'KG',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          color: Colors.grey.shade400,
                         ),
-                        Text(
+                        TextPlain(
                           'REPS',
-                          style: TextStyle(color: Colors.grey.shade400),
+                          color: Colors.grey.shade400,
                         ),
                         SizedBox(
                           width: w * 0.01,
@@ -946,11 +942,10 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                     children: [
                                       Container(
                                         margin:
-                                             EdgeInsets.only(top: 10.0*kh*h),
-                                        child: Text(
+                                            EdgeInsets.only(top: 10.0 * kh * h),
+                                        child: TextPlain(
                                           (item + 1).toString(),
-                                          style: TextStyle(
-                                              color: Colors.grey.shade400),
+                                          color: Colors.grey.shade400,
                                         ),
                                       ),
                                       Container(
@@ -1020,7 +1015,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                     ],
                                   ),
                                 ),
-                                IconButton(
+                                IconButtonSimple(
                                   onPressed: () {
                                     setState(() {
                                       if ((l[itemer].values.toList()[0]
@@ -1037,7 +1032,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                             timeInSecForIosWeb: 2,
                                             backgroundColor: Colors.grey,
                                             textColor: Colors.white,
-                                            fontSize: 16.0*kh*h);
+                                            fontSize: 16.0 * kh * h);
                                       } else {
                                         l[itemer].values.toList()[0]
                                                     ['RepWeight'][item]
@@ -1086,8 +1081,7 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                               });
                               print(l);
                             },
-                            child: const Text('ADD SET',
-                                style: TextStyle(color: Colors.blue))),
+                            child: TextPlain('ADD SET', color: Colors.blue)),
                       ],
                     ),
                   ],

@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
+
+import '../customwidgets/circleavatarsimple.dart';
+import '../customwidgets/text.dart';
 
 class ExerciseScreen extends StatefulWidget {
   List<Map<String, String>> exercisecat;
@@ -25,7 +29,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   List<Map<String, String>> displayexercisecat = [];
   List<Image> displaycategoryimages = [];
   String? selectedValue;
-  Widget customSearchBar = const Text('Exercise',style: TextStyle(color: Colors.black),);
+  Widget customSearchBar = TextPlain(
+    'Exercise',
+    color: Colors.black,
+  );
   String value = '';
   void find(String str) {
     String i = '';
@@ -68,9 +75,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         backgroundColor: Colors.white,
         actions: [
           AnimatedSearchBar(
-            shadow:  [
+            shadow: [
               BoxShadow(
-                  color: Colors.black38, blurRadius: 6*kh*h, offset: Offset(0, 6))
+                  color: Colors.black38,
+                  blurRadius: 6 * kh * h,
+                  offset: Offset(0, 6))
             ],
             backgroundColor: Colors.blue[100],
             failMessage: 'No Items found',
@@ -80,7 +89,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             width: w * 0.55,
             submitButtonColor: Colors.blue,
             textStyle: const TextStyle(color: Colors.blue),
-            buttonIcon: const Icon(
+            buttonIcon: Icon(
               Icons.search,
             ),
             duration: const Duration(milliseconds: 500),
@@ -102,10 +111,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             }).toList(),
             textController: textController,
             overlaySearchListItemBuilder: (dynamic item) => Container(
-              padding:  EdgeInsets.all(8*kh*h),
-              child: Text(
+              padding: EdgeInsets.all(8 * kh * h),
+              child: TextPlain(
                 item,
-                style:  TextStyle(fontSize: 15*kh*h, color: Colors.black),
+                fontSize: 15 * kh * h,
+                color: Colors.black,
               ),
             ),
             onItemSelected: (dynamic item) {
@@ -128,27 +138,25 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             child: DropdownButton2(
               isExpanded: true,
               hint: Row(
-                children:  [
+                children: [
                   Icon(
                     Icons.filter_alt_rounded,
-                    size: 25*kh*h,
+                    size: 25 * kh * h,
                     color: Colors.blue,
                   ),
                   SizedBox(
-                    width: 4*kw*w,
+                    width: 4 * kw * w,
                   ),
                 ],
               ),
               items: widget.combinedtypesofcategory
                   .map((item) => DropdownMenuItem<String>(
                         value: item,
-                        child: Text(
+                        child: TextPlain(
                           item,
-                          style:  TextStyle(
-                            fontSize: 14*kh*h,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          fontSize: 14 * kh * h,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ))
@@ -164,40 +172,44 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 Icons.arrow_forward_ios_outlined,
                 color: Colors.blue,
               ),
-              iconSize: 14*kh*h,
+              iconSize: 14 * kh * h,
               iconEnabledColor: Colors.yellow,
               iconDisabledColor: Colors.grey,
-              buttonHeight: 50*kh*h,
-              buttonWidth: 50*kw*w,
+              buttonHeight: 50 * kh * h,
+              buttonWidth: 50 * kw * w,
               //buttonPadding: const EdgeInsets.only(left: 14, right: 14),
               buttonDecoration: BoxDecoration(
                 color: Colors.white,
               ),
               buttonElevation: 2,
-              itemHeight: 40*kh*h,
-              itemPadding:  EdgeInsets.only(left: 14*kw*w, right: 14*kw*w),
-              dropdownMaxHeight: 200*kh*h,
-              dropdownWidth: 200*kw*w,
+              itemHeight: 40 * kh * h,
+              itemPadding:
+                  EdgeInsets.only(left: 14 * kw * w, right: 14 * kw * w),
+              dropdownMaxHeight: 200 * kh * h,
+              dropdownWidth: 200 * kw * w,
               dropdownPadding: null,
               dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14*kh*h),
+                borderRadius: BorderRadius.circular(14 * kh * h),
                 //color: Colors.redAccent,
               ),
               dropdownElevation: 8,
-              scrollbarRadius:  Radius.circular(40*kh*h),
-              scrollbarThickness: 6*kw*w,
+              scrollbarRadius: Radius.circular(40 * kh * h),
+              scrollbarThickness: 6 * kw * w,
               scrollbarAlwaysShow: true,
               offset: const Offset(-20, 0),
             ),
           )
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (_, item) {
-          return ExerciseItems(displayexercisecat[item]['name']!,
-              displayexercisecat[item]['type']!, displaycategoryimages[item]);
-        },
-        itemCount: displayexercisecat.length,
+      body: Padding(
+        padding:  EdgeInsets.all(Constants.padding),
+        child: ListView.builder(
+          itemBuilder: (_, item) {
+            return ExerciseItems(displayexercisecat[item]['name']!,
+                displayexercisecat[item]['type']!, displaycategoryimages[item]);
+          },
+          itemCount: displayexercisecat.length,
+        ),
       ),
     );
   }
@@ -220,11 +232,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
+            CircleAvatarSimple(
               backgroundColor: Colors.grey[200],
               radius: 35,
-              child: CircleAvatar(
-                radius: 30.0*kh*h,
+              child: CircleAvatarSimple(
+                radius: 30.0 * kh * h,
                 child: image,
                 backgroundColor: Colors.transparent,
               ),
@@ -235,17 +247,17 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                TextPlain(
                   name,
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1*kw*w),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1 * kw * w,
                 ),
                 SizedBox(
                   height: h * 0.01,
                 ),
-                Text(
+                TextPlain(
                   type,
-                  style: TextStyle(letterSpacing: 1*kw*w),
+                  letterSpacing: 1 * kw * w,
                 ),
               ],
             )

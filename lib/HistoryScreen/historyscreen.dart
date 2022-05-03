@@ -10,6 +10,9 @@ import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.da
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../customwidgets/constants.dart';
+import '../customwidgets/text.dart';
+
 class HistoryScreen extends StatefulWidget {
   String workoutname;
   List<Map<String, Map<String, dynamic>>> newtemplates = [];
@@ -20,7 +23,7 @@ class HistoryScreen extends StatefulWidget {
   List<Map<String, dynamic>> templates = [
     // {
     //   'name': 'Evening Workout',
-    //   
+    //
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -30,7 +33,7 @@ class HistoryScreen extends StatefulWidget {
     // },
     // {
     //   'name': 'Evening Workout',
-    //   
+    //
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -38,7 +41,7 @@ class HistoryScreen extends StatefulWidget {
     // },
     // {
     //   'name': 'Evening Workout',
-    //   
+    //
     //   'list': [
     //     exercise(1, 'Pendlay Row(Barbell'),
     //     exercise(2, 'Pistol Squat'),
@@ -61,7 +64,7 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveClientMixin {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
@@ -81,7 +84,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void didChangeDependencies() {
     // addtemplate(widget.templates);
-     gettemplates();
+    gettemplates();
     print(widget.templates);
     print(widget.newtemplates);
     super.didChangeDependencies();
@@ -277,9 +280,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: TextPlain(
           'History',
-          style: TextStyle(color: Colors.black),
+          color: Colors.black,
         ),
         elevation: 0,
         backgroundColor: Colors.white,
@@ -289,7 +292,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: CircularProgressIndicator(),
             )
           : Padding(
-              padding:  EdgeInsets.all(8.0*kh*h),
+              padding: EdgeInsets.all(Constants.padding * kh * h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -329,27 +332,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey,
+              color: Constants.bordercolor,
+              width: Constants.borderwidth*kw*w
             ),
             borderRadius: BorderRadius.all(
-              Radius.circular(20*kh*h),
+              Radius.circular(Constants.circularadiussmall * kh * h),
             )),
         child: Padding(
-          padding:  EdgeInsets.all(8.0*kh*h),
+          padding: EdgeInsets.all(8.0 * kh * h),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                TextPlain(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,
                 ),
                 SizedBox(
                   height: h * 0.01,
                 ),
-                Text(
+                TextPlain(
                   date,
-                  style: TextStyle(fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.w400,
                 ),
                 SizedBox(
                   height: h * 0.01,
@@ -359,13 +363,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   children: [
                     Icon(
                       Icons.timer,
-                      size: 12*kh*h,
+                      size: 12 * kh * h,
                     ),
                     SizedBox(
                       width: w * 0.02,
                     ),
-                    Text(workouttime,
-                        style: TextStyle(fontWeight: FontWeight.w700))
+                    TextPlain(workouttime, fontWeight: FontWeight.w700)
                   ],
                 ),
                 SizedBox(
@@ -379,10 +382,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       //padding: const EdgeInsets.all(10),
                       child: VerticalDivider(
                         color: Colors.black,
-                        thickness: 3*kw*w,
+                        thickness: 3 * kw * w,
                         indent: 0,
                         endIndent: 0,
-                        width: 20*kw*w,
+                        width: 20 * kw * w,
                       ),
                     ),
                     Container(
@@ -393,20 +396,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           itemBuilder: (ctx, item) {
                             return Row(
                               children: [
-                                Text(
+                                TextPlain(
                                   l[item].count.toString() + ' x ' + '  ',
-                                  style: TextStyle(
-                                      fontSize: 12*kh*h,
-                                      fontWeight: FontWeight.w400),
+                                  fontSize: 12 * kh * h,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                 SizedBox(
                                   width: w * 0.001,
                                 ),
-                                Text(
+                                TextPlain(
                                   l[item].name,
-                                  style: TextStyle(
-                                      fontSize: 12*kh*h,
-                                      fontWeight: FontWeight.w400),
+                                  fontSize: 12 * kh * h,
+                                  fontWeight: FontWeight.w400,
                                 )
                               ],
                             );
@@ -467,6 +468,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  
+  bool get wantKeepAlive => true;
 }
 
 class exercise {

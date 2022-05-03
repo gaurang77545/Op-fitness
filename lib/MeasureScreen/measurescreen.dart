@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/MeasureScreen/calorieintakechart/caloricintakehelper.dart' as ci;
+import 'package:op_fitnessapp/MeasureScreen/calorieintakechart/caloricintakehelper.dart'
+    as ci;
 import 'package:op_fitnessapp/MeasureScreen/weightchart/weightchart.dart';
-import 'package:op_fitnessapp/MeasureScreen/weightchart/weighthelper.dart' as wd;
-import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfathelper.dart' as bf;
+import 'package:op_fitnessapp/MeasureScreen/weightchart/weighthelper.dart'
+    as wd;
+import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfathelper.dart'
+    as bf;
+import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
 
+import '../customwidgets/text.dart';
 import 'calorieintakechart/calorieintakechart.dart';
-
-
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);
@@ -60,15 +63,15 @@ class _MeasureScreenState extends State<MeasureScreen> {
     w = size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: TextPlain(
           'Measure',
-          style: TextStyle(color: Colors.black),
+          color: Colors.black,
         ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(Constants.padding*kh*h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -186,17 +189,14 @@ class _MeasureScreenState extends State<MeasureScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 25*kh*h,
-                      letterSpacing: 2*kw*w),
-                ),
+                TextPlain(title,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 25 * kh * h,
+                    letterSpacing: 2 * kw * w),
                 Icon(
                   Icons.arrow_circle_right_outlined,
                   color: Colors.blueAccent,
-                  size: 25*kh*h,
+                  size: 25 * kh * h,
                 )
               ],
             ),
@@ -214,21 +214,15 @@ class _MeasureScreenState extends State<MeasureScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 25*kh*h,
-                          letterSpacing: 2*kw*w),
-                    ),
-                    Text(
-                      val,
-                      style: TextStyle(fontSize: 20*kh*h),
-                    ),
+                    TextPlain(title,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 25 * kh * h,
+                        letterSpacing: 2 * kw * w),
+                    TextPlain(val, fontSize: 20 * kh * h),
                   ],
                 ),
                 Icon(Icons.arrow_circle_right_outlined,
-                    color: Colors.blueAccent, size: 25*kh*h)
+                    color: Colors.blueAccent, size: 25 * kh * h)
               ],
             ),
             onTap: () {
