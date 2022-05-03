@@ -238,7 +238,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 Text(
                   name,
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+                      TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1*kw*w),
                 ),
                 SizedBox(
                   height: h * 0.01,

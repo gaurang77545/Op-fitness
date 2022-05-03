@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart/caloricintakehelper.dart' as ci;
-import 'package:op_fitnessapp/weightchart/weightchart.dart';
-import 'package:op_fitnessapp/weightchart/weighthelper.dart' as wd;
-import 'package:op_fitnessapp/bodyfatchart/bodyfathelper.dart' as bf;
+import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfatpercentage.dart';
+import 'package:op_fitnessapp/MeasureScreen/calorieintakechart/caloricintakehelper.dart' as ci;
+import 'package:op_fitnessapp/MeasureScreen/weightchart/weightchart.dart';
+import 'package:op_fitnessapp/MeasureScreen/weightchart/weighthelper.dart' as wd;
+import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfathelper.dart' as bf;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:search_bar_animated/search_bar_animated.dart';
 
-import '../calorieintakechart/caloricintakehelper.dart';
-import '../calorieintakechart/calorieintakechart.dart';
+import 'calorieintakechart/calorieintakechart.dart';
+
+
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);

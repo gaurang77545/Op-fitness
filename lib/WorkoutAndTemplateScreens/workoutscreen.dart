@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
-import 'package:op_fitnessapp/calorieintakechart/calorieintakechart.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/newworkouttemplate.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/startworkoutscreen.dart';
-import 'package:op_fitnessapp/weightchart/weightchart.dart';
 import 'package:op_fitnessapp/MeasureScreen/measurescreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/templateshelper.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';

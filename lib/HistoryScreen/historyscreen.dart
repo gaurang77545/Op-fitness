@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:op_fitnessapp/bodyfatchart/bodyfatpercentage.dart';
 import 'package:op_fitnessapp/MeasureScreen/calorieintakechart/calorieintakechart.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
