@@ -622,22 +622,46 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
     chosenExercises = widget.chosenExercises;
     _stopWatchTimer.onExecute.add(StopWatchExecute.start);
     currhour = DateTime.now().hour;
-    if ((currhour >= 0 && currhour <= 4) ||
-        (currhour >= 19 && currhour <= 23) ||
-        currhour == 0) {
-      widget.workoutname = 'Night Workout';
+    if (widget.workoutname.isEmpty) {
+      if ((currhour >= 0 && currhour <= 4) ||
+          (currhour >= 19 && currhour <= 23) ||
+          currhour == 0) {
+        widget.workoutname = 'Night Workout';
+      }
+      if (currhour > 4 && currhour <= 11) {
+        widget.workoutname = 'Morning Workout';
+      }
+      if (currhour > 11 && currhour <= 16) {
+        widget.workoutname = 'Noon Workout';
+      }
+      if (currhour > 16 && currhour < 19) {
+        widget.workoutname = 'Evening Workout';
+      }
     }
-    if (currhour > 4 && currhour <= 11) {
-      widget.workoutname = 'Morning Workout';
-    }
-    if (currhour > 11 && currhour <= 16) {
-      widget.workoutname = 'Noon Workout';
-    }
-    if (currhour > 16 && currhour < 19) {
-      widget.workoutname = 'Evening Workout';
-    }
+
     //templates = widget.templates;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (widget.workoutname.isEmpty) {
+      if ((currhour >= 0 && currhour <= 4) ||
+          (currhour >= 19 && currhour <= 23) ||
+          currhour == 0) {
+        widget.workoutname = 'Night Workout';
+      }
+      if (currhour > 4 && currhour <= 11) {
+        widget.workoutname = 'Morning Workout';
+      }
+      if (currhour > 11 && currhour <= 16) {
+        widget.workoutname = 'Noon Workout';
+      }
+      if (currhour > 16 && currhour < 19) {
+        widget.workoutname = 'Evening Workout';
+      }
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -686,6 +710,22 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
 
   Future<void> _insert() async {
     print('WORKOUT NAME IS' + widget.workoutname);
+    if (widget.workoutname.isEmpty) {
+      if ((currhour >= 0 && currhour <= 4) ||
+          (currhour >= 19 && currhour <= 23) ||
+          currhour == 0) {
+        widget.workoutname = 'Night Workout';
+      }
+      if (currhour > 4 && currhour <= 11) {
+        widget.workoutname = 'Morning Workout';
+      }
+      if (currhour > 11 && currhour <= 16) {
+        widget.workoutname = 'Noon Workout';
+      }
+      if (currhour > 16 && currhour < 19) {
+        widget.workoutname = 'Evening Workout';
+      }
+    }
     // row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columncombinedexercise: exercisecombined,
