@@ -89,6 +89,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
     print(widget.newtemplates);
     super.didChangeDependencies();
   }
+  
 
   Future<void> gettemplates() async {
     final allRows = await dbHelper.queryAllRows();
@@ -291,28 +292,32 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Padding(
-              padding: EdgeInsets.all(Constants.padding * kh * h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: h * 0.005,
-                  ),
-
-                  //template('Evening Workout', '14', l)
-                  templatelist(
-                    workouthistorylist,
-                    historydummy,
-                    widget.workoutname,
-                    widget.exercisecat,
-                    widget.categoryimages,
-                    widget.combinedtypesofcategory,
-                    widget.exercisenames,
-                  )
-                ],
+          : RefreshIndicator(
+            onRefresh: gettemplates,
+            
+            child: Padding(
+                padding: EdgeInsets.all(Constants.padding * kh * h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: h * 0.005,
+                    ),
+          
+                    //template('Evening Workout', '14', l)
+                    templatelist(
+                      workouthistorylist,
+                      historydummy,
+                      widget.workoutname,
+                      widget.exercisecat,
+                      widget.categoryimages,
+                      widget.combinedtypesofcategory,
+                      widget.exercisenames,
+                    )
+                  ],
+                ),
               ),
-            ),
+          ),
     );
   }
 
