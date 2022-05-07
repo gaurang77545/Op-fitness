@@ -35,6 +35,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   );
   String value = '';
   void find(String str) {
+    //finding the exercises in the list.Search bar functionality
     String i = '';
     int counter = 0;
     displaycategoryimages = [];
@@ -49,6 +50,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   void chosen(String str) {
+    //when we click on the recomendation of search bar this will open up
     String i = '';
     int counter = 0;
     displaycategoryimages = [];
@@ -124,8 +126,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   text: item.toString(),
                 );
                 value = textController.text;
-
-                print(textController.value);
               });
               chosen(value);
             },
@@ -202,11 +202,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         ],
       ),
       body: Padding(
-        padding:  EdgeInsets.all(Constants.padding),
+        padding: EdgeInsets.all(Constants.padding),
         child: ListView.builder(
           itemBuilder: (_, item) {
-            return ExerciseItems(displayexercisecat[item]['name']!,
-                displayexercisecat[item]['type']!, displaycategoryimages[item]);
+            return ExerciseItems(
+                displayexercisecat[item]
+                    ['name']!, //We are displaying the searched items only
+                displayexercisecat[item]['type']!,
+                displaycategoryimages[item]);
           },
           itemCount: displayexercisecat.length,
         ),
@@ -223,6 +226,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   Widget ExerciseItems(String name, String type, Image image) {
+    //Display each list item
     return Column(
       children: [
         SizedBox(
@@ -271,9 +275,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 
   void filterscreen(String val) {
+    //filter screen for search bar functionality
     displaycategoryimages = [];
     displayexercisecat = [];
     if (val == 'All') {
+      //if all means all exercises have to be shown
       displayexercisecat = List.from(widget.exercisecat);
       displaycategoryimages = List.from(widget.categoryimages);
       return;
@@ -284,6 +290,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
     for (i in widget.exercisecat) {
       if (i['type'] == val) {
+        //here i['type'] contains category of exercises and that is being compared with category(val) as well
         displaycategoryimages.add(widget.categoryimages[counter]);
         displayexercisecat.add(widget.exercisecat[counter]);
       }

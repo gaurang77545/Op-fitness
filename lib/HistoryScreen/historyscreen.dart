@@ -21,7 +21,7 @@ class HistoryScreen extends StatefulWidget {
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
   List<Map<String, dynamic>> templates = [
-    // {
+    // {Format of stored templates
     //   'name': 'Evening Workout',
     //
     //   'list': [
@@ -69,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   final dbHelper = DatabaseHelper.instance;
-  List<Map<String, dynamic>> workouthistorylist = [];
+  List<Map<String, dynamic>> workouthistorylist = [];//List of history templates 
   List<Map<String, Map<String, dynamic>>> historydummy = [];
   String exercisecombined = '';
   String repweightcombined = '';
@@ -85,16 +85,14 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
   void didChangeDependencies() {
     // addtemplate(widget.templates);
     gettemplates();
-    print(widget.templates);
-    print(widget.newtemplates);
+    
     super.didChangeDependencies();
   }
   
 
   Future<void> gettemplates() async {
     final allRows = await dbHelper.queryAllRows();
-    print('query all rows: WORKOUT SCREEN');
-    print(allRows);
+    
     repweightcombined = '';
     exercisecombined = '';
     workouthistorylist = [];
@@ -118,15 +116,14 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
               for (int j = 0;
                   j < historydummy[i].values.toList()[0]['Sets'];
                   j++) {
-                // print(historydummy[i].values.toList()[0]['RepWeight'][j]
-                //     ['performed']);
+                
                 if (historydummy[i].values.toList()[0]['RepWeight'][j]
                         ['performed'] ==
                     1) {
                   setState(() {
                     sets++;
                   });
-                  // print('REACHED');
+                 
                 }
               }
               setState(() {
@@ -143,7 +140,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
               workouthistorylist.add({
                 'name': row['workoutname'],
                 'time': row['workouttime'].toString(),
-                'date': DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                'date': DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                 'list': l
               });
             });
@@ -182,8 +179,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
   Future<void> gettemplatesindex(int i) async {
     final allRows = await dbHelper.queryAllRows();
 
-    // print('query all rows:');
-    // print(allRows);
+    
     repweightcombined = '';
     exercisecombined = '';
     perfcombined = '';
@@ -208,14 +204,11 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
     var repsarr = repweightcombined.split('\n');
     var perf = perfcombined;
     var perfarr = perfcombined.split('\n');
-    // print(' PERFarr');
-    // print(perfcombined);
-    //print(arr.length);
+    
     List<int> kg = [];
     for (int i = 0; i < repsarr.length; i++) {
       String name = arr[i];
-      //print(name);
-      //print(repsarr);
+      
       kgreps = repsarr[i];
       perf = perfarr[i];
       List<String> kglist = [];
@@ -227,7 +220,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
         int repsindex = kgreps.indexOf('reps', index + 1);
         String kg = kgreps.substring(index + 2, repsindex);
         kglist.add(kg);
-        // print('kg' + kg);
+        
       }
       for (int index = kgreps.indexOf('reps');
           index >= 0;
@@ -237,7 +230,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
             : kgreps.indexOf('kg', index + 1);
         String reps = kgreps.substring(index + 4, kgindex);
         repslist.add(reps);
-        // print('reps' + reps);
+        
       }
 
       for (int index = perf.indexOf('performed');
@@ -246,17 +239,15 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
         int perfindex = perf.indexOf('performed', index + 1) == -1
             ? perf.length
             : perf.indexOf('performed', index + 1);
-        //print(perfindex);
+        
         String performed = perf.substring(index + 9, perfindex);
 
         perflist.add(performed);
-        // print('kg' + kg);
+       
       }
-      // print(perflist);
+    
       List<Map<String, int>> kgrepslist = [];
-      // print(kgreps);
-      // print('PERFLISTTTTT');
-      // print(perflist);
+      
       for (int i = 0; i < kglist.length; i++) {
         kgrepslist.add({
           'kg': int.parse(kglist[i]),
@@ -264,12 +255,12 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
           'performed': perflist[i] == null ? 0 : int.parse(perflist[i])
         });
       }
-      //print(kgrepslist);
+      
       historydummy.add({
         name: {'Sets': kgrepslist.length, 'RepWeight': kgrepslist}
       });
       setState(() {});
-      //print('\n');
+      
     }
   }
 

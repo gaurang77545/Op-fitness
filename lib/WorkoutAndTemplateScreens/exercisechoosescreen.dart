@@ -158,7 +158,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
                 );
                 value = textController.text;
 
-                print(textController.value);
+              
               });
               chosen(value);
             },
@@ -332,7 +332,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         });
         if (selected[index] == true) {
           setState(() {
-            print(widget.navig);
+          
             if (widget.navig == 1) {
               chosenExercises.add({
                 name: {
@@ -353,14 +353,14 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
               });
             }
           });
-          print(chosenExercises);
+      
         }
         if (selected[index] == false) {
           setState(() {
             chosenExercises
                 .removeWhere((element) => element.keys.first == name);
           });
-          print(chosenExercises);
+       
         }
       },
     );

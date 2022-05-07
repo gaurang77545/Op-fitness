@@ -11,7 +11,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../customwidgets/iconbuttonsimple.dart';
 import '../customwidgets/text.dart';
@@ -671,10 +671,8 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
   }
 
   void format(List<Map<String, dynamic>> templateser) {
-    //print(templateser.length);
     setState(() {
       for (int i = 0; i < templateser.length; i++) {
-        // print(i);
         exercisecombined += templateser[i].keys.toList()[0];
         for (int j = 0; j < templateser[i].values.toList()[0]['Sets']; j++) {
           repweightcombined += 'kg' +
@@ -698,18 +696,11 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
           exercisecombined += '\n';
           perfcombined += '\n';
         }
-        //repweightcombined+=
       }
     });
-    print(exercisecombined);
-    print(repweightcombined);
-    print(perfcombined);
-    //print(templates[1].values.toList()[0]['Sets']);
-    //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
   }
 
   Future<void> _insert() async {
-    print('WORKOUT NAME IS' + widget.workoutname);
     if (widget.workoutname.isEmpty) {
       if ((currhour >= 0 && currhour <= 4) ||
           (currhour >= 19 && currhour <= 23) ||
@@ -731,13 +722,12 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
       DatabaseHelper.columncombinedexercise: exercisecombined,
       DatabaseHelper.columncombinedweightreps: repweightcombined,
       DatabaseHelper.workoutname: widget.workoutname,
-      DatabaseHelper.columndate:
-          int.parse(Timestamp.fromDate(DateTime.now()).seconds.toString()),
+      DatabaseHelper.columndate: DateTime.now().millisecondsSinceEpoch,
       DatabaseHelper.columnworkouttime: int.parse(currtime),
       DatabaseHelper.columnperformed: perfcombined
       //DatabaseHelper.columnExperience:'Flutter Developer'
     };
-    print(row);
+
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
   }
@@ -870,7 +860,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                     minute: false,
                     milliSecond: false,
                     second: true);
-                // print(currtime);
 
                 return TextPlain(displayTime,
                     fontSize: 20 * kh * h,
@@ -932,7 +921,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (ctx, itemer) {
-                print('Outside Loop' + itemer.toString());
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -968,7 +956,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemBuilder: (ctx, item) {
-                            print('Inside Loop+' + item.toString());
                             Color color = Colors.black;
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1016,7 +1003,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                                     ['kg'] = int.parse(value);
                                               }
                                             });
-                                            print(l);
                                           }),
                                         ),
                                       ),
@@ -1048,7 +1034,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                                     ['reps'] = int.parse(value);
                                               }
                                             });
-                                            print(l);
                                           }),
                                         ),
                                       ),
@@ -1082,8 +1067,6 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                                                         ['RepWeight'][item]
                                                     ['performed'];
                                       }
-
-                                      print(chosenExercises);
                                     });
                                   },
                                   icon: Icon(
@@ -1112,14 +1095,12 @@ class _StartWorkoutScreenState extends State<StartWorkoutScreen> {
                             onPressed: () {
                               setState(() {
                                 l[itemer].values.toList()[0]['Sets'] += 1;
-                                print(l[itemer].values.toList()[0]['RepWeight']
-                                    [0]);
+
                                 l[itemer]
                                     .values
                                     .toList()[0]['RepWeight']
                                     .add({'kg': 0, 'reps': 0, 'performed': 0});
                               });
-                              print(l);
                             },
                             child: TextPlain('ADD SET', color: Colors.blue)),
                       ],

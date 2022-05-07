@@ -4,7 +4,7 @@ import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../customwidgets/circleavatarsimple.dart';
@@ -23,18 +23,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double kw = 1 / 392.72727272727275;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController profilenamecontroller = TextEditingController();
-  List<ProfileData> data = [
-    // ProfileData(DateTime.now().add(Duration(days: 10)), 2),
-    // ProfileData(DateTime.now().add(Duration(days: 5)), 2)
-  ];
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<ProfileData> data = [];
+  final Future<SharedPreferences> _prefs = SharedPreferences
+      .getInstance(); //We use shared preference for storing user name
   final prefs = SharedPreferences.getInstance();
   final dbHelper = DatabaseHelper.instance;
   DateTime dater = DateTime.now();
   String workout = '';
 
   TextEditingController workoutcontroller = TextEditingController();
-  String profilename = 'User';
+  String profilename = 'User'; //default user name
 
   @override
   void initState() {
@@ -56,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> getStringValuesSF() async {
+    //get user name
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
     String stringValue = 'User';
@@ -84,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   int get workoutcount {
+    //returns total count of workouts performed
     int count = 0;
     for (int i = 0; i < data.length; i++) {
       count += data[i].workout;
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         brightness: Brightness.dark,
       ),
       body: Padding(
-        padding: EdgeInsets.all(Constants.padding* kh * h),
+        padding: EdgeInsets.all(Constants.padding * kh * h),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -159,7 +159,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       return AlertDialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(Constants.circularradiusbig*kh*h))),
+                                                Radius.circular(Constants
+                                                        .circularradiusbig *
+                                                    kh *
+                                                    h))),
                                         title: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -209,13 +212,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       );
                                     });
                                   }).then((value) {
-                                //print(value);
+                                
                                 setState(() {
                                   profilename = value;
                                 });
                               });
-                              // int id = await dbHelper.delete(8);
-                              // print(id);
+                              
                             },
                             icon: Icon(Icons.edit)),
                       ],
@@ -230,7 +232,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: h * 0.45,
                 margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                    border: Border.all(width: Constants.borderwidth * kw * w, color: Constants.bordercolor)),
+                    border: Border.all(
+                        width: Constants.borderwidth * kw * w,
+                        color: Constants.bordercolor)),
                 width: w,
                 padding: EdgeInsets.symmetric(
                     horizontal: 10 * kw * w, vertical: 20 * kh * h),
@@ -263,12 +267,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _query() async {
+    //Query the rows and add to data variable the count of workouts performed on different dates
     final allRows = await dbHelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
-    //data = [];
+   
     allRows.isNotEmpty
         ? allRows.forEach((row) {
+            //For each element of workout performed we are adding it to their respective dates and increasing count of workouts performed
             setState(() {
               var found = 0;
               for (int i = 0; i < data.length; i++) {
@@ -276,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 if (formattedate(obj.month) ==
                     formattedate(DateTime.fromMillisecondsSinceEpoch(
-                        row['date'] * 1000))) {
+                        row['date'] ))) {
                   data[i].workout += 1;
                   found = 1;
                   break;
@@ -284,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
               if (found == 0) {
                 data.add(ProfileData(
-                    DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                    DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                     1));
               } else {
                 found = 0;
@@ -293,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           })
         : [];
     sort();
-    print(data);
+
   }
 
   String formattedate(DateTime date) {
@@ -316,49 +320,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String num_month = num + '  ' + month + '    ';
     String time = date.hour.toString() + ":" + date.minute.toString();
     return num_month;
-  }
-
-  Widget historyrecord(DateTime date, String cal) {
-    List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-    String num = date.day.toString();
-    String month = months[date.month - 1].substring(0, 3);
-    String num_month = num + '  ' + month + '    ';
-    //String time = DateTime.now().hour.toString() + ":" + date.minute.toString();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextPlain(
-              num_month,
-              fontWeight: FontWeight.bold,
-            ),
-            //TextPlain(
-            //   time,
-            //   style: TextStyle(fontWeight: FontWeight.w300),
-            // )
-          ],
-        ),
-        TextPlain(
-          cal + ' ',
-          fontWeight: FontWeight.w500,
-        )
-      ],
-    );
   }
 }
 

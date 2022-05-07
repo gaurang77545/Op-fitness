@@ -3,7 +3,7 @@ import 'package:op_fitnessapp/MeasureScreen/bodyfatchart/bodyfathelper.dart';
 import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../customwidgets/flatbuttonsimple.dart';
 import '../../customwidgets/iconbuttonsimple.dart';
@@ -83,7 +83,9 @@ class _bodyfatChartState extends State<bodyfatChart> {
               height: h * 0.45,
               margin: EdgeInsets.all(5 * kh * h),
               decoration: BoxDecoration(
-                  border: Border.all(width: Constants.borderwidth * kw * w, color: Constants.bordercolor)),
+                  border: Border.all(
+                      width: Constants.borderwidth * kw * w,
+                      color: Constants.bordercolor)),
               width: w,
               padding: EdgeInsets.symmetric(
                   horizontal: 10 * kw * w, vertical: 20 * kh * h),
@@ -113,7 +115,9 @@ class _bodyfatChartState extends State<bodyfatChart> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: Constants.padding * kw * w, right: Constants.padding * kw * w),
+              padding: EdgeInsets.only(
+                  left: Constants.padding * kw * w,
+                  right: Constants.padding * kw * w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -136,7 +140,10 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(Constants.circularradiusbig * kh * h))),
+                                          Radius.circular(
+                                              Constants.circularradiusbig *
+                                                  kh *
+                                                  h))),
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -165,7 +172,6 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                       onChanged: (val) {
                                         setState() {
                                           bodyfat = val;
-                                          print(bodyfat);
                                         }
                                       },
                                     ),
@@ -182,15 +188,11 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
                                           if (x) {
-                                            print(bodyfatcontroller.text
-                                                .toString());
                                             _insert(
                                                 dater,
                                                 bodyfatcontroller.text
                                                     .toString());
                                             sort();
-                                            // print(bodyfatcontroller.text);
-                                            print(dater.toString());
                                           }
                                           Navigator.of(ctx)
                                               .pop(bodyfatcontroller.text);
@@ -202,13 +204,10 @@ class _bodyfatChartState extends State<bodyfatChart> {
                                 );
                               });
                             }).then((value) {
-                          //print(value);
                           setState(() {
                             bodyfat = value;
                           });
                         });
-                        // int id = await dbHelper.delete(8);
-                        // print(id);
                       },
                       icon: Icon(Icons.add))
                 ],
@@ -237,12 +236,11 @@ class _bodyfatChartState extends State<bodyfatChart> {
   void _insert(DateTime dt, String bodyfat) async {
     // row to insert
     Map<String, dynamic> row = {
-      DatabaseHelper.columnDate:
-          int.parse(Timestamp.fromDate(dt).seconds.toString()),
+      DatabaseHelper.columnDate: dt.millisecondsSinceEpoch,
+      
       DatabaseHelper.columnbodyfat: bodyfat,
-      //DatabaseHelper.columnExperience:'Flutter Developer'
     };
-    // print(row);
+    print(row);
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
     _query();
@@ -250,14 +248,13 @@ class _bodyfatChartState extends State<bodyfatChart> {
 
   void _query() async {
     final allRows = await dbHelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
+
     data = [];
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
               data.add(bodyfatData(
-                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                   double.parse(row['bodyfat'].toString())));
             });
           })
@@ -307,10 +304,6 @@ class _bodyfatChartState extends State<bodyfatChart> {
       return true;
     }
     return false;
-    //print(bodyfat);
-    //
-    //print(data);
-    // print(dater);
   }
 }
 

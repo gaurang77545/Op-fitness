@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:op_fitnessapp/MeasureScreen/calorieintakechart/caloricintakehelper.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../customwidgets/constants.dart';
 import '../../customwidgets/flatbuttonsimple.dart';
@@ -166,7 +166,7 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                       onChanged: (val) {
                                         setState() {
                                           caloricintake = val;
-                                          print(caloricintake);
+                                         
                                         }
                                       },
                                     ),
@@ -183,15 +183,13 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                         if (_formKey.currentState!.validate()) {
                                           bool x = await _showDatePicker();
                                           if (x) {
-                                            print(caloricintakecontroller.text
-                                                .toString());
+                                            
                                             _insert(
                                                 dater,
                                                 caloricintakecontroller.text
                                                     .toString());
                                             sort();
-                                            // print(caloricintakecontroller.text);
-                                            print(dater.toString());
+                                            
                                           }
                                           Navigator.of(ctx).pop(
                                               caloricintakecontroller.text);
@@ -203,13 +201,12 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
                                 );
                               });
                             }).then((value) {
-                          //print(value);
+                         
                           setState(() {
                             caloricintake = value;
                           });
                         });
-                        // int id = await dbHelper.delete(8);
-                        // print(id);
+                        
                       },
                       icon: Icon(Icons.add))
                 ],
@@ -238,12 +235,12 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
   void _insert(DateTime dt, String caloricintake) async {
     // row to insert
     Map<String, dynamic> row = {
-      DatabaseHelper.columnDate:
-          int.parse(Timestamp.fromDate(dt).seconds.toString()),
+      
+          DatabaseHelper.columnDate: dt.millisecondsSinceEpoch,
       DatabaseHelper.columncaloricintake: caloricintake,
-      //DatabaseHelper.columnExperience:'Flutter Developer'
+      
     };
-    // print(row);
+    
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
     _query();
@@ -251,14 +248,13 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
 
   void _query() async {
     final allRows = await dbHelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
+    
     data = [];
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
               data.add(caloricintakeData(
-                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                   double.parse(row['caloricintake'].toString())));
             });
           })
@@ -308,10 +304,7 @@ class _caloricintakeChartState extends State<caloricintakeChart> {
       return true;
     }
     return false;
-    //print(caloricintake);
-    //
-    //print(data);
-    // print(dater);
+    
   }
 }
 

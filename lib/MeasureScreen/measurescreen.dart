@@ -29,18 +29,18 @@ class _MeasureScreenState extends State<MeasureScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  String weight = '';
-  String bodyfatpercentage = '';
-  String calorieintake = '';
-  List<WeightData> weightdata = [];
-  List<caloricintakeData> caloricintakedata = [];
-  List<bodyfatData> bodyfatdata = [];
+  String weight = '';//Stores value of latest weight
+  String bodyfatpercentage = '';//Stores value of latest body fat
+  String calorieintake = '';//Stores value of latest calorie intake
+  List<WeightData> weightdata = [];//Stores all the entries of weight data
+  List<caloricintakeData> caloricintakedata = [];//Stores all entries of calorie intake data
+  List<bodyfatData> bodyfatdata = [];//Stores all entries of body fat data
   final dbweightHelper = wd.DatabaseHelper.instance;
   final dbcaloricintakehelper = ci.DatabaseHelper.instance;
   final dbbodyfathelper = bf.DatabaseHelper.instance;
   @override
   void initState() {
-    _weightquery();
+    _weightquery();//Query weight table to get latest data
     _bodyfatquery();
     _caloricintakequery();
 
@@ -93,23 +93,23 @@ class _MeasureScreenState extends State<MeasureScreen> {
     );
   }
 
-  void weightsort() {
+  void weightsort() {//sort weight table to get latest value of the weight
     weightdata.sort((a, b) {
-      var adate = a.month; //before -> var adate = a.expiry;
-      var bdate = b.month; //before -> var bdate = b.expiry;
+      var adate = a.month; 
+      var bdate = b.month; 
       return adate.compareTo(
-          bdate); //to get the order other way just switch `adate & bdate`
+          bdate); 
     });
     weight = weightdata.last.weight.toString();
     setState(() {});
   }
 
-  void bodyfatsort() {
+  void bodyfatsort() {//sort body fat table to get latest entry
     weightdata.sort((a, b) {
-      var adate = a.month; //before -> var adate = a.expiry;
-      var bdate = b.month; //before -> var bdate = b.expiry;
+      var adate = a.month; 
+      var bdate = b.month; 
       return adate.compareTo(
-          bdate); //to get the order other way just switch `adate & bdate`
+          bdate); 
     });
     bodyfatpercentage = bodyfatdata.last.bodyfat.toString();
     setState(() {});
@@ -126,35 +126,33 @@ class _MeasureScreenState extends State<MeasureScreen> {
     setState(() {});
   }
 
-  void _weightquery() async {
+  void _weightquery() async {//queries weight table and adds it to weight data
     final allRows = await dbweightHelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
+    
     weightdata = [];
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
               weightdata.add(WeightData(
-                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                   double.parse(row['weight'].toString())));
             });
           })
         : [];
     if (allRows.isNotEmpty) {
-      weightsort();
+      weightsort();//sort and get the latest value
     }
   }
 
   void _bodyfatquery() async {
     final allRows = await dbbodyfathelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
+    
     bodyfatdata = [];
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
               bodyfatdata.add(bodyfatData(
-                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  DateTime.fromMillisecondsSinceEpoch(row['date']),
                   double.parse(row['bodyfat'].toString())));
             });
           })
@@ -166,14 +164,13 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   void _caloricintakequery() async {
     final allRows = await dbcaloricintakehelper.queryAllRows();
-    print(allRows);
-    print('query all rows:');
+    
     caloricintakedata = [];
     allRows.isNotEmpty
         ? allRows.forEach((row) {
             setState(() {
               caloricintakedata.add(caloricintakeData(
-                  DateTime.fromMillisecondsSinceEpoch(row['date'] * 1000),
+                  DateTime.fromMillisecondsSinceEpoch(row['date'] ),
                   double.parse(row['caloricintake'].toString())));
             });
           })
@@ -184,6 +181,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
   }
 
   Widget listitem(String title, String val, Widget screen) {
+    //COMMENTS ARE ONLY ADDED IN WEIGHT DATA SCREEN+HELPER.REST 2 ie BODY FAT AND CALORIFIC DATA FOLLOW SAME PATTERN OF CODE
     return val == ''
         ? InkWell(
             child: Row(

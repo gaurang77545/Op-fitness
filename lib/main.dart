@@ -26,15 +26,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
@@ -51,9 +42,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double h = 0.0, w = 0.0;
-  double kh = 1 / 759.2727272727273;
+  double kh = 1 /
+      759.2727272727273; //height coeffecient by which we multiply to make screen size configurable to diff screen sizes
   double kw = 1 / 392.72727272727275;
   List<String> exercisenames = [
+    //Name of all exercises
     'Ab Wheel ',
     'Aerobics',
     'Arnold Press (Dumbbell)',
@@ -309,6 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'Zercher Squat (Barbell)'
   ];
   List<String> exercisecategories = [
+    //Name of all the categories of exercises which are corresponding to the elements of exercise names array we created before
     'Core',
     'Cardio',
     'Shoulders',
@@ -565,6 +559,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List<Map<String, String>> exercisecat = [];
   List<String> combinedtypesofcategory = [
+    //Name of all categories
     'All',
     'Core',
     'Cardio',
@@ -577,11 +572,12 @@ class _MyHomePageState extends State<MyHomePage> {
     'Olympic',
     'Other'
   ];
-  List<Image> categoryimages = [];
+  List<Image> categoryimages = []; //List of images for different categories
   PersistentTabController _controller =
-      PersistentTabController(initialIndex: 2);
+      PersistentTabController(initialIndex: 2); //Tab controller
 
   void mapstuff() {
+    //We are adding diff category images for respective exercises according to their categories
     for (int i = 0; i < exercisenames.length; i++) {
       String category = exercisecategories[i];
       if (category == combinedtypesofcategory[1]) {
@@ -636,9 +632,7 @@ class _MyHomePageState extends State<MyHomePage> {
       exercisecat
           .add({'name': exercisenames[i], 'type': exercisecategories[i]});
     }
-    // print(categoryimages);
-    // print(exercisecat);
-    //print(exercisecat.length);
+    
   }
 
   @override
@@ -649,59 +643,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      // Center(
-      //   child: CircleAvatarSimple(
-      //     backgroundColor: Colors.grey[200],
-      //     radius: 35,
-      //     child: CircleAvatarSimple(
-      //       radius: 30.0,
-      //       child: Image.asset(
-      //         'icons/arms.webp',
-      //         color: Colors.lightBlue[200],
-      //       ),
-      //       backgroundColor: Colors.transparent,
-      //     ),
-      //   ),
-      // ),
       ProfileScreen(),
-      //TimerNew(),
-      // ExerciseChooseScreen([], [], 'hahah', exercisecat, categoryimages,
-      //     combinedtypesofcategory, exercisenames,1),
       HistoryScreen([], '', [], exercisecat, categoryimages,
           combinedtypesofcategory, exercisenames),
       WorkoutScreen([], '', [], exercisecat, categoryimages,
           combinedtypesofcategory, exercisenames),
-      // ProfileScreen(),
-      // DemoScreen(),
-      // StartWorkoutScreen([
-      //   {
-      //     'Around the World': {
-      //       'Sets': 3,
-      //       'RepWeight': [
-      //         {'kg': 1, 'reps': 0},
-      //         {'kg': 12, 'reps': 1},
-      //         {'kg': 2, 'reps': 2}
-      //       ]
-      //     }
-      //   },
-      //   {
-      //     'Back Extension': {
-      //       'Sets': 1,
-      //       'RepWeight': [
-      //         {'kg': 3, 'reps': 0}
-      //       ]
-      //     }
-      //   }
-      // ], 'Evening', exercisecat, categoryimages, combinedtypesofcategory,
-      //     exercisenames),
-
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
     ];
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  List<PersistentBottomNavBarItem> _navBarsItems() {//Tab bar
     return [
       PersistentBottomNavBarItem(
         icon: FaIcon(FontAwesomeIcons.user),

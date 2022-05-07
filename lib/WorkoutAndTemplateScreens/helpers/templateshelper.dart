@@ -59,12 +59,7 @@ class DatabaseHelper {
     return await db.insert(table, row);
   }
 
-  // void _onUpgrade(Database db, int oldVersion, int newVersion) {
-  //   //We added a new column to an already existing table in db
-  //   if (oldVersion < newVersion) {
-  //     db.execute("ALTER TABLE my_table ADD COLUMN $columnExperience TEXT;");
-  //   }
-  // }
+
 
   //The data present in the table is returned as a List of Map, where each
   // row is of type map

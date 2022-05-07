@@ -22,6 +22,7 @@ class WorkoutScreen extends StatefulWidget {
   List<String> exercisenames = [];
   List<String> combinedtypesofcategory = [];
   List<Map<String, dynamic>> templates = [
+    //Example of a template
     // {
     //   'name': 'Evening Workout',
     //
@@ -82,26 +83,26 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   @override
   void didChangeDependencies() {
-    // addtemplate(widget.templates);
-    print(widget.templates);
-    print(widget.newtemplates);
     super.didChangeDependencies();
   }
 
   Future<void> gettemplates() async {
+    //Gets list of all templates
     final allRows = await dbHelper.queryAllRows();
-    print('query all rows:');
-    print(allRows);
+
     repweightcombined = '';
     exercisecombined = '';
     allRows.forEach((row) {
       setState(() {
+        //We have stored all the reps performed for a given template like a single string in the format of kg1reps1\nkg1reps1\nkg1reps1
         repweightcombined =
             row['combinedweightreps'] == null ? '' : row['combinedweightreps'];
-        exercisecombined =
+        exercisecombined = //We have stored all exercise names for a given exercise template like a single string in the format of AbWheel\nAerobics\nBackExtension
             row['combinedexercise'] == null ? '' : row['combinedexercise'];
+
         if (repweightcombined != '' || exercisecombined != '') {
           seperate();
+          //After seperating reps and exercise we get respective template with the reps and weight performed
           if (templatesdummy.length != 0) {
             List<exercise> l = [];
             for (int i = 0; i < templatesdummy.length; i++) {
@@ -114,19 +115,25 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             }
             templatesdummy = [];
             setState(() {
-              templateslistall.add({'name': row['workoutname'], 'list': l});
+              templateslistall.add({
+                'name': row['workoutname'],
+                'list': l
+              }); //contain list of all templates
             });
           }
         }
       });
     });
+    print(templateslistall);
+    //This is what templatelistall would look like eventually
+    //[{name: eve, list: [Instance of 'exercise', Instance of 'exercise']}, {name: ohhh, list: [Instance of 'exercise', Instance of 'exercise', Instance of 'exercise']}, {name: pop, list: [Instance of 'exercise', Instance of 'exercise']}, {name: okay, list: [Instance of 'exercise', Instance of 'exercise']}, {name: rand, list: [Instance of 'exercise']}, {name: gbn, list: [Instance of 'exercise']}]
+    //It contains name of all exercises performed with their respective names for each individual workout template
   }
 
   Future<void> gettemplatesindex(int i) async {
+    //We get data only for a respective template according to their index
     final allRows = await dbHelper.queryAllRows();
 
-    // print('query all rows:');
-    // print(allRows);
     repweightcombined = '';
     exercisecombined = '';
     var row = allRows[i];
@@ -142,15 +149,16 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 
   void seperate() {
+    //We are splitting our combined string comprising ofexercise, kgs and reps and adding them to array template dummy
+    //Example of what repsweightcombined would loom like=>kg1reps1\nkg1reps1\nkg1reps1
     var arr = exercisecombined.split('\n');
     var kgreps = repweightcombined;
     var repsarr = repweightcombined.split('\n');
-    print(arr.length);
+
     List<int> kg = [];
     for (int i = 0; i < repsarr.length; i++) {
       String name = arr[i];
-      print(name);
-      print(repsarr);
+
       kgreps = repsarr[i];
       List<String> kglist = [];
       List<String> repslist = [];
@@ -160,7 +168,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         int repsindex = kgreps.indexOf('reps', index + 1);
         String kg = kgreps.substring(index + 2, repsindex);
         kglist.add(kg);
-        // print('kg' + kg);
       }
       for (int index = kgreps.indexOf('reps');
           index >= 0;
@@ -170,27 +177,22 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             : kgreps.indexOf('kg', index + 1);
         String reps = kgreps.substring(index + 4, kgindex);
         repslist.add(reps);
-        // print('reps' + reps);
       }
       List<Map<String, int>> kgrepslist = [];
-      // print(kgreps);
+
       for (int i = 0; i < kglist.length; i++) {
         kgrepslist
             .add({'kg': int.parse(kglist[i]), 'reps': int.parse(repslist[i])});
       }
-      print(kgrepslist);
+
       templatesdummy.add({
         name: {'Sets': kgrepslist.length, 'RepWeight': kgrepslist}
       });
-
+      //This is an example of what template dummy would contain eventuallly.
+      //[{Back Extension: {Sets: 1, RepWeight: [{kg: 2, reps: 3}]}}, {Back Extension (Machine) : {Sets: 1, RepWeight: [{kg: 1, reps: 4}]}}]
+      //It only contains value for one single template
       setState(() {});
-      print('\n');
     }
-    // print('TEMPLATES DUMMY');
-    // print(templatesdummy);
-    // }
-    //  print(arr);
-    // print(kgreps);
   }
 
   @override
@@ -234,7 +236,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ExerciseChooseScreen([], [],
+                      builder: (context) => ExerciseChooseScreen(
+                          [],
+                          [], //Directly opens exercise choose screen comprising of different exercises
                           widget.workoutname,
                           widget.exercisecat,
                           widget.categoryimages,
@@ -272,10 +276,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       ),
                     ).then((value) => gettemplates());
                     gettemplates();
-                    //print(templates);
-                    //print(widget.templates);
-                    //addtemplate(widget.templates);
-                    //print(widget.templates);
                   },
                   icon: Icon(Icons.add),
                 )
@@ -284,7 +284,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             SizedBox(
               height: h * 0.005,
             ),
-            //template('Evening Workout', '14', l)
             templatelist(
               templateslistall,
               templatesdummy,
@@ -301,6 +300,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 
   Widget template(
+      //individual template design
       String title,
       List<exercise> l,
       List<Map<String, Map<String, dynamic>>> chosenExercises,
@@ -384,24 +384,23 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         ),
       ),
       onTap: () async {
-        await gettemplatesindex(index);
-        print('CHOSEN EXERCISES');
-        print(chosenExercises);
+        await gettemplatesindex(
+            index); //on tapping any item we get only specific item based on their index
+
         for (int i = 0; i < chosenExercises.length; i++) {
           for (int j = 0;
               j < chosenExercises[i].values.toList()[0]['Sets'];
               j++) {
             chosenExercises[i].values.toList()[0]['RepWeight'][j]['performed'] =
-                0;
+                0; //We have made whether or not the exercise is performed to 0
           }
         }
-        print(chosenExercises);
-        print('TEMPLATE LIST');
-        print(templateslistall);
+
         await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => StartWorkoutScreen(
+                //Open workout screen with respective value from templates stored
                 chosenExercises,
                 templateslistall[index]['name'],
                 exercisecat,

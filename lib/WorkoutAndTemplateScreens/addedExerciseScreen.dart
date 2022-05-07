@@ -611,12 +611,10 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
   List<Map<String, Map<String, dynamic>>> templatesdummy = [];
   @override
   void initState() {
-    print('CHOSEN EXERCISES');
-    print(chosenExercises);
+   
     chosenExercises = widget.chosenExercises;
     templates = widget.templates;
-    print('CHOSEN EXERCISES');
-    print(chosenExercises);
+ 
     super.initState();
   }
 
@@ -754,10 +752,10 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
   }
 
   void format(List<Map<String, dynamic>> templateser) {
-    print(templateser.length);
+    
     setState(() {
       for (int i = 0; i < templateser.length; i++) {
-        // print(i);
+        
         exercisecombined += templateser[i].keys.toList()[0];
         for (int j = 0; j < templateser[i].values.toList()[0]['Sets']; j++) {
           repweightcombined += 'kg' +
@@ -775,13 +773,10 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
           repweightcombined += '\n';
           exercisecombined += '\n';
         }
-        //repweightcombined+=
+      
       }
     });
-    //  print(exercisecombined);
-    // print(repweightcombined);
-    //print(templates[1].values.toList()[0]['Sets']);
-    //print(templates[0].values.toList()[0]['RepWeight'][1]['kg']);
+   
   }
 
   bool setsrepallfilled() {
@@ -830,7 +825,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (ctx, itemer) {
-                print('Outside Loop' + itemer.toString());
+              
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -859,7 +854,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemBuilder: (ctx, item) {
-                            print('Inside Loop+' + item.toString());
+                           
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -885,7 +880,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                               int.parse(value);
                                         }
                                       });
-                                      print(l);
+                                     
                                     }),
                                   ),
                                 ),
@@ -904,7 +899,7 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                                               int.parse(value);
                                         }
                                       });
-                                      print(l);
+                                
                                     }),
                                   ),
                                 ),
@@ -925,14 +920,13 @@ class _AddedExerciseScreenState extends State<AddedExerciseScreen> {
                             onPressed: () {
                               setState(() {
                                 l[itemer].values.toList()[0]['Sets'] += 1;
-                                print(l[itemer].values.toList()[0]['RepWeight']
-                                    [0]);
+                              
                                 l[itemer]
                                     .values
                                     .toList()[0]['RepWeight']
                                     .add({'kg': 0, 'reps': 0});
                               });
-                              print(l);
+                     
                             },
                             child: TextPlain('ADD SET', color: Colors.blue)),
                       ],
