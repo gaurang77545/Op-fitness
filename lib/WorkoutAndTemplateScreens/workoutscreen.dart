@@ -124,7 +124,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         }
       });
     });
-    print(templateslistall);
+   
     //This is what templatelistall would look like eventually
     //[{name: eve, list: [Instance of 'exercise', Instance of 'exercise']}, {name: ohhh, list: [Instance of 'exercise', Instance of 'exercise', Instance of 'exercise']}, {name: pop, list: [Instance of 'exercise', Instance of 'exercise']}, {name: okay, list: [Instance of 'exercise', Instance of 'exercise']}, {name: rand, list: [Instance of 'exercise']}, {name: gbn, list: [Instance of 'exercise']}]
     //It contains name of all exercises performed with their respective names for each individual workout template

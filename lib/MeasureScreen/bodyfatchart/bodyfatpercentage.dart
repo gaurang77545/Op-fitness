@@ -240,7 +240,7 @@ class _bodyfatChartState extends State<bodyfatChart> {
       
       DatabaseHelper.columnbodyfat: bodyfat,
     };
-    print(row);
+    
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
     _query();

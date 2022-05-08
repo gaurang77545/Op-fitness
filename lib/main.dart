@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exerciseitem.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/addedExerciseScreen.dart';
 import 'package:op_fitnessapp/WorkoutAndTemplateScreens/exercisechoosescreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/exercisescreen.dart';
@@ -647,7 +648,8 @@ class _MyHomePageState extends State<MyHomePage> {
       HistoryScreen([], '', [], exercisecat, categoryimages,
           combinedtypesofcategory, exercisenames),
       WorkoutScreen([], '', [], exercisecat, categoryimages,
-          combinedtypesofcategory, exercisenames),
+         combinedtypesofcategory, exercisenames),
+      //ExerciseItemScreen('Chin Up','INSTRUCTIONS HERE'),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),

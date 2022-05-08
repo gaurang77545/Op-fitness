@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:op_fitnessapp/ExerciseScreen/exerciseitem.dart';
 import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -227,50 +228,62 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
 
   Widget ExerciseItems(String name, String type, Image image) {
     //Display each list item
-    return Column(
-      children: [
-        SizedBox(
-          height: h * 0.01,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatarSimple(
-              backgroundColor: Colors.grey[200],
-              radius: 35,
-              child: CircleAvatarSimple(
-                radius: 30.0 * kh * h,
-                child: image,
-                backgroundColor: Colors.transparent,
+    return InkWell(
+      child: Column(
+        children: [
+          SizedBox(
+            height: h * 0.01,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatarSimple(
+                backgroundColor: Colors.grey[200],
+                radius: 35,
+                child: CircleAvatarSimple(
+                  radius: 30.0 * kh * h,
+                  child: image,
+                  backgroundColor: Colors.transparent,
+                ),
               ),
-            ),
-            SizedBox(
-              width: w * 0.05,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextPlain(
-                  name,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1 * kw * w,
-                ),
-                SizedBox(
-                  height: h * 0.01,
-                ),
-                TextPlain(
-                  type,
-                  letterSpacing: 1 * kw * w,
-                ),
-              ],
-            )
-          ],
-        ),
-        SizedBox(
-          height: h * 0.01,
-        ),
-      ],
+              SizedBox(
+                width: w * 0.05,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextPlain(
+                    name,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1 * kw * w,
+                  ),
+                  SizedBox(
+                    height: h * 0.01,
+                  ),
+                  TextPlain(
+                    type,
+                    letterSpacing: 1 * kw * w,
+                  ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: h * 0.01,
+          ),
+        ],
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ExerciseItemScreen(
+                    name,
+                    'INSTRUCTIONS HERE',
+                  )),
+        );
+      },
     );
   }
 
