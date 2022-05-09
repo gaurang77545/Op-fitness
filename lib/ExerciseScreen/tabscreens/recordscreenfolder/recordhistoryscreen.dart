@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:op_fitnessapp/ExerciseScreen/tabscreens/recordscreenfolder/recordsclass.dart';
 import 'package:op_fitnessapp/ExerciseScreen/tabscreens/recordscreenfolder/recordstabscreen.dart';
 import 'package:op_fitnessapp/customwidgets/constants.dart';
 import 'package:op_fitnessapp/customwidgets/text.dart';
@@ -17,6 +19,14 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
+  var instance;
+  void initState() {
+    // gettemplates();
+    instance = Get.put(Records(widget.name));
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -53,7 +63,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
                 child: ListView.builder(
                   itemBuilder: (_, item) {
                     return singledetailrow(widget.maxrepsarr[item].reps,
-                        widget.maxrepsarr[item].date);
+                        instance.formattedate(widget.maxrepsarr[item].date));
                   },
                   itemCount: widget.maxrepsarr.length,
                 ),
@@ -70,7 +80,7 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
                 child: ListView.builder(
                   itemBuilder: (_, item) {
                     return singledetailrow(widget.maxweightarr[item].weight,
-                        widget.maxweightarr[item].date);
+                        instance.formattedate(widget.maxweightarr[item].date));
                   },
                   itemCount: widget.maxweightarr.length,
                 ),

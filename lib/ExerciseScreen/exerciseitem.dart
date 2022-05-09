@@ -74,7 +74,7 @@ class _ExerciseItemScreenState extends State<ExerciseItemScreen> {
               HistoryTabScreen(
                 widget.name,
               ),
-              Center(),
+              ChartTabScreen(widget.name),
               RecordTabScreen(widget.name)
             ],
           ),

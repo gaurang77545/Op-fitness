@@ -649,7 +649,7 @@ class _MyHomePageState extends State<MyHomePage> {
           combinedtypesofcategory, exercisenames),
       WorkoutScreen([], '', [], exercisecat, categoryimages,
          combinedtypesofcategory, exercisenames),
-      //ExerciseItemScreen('Chin Up','INSTRUCTIONS HERE'),
+      //ExerciseItemScreen('Aerobics','INSTRUCTIONS HERE'),
       ExerciseScreen(
           exercisecat, categoryimages, combinedtypesofcategory, exercisenames),
       MeasureScreen(),
