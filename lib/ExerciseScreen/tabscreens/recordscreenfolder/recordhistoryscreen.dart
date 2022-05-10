@@ -9,7 +9,9 @@ class RecordHistoryScreen extends StatefulWidget {
   String name;
   List<maxreps> maxrepsarr = [];
   List<maxweight> maxweightarr = [];
-  RecordHistoryScreen(this.name, this.maxrepsarr, this.maxweightarr);
+  Records instance;
+  RecordHistoryScreen(
+      this.name, this.maxrepsarr, this.maxweightarr, this.instance);
 
   @override
   State<RecordHistoryScreen> createState() => _RecordHistoryScreenState();
@@ -20,10 +22,9 @@ class _RecordHistoryScreenState extends State<RecordHistoryScreen> {
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   var instance;
+  @override
   void initState() {
-    // gettemplates();
-    instance = Get.put(Records(widget.name));
-
+    instance = widget.instance;
     super.initState();
   }
 

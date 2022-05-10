@@ -17,10 +17,7 @@ import '../customwidgets/text.dart';
 class WorkoutScreen extends StatefulWidget {
   String workoutname;
   List<Map<String, Map<String, dynamic>>> newtemplates = [];
-  List<Map<String, String>> exercisecat;
-  List<Image> categoryimages = [];
-  List<String> exercisenames = [];
-  List<String> combinedtypesofcategory = [];
+
   List<Map<String, dynamic>> templates = [
     //Example of a template
     // {
@@ -57,10 +54,8 @@ class WorkoutScreen extends StatefulWidget {
       this.templates,
       this.workoutname,
       this.newtemplates,
-      this.exercisecat,
-      this.categoryimages,
-      this.combinedtypesofcategory,
-      this.exercisenames);
+     
+      );
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
@@ -239,11 +234,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       builder: (context) => ExerciseChooseScreen(
                           [],
                           [], //Directly opens exercise choose screen comprising of different exercises
-                          widget.workoutname,
-                          widget.exercisecat,
-                          widget.categoryimages,
-                          widget.combinedtypesofcategory,
-                          widget.exercisenames,
+                          '',
+                          // widget.exercisecat,
+                          // widget.categoryimages,
+                          // widget.combinedtypesofcategory,
+                          // widget.exercisenames,
                           1),
                     ),
                   );
@@ -269,10 +264,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       MaterialPageRoute(
                         builder: (context) => WorkoutTemplateScreen(
                             templateslistall,
-                            widget.exercisecat,
-                            widget.categoryimages,
-                            widget.combinedtypesofcategory,
-                            widget.exercisenames),
+                           // widget.exercisecat,
+                            //widget.categoryimages,
+                            //widget.combinedtypesofcategory,
+                            //widget.exercisenames
+                            ),
                       ),
                     ).then((value) => gettemplates());
                     gettemplates();
@@ -288,10 +284,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               templateslistall,
               templatesdummy,
               widget.workoutname,
-              widget.exercisecat,
-              widget.categoryimages,
-              widget.combinedtypesofcategory,
-              widget.exercisenames,
+              
             )
           ],
         ),
@@ -305,10 +298,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       List<exercise> l,
       List<Map<String, Map<String, dynamic>>> chosenExercises,
       String workoutname,
-      List<Map<String, String>> exercisecat,
-      List<Image> categoryimages,
-      List<String> combinedtypesofcategory,
-      List<String> exercisenames,
+      
       int index) {
     return InkWell(
       child: Container(
@@ -403,10 +393,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 //Open workout screen with respective value from templates stored
                 chosenExercises,
                 templateslistall[index]['name'],
-                exercisecat,
-                categoryimages,
-                combinedtypesofcategory,
-                exercisenames),
+                
+                ),
           ),
         ).then((value) => templatesdummy = []);
       },
@@ -417,10 +405,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     List<Map<String, dynamic>> l,
     List<Map<String, Map<String, dynamic>>> chosenExercises,
     String workoutname,
-    List<Map<String, String>> exercisecat,
-    List<Image> categoryimages,
-    List<String> combinedtypesofcategory,
-    List<String> exercisenames,
+    
   ) {
     return Container(
       child: Expanded(
@@ -437,10 +422,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     l[item]['list'],
                     chosenExercises,
                     workoutname,
-                    exercisecat,
-                    categoryimages,
-                    combinedtypesofcategory,
-                    exercisenames,
+                    
                     item),
                 SizedBox(
                   height: h * 0.02,

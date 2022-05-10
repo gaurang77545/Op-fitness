@@ -17,6 +17,7 @@ import '../../customwidgets/text.dart';
 
 class HistoryTabScreen extends StatefulWidget {
   String workoutname;
+  Records instance;
   // List<Map<String, Map<String, dynamic>>> newtemplates = [];
 
   // List<Map<String, dynamic>> templates = [
@@ -50,9 +51,7 @@ class HistoryTabScreen extends StatefulWidget {
   //   // },
   // ];
 
-  HistoryTabScreen(
-    this.workoutname,
-  );
+  HistoryTabScreen(this.workoutname, this.instance);
   @override
   State<HistoryTabScreen> createState() => _HistoryTabScreenState();
 }
@@ -63,29 +62,11 @@ class _HistoryTabScreenState extends State<HistoryTabScreen>
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
   var instance;
-  // final dbHelper = DatabaseHelper.instance;
-  // List<Map<String, dynamic>> workouthistorylist =
-  //     []; //List of history templates
-  // List<Map<String, Map<String, dynamic>>> historydummy = [];
-  // String exercisecombined = '';
-  // String repweightcombined = '';
-  // String perfcombined = '';
-  // bool loading = true;
+
   @override
   void initState() {
-    // gettemplates();
-    instance = Get.put(Records(widget.workoutname));
-    instance.gettemplates();
-
+    instance = widget.instance;
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // addtemplate(widget.templates);
-    instance.gettemplates();
-
-    super.didChangeDependencies();
   }
 
   @override
@@ -93,7 +74,7 @@ class _HistoryTabScreenState extends State<HistoryTabScreen>
     var size = MediaQuery.of(context).size;
     h = size.height;
     w = size.width;
-    print(instance.workouthistorylist);
+    //print(instance.workouthistorylist);
     return Obx(
       () => Scaffold(
         body: instance.loading.toString() == "true"

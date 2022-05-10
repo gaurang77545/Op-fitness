@@ -11,7 +11,8 @@ import '../../customwidgets/constants.dart';
 
 class ChartTabScreen extends StatefulWidget {
   String workoutname;
-  ChartTabScreen(this.workoutname);
+  Records instance;
+  ChartTabScreen(this.workoutname, this.instance);
 
   @override
   State<ChartTabScreen> createState() => _ChartTabScreenState();
@@ -24,10 +25,7 @@ class _ChartTabScreenState extends State<ChartTabScreen> {
   var instance;
   @override
   void initState() {
-    // gettemplates();
-    instance = Get.put(Records(widget.workoutname));
-    instance.gettemplates();
-
+    instance = widget.instance;
     super.initState();
   }
 
@@ -36,6 +34,7 @@ class _ChartTabScreenState extends State<ChartTabScreen> {
     var size = MediaQuery.of(context).size;
     h = size.height;
     w = size.width;
+
     return Obx(
       () => Scaffold(
         body: instance.loading.toString() == "true"
@@ -43,8 +42,8 @@ class _ChartTabScreenState extends State<ChartTabScreen> {
                 child: CircularProgressIndicator(),
               )
             : Padding(
-              padding:  EdgeInsets.all(Constants.padding),
-              child: SingleChildScrollView(
+                padding: EdgeInsets.all(Constants.padding),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -137,7 +136,7 @@ class _ChartTabScreenState extends State<ChartTabScreen> {
                     ],
                   ),
                 ),
-            ),
+              ),
       ),
     );
   }

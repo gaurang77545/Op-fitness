@@ -13,25 +13,16 @@ import 'package:search_bar_animated/search_bar_animated.dart';
 import '../customwidgets/circleavatarsimple.dart';
 import '../customwidgets/iconbuttonsimple.dart';
 import '../customwidgets/text.dart';
+import '../exercisenamesvalues.dart';
 
 class ExerciseChooseScreen extends StatefulWidget {
   int navig = 0;
   String workoutname = '';
-  List<Map<String, String>> exercisecat = [];
+
   List<Map<String, dynamic>> templates = [];
   List<Map<String, Map<String, dynamic>>> chosenExercises = [];
-  List<Image> categoryimages = [];
-  List<String> exercisenames = [];
-  List<String> combinedtypesofcategory = [];
 
-  ExerciseChooseScreen(
-      this.templates,
-      this.chosenExercises,
-      this.workoutname,
-      this.exercisecat,
-      this.categoryimages,
-      this.combinedtypesofcategory,
-      this.exercisenames,
+  ExerciseChooseScreen(this.templates, this.chosenExercises, this.workoutname,
       [this.navig = 0]);
 
   @override
@@ -44,7 +35,12 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
   double kw = 1 / 392.72727272727275;
   List<Map<String, String>> displayexercisecat = [];
   List<Map<String, Map<String, dynamic>>> chosenExercises = [];
+  List<Image> categoryimages = [];
+  List<String> exercisenames = [];
+  List<String> combinedtypesofcategory = [];
+  List<Map<String, String>> exercisecat = [];
   List<Image> displaycategoryimages = [];
+  List<String> exercisecategories = [];
   List<bool> selected = [];
   String? selectedValue;
   Widget customSearchBar = TextPlain(
@@ -55,10 +51,16 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    ExerciseValues.mapstuff();
+    exercisenames = ExerciseValues.exercisenames;
+    exercisecategories = ExerciseValues.exercisecategories;
+    exercisecat = ExerciseValues.exercisecat;
+    combinedtypesofcategory = ExerciseValues.combinedtypesofcategory;
+    categoryimages = ExerciseValues.categoryimages;
     chosenExercises = widget.chosenExercises;
-    displayexercisecat = List.from(widget.exercisecat);
-    displaycategoryimages = List.from(widget.categoryimages);
-    selected = List.generate(widget.exercisenames.length, (index) => false);
+    displayexercisecat = List.from(exercisecat);
+    displaycategoryimages = List.from(categoryimages);
+    selected = List.generate(exercisenames.length, (index) => false);
     super.initState();
   }
 
@@ -67,10 +69,10 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
     int counter = 0;
     displaycategoryimages = [];
     displayexercisecat = [];
-    for (i in widget.exercisenames) {
+    for (i in exercisenames) {
       if (i.contains(str)) {
-        displaycategoryimages.add(widget.categoryimages[counter]);
-        displayexercisecat.add(widget.exercisecat[counter]);
+        displaycategoryimages.add(categoryimages[counter]);
+        displayexercisecat.add(exercisecat[counter]);
       }
       counter++;
     }
@@ -81,10 +83,10 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
     int counter = 0;
     displaycategoryimages = [];
     displayexercisecat = [];
-    for (i in widget.exercisenames) {
+    for (i in exercisenames) {
       if (i == str) {
-        displaycategoryimages.add(widget.categoryimages[counter]);
-        displayexercisecat.add(widget.exercisecat[counter]);
+        displaycategoryimages.add(categoryimages[counter]);
+        displayexercisecat.add(exercisecat[counter]);
         break;
       }
       counter++;
@@ -109,61 +111,6 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          AnimatedSearchBar(
-            shadow: const [
-              BoxShadow(
-                  color: Colors.black38, blurRadius: 6, offset: Offset(0, 6))
-            ],
-            backgroundColor: Colors.blue[100],
-            failMessage: 'No Items found',
-
-            //hideSearchBoxWhenItemSelected: true,
-            buttonColor: Colors.blue,
-            width: w * 0.55,
-            submitButtonColor: Colors.blue,
-            textStyle: const TextStyle(color: Colors.blue),
-            buttonIcon: const Icon(
-              Icons.search,
-            ),
-            duration: const Duration(milliseconds: 500),
-            submitIcon: const Icon(Icons.close),
-            hintText: '',
-            animationAlignment: AnimationAlignment.left,
-            onSubmit: () {
-              setState(() {
-                value = textController.text;
-              });
-              find(value);
-            },
-            searchList: widget.exercisenames,
-            searchQueryBuilder: (query, list) => list.where((item) {
-              return item!
-                  .toString()
-                  .toLowerCase()
-                  .contains(query.toLowerCase());
-            }).toList(),
-            textController: textController,
-            overlaySearchListItemBuilder: (dynamic item) => Container(
-              padding: EdgeInsets.all(8 * kh * h),
-              child: TextPlain(
-                item,
-                fontSize: 15 * kh * h,
-                color: Colors.black,
-              ),
-            ),
-            onItemSelected: (dynamic item) {
-              setState(() {
-                textController.value = textController.value.copyWith(
-                  text: item.toString(),
-                );
-                value = textController.text;
-
-              
-              });
-              chosen(value);
-            },
-            overlaySearchListHeight: h * 0.5,
-          ),
           SizedBox(
             width: w * 0.01,
           ),
@@ -182,7 +129,7 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
                   ),
                 ],
               ),
-              items: widget.combinedtypesofcategory
+              items: combinedtypesofcategory
                   .map((item) => DropdownMenuItem<String>(
                         value: item,
                         child: TextPlain(
@@ -235,16 +182,80 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         ],
       ),
       body: Padding(
-        padding:  EdgeInsets.all(Constants.padding),
-        child: ListView.builder(
-          itemBuilder: (_, item) {
-            return ExerciseItems(
-                displayexercisecat[item]['name']!,
-                displayexercisecat[item]['type']!,
-                displaycategoryimages[item],
-                item);
-          },
-          itemCount: displayexercisecat.length,
+        padding: EdgeInsets.all(Constants.padding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AnimatedSearchBar(
+              shadow: const [
+                BoxShadow(
+                    color: Colors.black38, blurRadius: 6, offset: Offset(0, 6))
+              ],
+              backgroundColor: Colors.blue[100],
+              failMessage: 'No Items found',
+
+              //hideSearchBoxWhenItemSelected: true,
+              buttonColor: Colors.blue,
+              width: w * 0.55,
+              submitButtonColor: Colors.blue,
+              textStyle: const TextStyle(color: Colors.blue),
+              buttonIcon: const Icon(
+                Icons.search,
+              ),
+              duration: const Duration(milliseconds: 500),
+              submitIcon: const Icon(Icons.close),
+              hintText: '',
+              animationAlignment: AnimationAlignment.left,
+              onSubmit: () {
+                setState(() {
+                  value = textController.text;
+                });
+                find(value);
+              },
+              searchList: exercisenames,
+              searchQueryBuilder: (query, list) => list.where((item) {
+                return item!
+                    .toString()
+                    .toLowerCase()
+                    .contains(query.toLowerCase());
+              }).toList(),
+              textController: textController,
+              overlaySearchListItemBuilder: (dynamic item) => Container(
+                padding: EdgeInsets.all(8 * kh * h),
+                child: TextPlain(
+                  item,
+                  fontSize: 15 * kh * h,
+                  color: Colors.black,
+                ),
+              ),
+              onItemSelected: (dynamic item) {
+                setState(() {
+                  textController.value = textController.value.copyWith(
+                    text: item.toString(),
+                  );
+                  value = textController.text;
+                });
+                chosen(value);
+              },
+              overlaySearchListHeight: h * 0.5,
+            ),
+            SizedBox(
+              height: h * 0.01,
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (_, item) {
+                  return ExerciseItems(
+                      displayexercisecat[item]['name']!,
+                      displayexercisecat[item]['type']!,
+                      displaycategoryimages[item],
+                      item);
+                },
+                itemCount: displayexercisecat.length,
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: chosenExercises.length == 0
@@ -256,25 +267,19 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => StartWorkoutScreen(
-                            chosenExercises,
-                            widget.workoutname,
-                            widget.exercisecat,
-                            widget.categoryimages,
-                            widget.combinedtypesofcategory,
-                            widget.exercisenames)),
+                              chosenExercises,
+                              widget.workoutname,
+                            )),
                   );
                 } else {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddedExerciseScreen(
-                            widget.templates,
-                            chosenExercises,
-                            widget.workoutname,
-                            widget.exercisecat,
-                            widget.categoryimages,
-                            widget.combinedtypesofcategory,
-                            widget.exercisenames)),
+                              widget.templates,
+                              chosenExercises,
+                              widget.workoutname,
+                            )),
                   );
                 }
               },
@@ -332,7 +337,6 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
         });
         if (selected[index] == true) {
           setState(() {
-          
             if (widget.navig == 1) {
               chosenExercises.add({
                 name: {
@@ -353,14 +357,12 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
               });
             }
           });
-      
         }
         if (selected[index] == false) {
           setState(() {
             chosenExercises
                 .removeWhere((element) => element.keys.first == name);
           });
-       
         }
       },
     );
@@ -370,18 +372,18 @@ class _ExerciseChooseScreenState extends State<ExerciseChooseScreen> {
     displaycategoryimages = [];
     displayexercisecat = [];
     if (val == 'All') {
-      displayexercisecat = List.from(widget.exercisecat);
-      displaycategoryimages = List.from(widget.categoryimages);
+      displayexercisecat = List.from(exercisecat);
+      displaycategoryimages = List.from(categoryimages);
       return;
     }
 
     Map<String, String> i;
     int counter = 0;
 
-    for (i in widget.exercisecat) {
+    for (i in exercisecat) {
       if (i['type'] == val) {
-        displaycategoryimages.add(widget.categoryimages[counter]);
-        displayexercisecat.add(widget.exercisecat[counter]);
+        displaycategoryimages.add(categoryimages[counter]);
+        displayexercisecat.add(exercisecat[counter]);
       }
       counter += 1;
     }

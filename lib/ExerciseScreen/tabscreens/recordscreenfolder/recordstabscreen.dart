@@ -9,10 +9,8 @@ import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.da
 
 class RecordTabScreen extends StatefulWidget {
   String workoutname;
- 
-  RecordTabScreen(
-    this.workoutname,
-  );
+  Records instance;
+  RecordTabScreen(this.workoutname, this.instance);
 
   @override
   State<RecordTabScreen> createState() => _RecordTabScreenState();
@@ -26,19 +24,8 @@ class _RecordTabScreenState extends State<RecordTabScreen>
   var instance;
   @override
   void initState() {
-    // gettemplates();
-    instance = Get.put(Records(widget.workoutname));
-    instance.gettemplates();
-
+    instance = widget.instance;
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // addtemplate(widget.templates);
-    instance.gettemplates();
-
-    super.didChangeDependencies();
   }
 
   @override
@@ -46,7 +33,7 @@ class _RecordTabScreenState extends State<RecordTabScreen>
     var size = MediaQuery.of(context).size;
     h = size.height;
     w = size.width;
-
+    instance.gettemplates();
     return Obx(
       () => Scaffold(
           body: instance.loading.toString() == "true"
@@ -54,7 +41,7 @@ class _RecordTabScreenState extends State<RecordTabScreen>
                   child: CircularProgressIndicator(),
                 )
               : RefreshIndicator(
-                  onRefresh: Records(widget.workoutname).gettemplates,
+                  onRefresh: instance.gettemplates,
                   child: Padding(
                     padding: EdgeInsets.all(Constants.padding),
                     child: Column(
@@ -93,7 +80,8 @@ class _RecordTabScreenState extends State<RecordTabScreen>
                                       builder: (context) => RecordHistoryScreen(
                                           widget.workoutname,
                                           instance.maxrepsarr,
-                                          instance.maxweightarr)));
+                                          instance.maxweightarr,
+                                          widget.instance)));
                             },
                             child: TextPlain('VIEW RECORDS HISTORY'),
                           ),
@@ -109,8 +97,8 @@ class _RecordTabScreenState extends State<RecordTabScreen>
                         SizedBox(
                           height: h * 0.01,
                         ),
-                        singledetailrow(
-                            'Total Weight Added', instance.totalweightadded.value),
+                        singledetailrow('Total Weight Added',
+                            instance.totalweightadded.value),
                       ],
                     ),
                   ),
@@ -144,5 +132,3 @@ class _RecordTabScreenState extends State<RecordTabScreen>
 
   bool get wantKeepAlive => true;
 }
-
-

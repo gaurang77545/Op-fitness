@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:op_fitnessapp/ExerciseScreen/tabscreens/abouttabscreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/tabscreens/chartstabscreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/tabscreens/historytabscreen.dart';
 import 'package:op_fitnessapp/ExerciseScreen/tabscreens/recordscreenfolder/recordstabscreen.dart';
 import 'package:op_fitnessapp/customwidgets/text.dart';
+
+import 'tabscreens/recordscreenfolder/recordsclass.dart';
 
 class ExerciseItemScreen extends StatefulWidget {
   //Shows details of each individual exercise upon tap
@@ -19,6 +22,10 @@ class ExerciseItemScreen extends StatefulWidget {
 class _ExerciseItemScreenState extends State<ExerciseItemScreen> {
   @override
   Widget build(BuildContext context) {
+    final instance = Get.put(Records());
+    instance.setworkoutname(widget.name);
+    instance.gettemplates();
+    //print(instance.workouthistorylist);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -36,7 +43,10 @@ class _ExerciseItemScreenState extends State<ExerciseItemScreen> {
                 Icons.arrow_back,
                 color: Colors.black,
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                //  instance.dispose();
+                Navigator.of(context).pop();
+              },
             ),
             backgroundColor: Colors.white,
             bottom: TabBar(
@@ -71,11 +81,9 @@ class _ExerciseItemScreenState extends State<ExerciseItemScreen> {
           body: TabBarView(
             children: [
               AboutTabScreen(instructions: widget.instructions),
-              HistoryTabScreen(
-                widget.name,
-              ),
-              ChartTabScreen(widget.name),
-              RecordTabScreen(widget.name)
+              HistoryTabScreen(widget.name, instance),
+              ChartTabScreen(widget.name,instance),
+              RecordTabScreen(widget.name,instance)
             ],
           ),
         ),

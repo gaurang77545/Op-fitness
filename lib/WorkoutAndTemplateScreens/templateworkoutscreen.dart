@@ -18,19 +18,20 @@ import '../customwidgets/text.dart';
 class TemplateWorkoutScreen extends StatefulWidget {
   List<Map<String, Map<String, dynamic>>> chosenExercises;
   String workoutname;
-  List<Map<String, String>> exercisecat;
+  //List<Map<String, String>> exercisecat;
   //List<Map<String, dynamic>> templates = [];
-  List<Image> categoryimages = [];
-  List<String> exercisenames = [];
-  List<String> combinedtypesofcategory = [];
+  // List<Image> categoryimages = [];
+  // List<String> exercisenames = [];
+  // List<String> combinedtypesofcategory = [];
   TemplateWorkoutScreen(
       //this.templates,
       this.chosenExercises,
       this.workoutname,
-      this.exercisecat,
-      this.categoryimages,
-      this.combinedtypesofcategory,
-      this.exercisenames);
+      // this.exercisecat,
+      // this.categoryimages,
+      // this.combinedtypesofcategory,
+      // this.exercisenames
+      );
   // List<Map<String, Map<String, dynamic>>> chosenExercises = [
   //   {
   //     'Dumbell': {
@@ -53,263 +54,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
   double h = 0.0, w = 0.0;
   double kh = 1 / 759.2727272727273;
   double kw = 1 / 392.72727272727275;
-  List<String> exercisenames = [];
-  List<String> exercisecategories = [
-    'Core',
-    'Cardio',
-    'Shoulders',
-    'Chest',
-    'Back',
-    'Back',
-    'Full body',
-    'Cardio',
-    'Arms',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Arms',
-    'Chest',
-    'Back',
-    'Back',
-    'Back',
-    'Back',
-    'Back',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Core',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Full body',
-    'Chest',
-    'Core',
-    'Arms',
-    'Legs',
-    'Core',
-    'Legs',
-    'Legs',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Back',
-    'Back',
-    'Olympic',
-    'Olympic',
-    'Cardio',
-    'Arms',
-    'Core',
-    'Core',
-    'Core',
-    'Core',
-    'Cardio',
-    'Cardio',
-    'Legs',
-    'Back',
-    'Legs',
-    'Legs',
-    'Olympic',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Core',
-    'Legs',
-    'Cardio',
-    'Shoulders',
-    'Core',
-    'Core',
-    'Chest',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Back',
-    'Legs',
-    'Legs',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Legs',
-    'Olympic',
-    'Olympic',
-    'Core',
-    'Core',
-    'Legs',
-    'Cardio',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Arms',
-    'Back',
-    'Back',
-    'Chest',
-    'Back',
-    'Core',
-    'Cardio',
-    'Olympic',
-    'Legs',
-    'Full body',
-    'Full body',
-    'Full body',
-    'Back',
-    'Core',
-    'Back',
-    'Core',
-    'Back',
-    'Back',
-    'Back',
-    'Back',
-    'Back',
-    'Back',
-    'Legs',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Full body',
-    'Core',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Olympic',
-    'Chest',
-    'Back',
-    'Legs',
-    'Core',
-    'Olympic',
-    'Olympic',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Olympic',
-    'Back',
-    'Back',
-    'Back',
-    'Chest',
-    'Chest',
-    'Shoulders',
-    'Chest',
-    'Chest',
-    'Chest',
-    'Back',
-    'Core',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Arms',
-    'Core',
-    'Back',
-    'Legs',
-    'Cardio',
-    'Cardio',
-    'Cardio',
-    'Core',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Shoulders',
-    'Shoulders',
-    'Arms',
-    'Back',
-    'Back',
-    'Back',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Shoulders',
-    'Back',
-    'Back',
-    'Core',
-    'Core',
-    'Core',
-    'Core',
-    'Legs',
-    'Core',
-    'Cardio',
-    'Cardio',
-    'Arms',
-    'Arms',
-    'Olympic',
-    'Olympic',
-    'Cardio',
-    'Olympic',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Full body',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Legs',
-    'Back',
-    'Legs',
-    'Legs',
-    'Other',
-    'Shoulders',
-    'Back',
-    'Full body',
-    'Core',
-    'Cardio',
-    'Back',
-    'Full body',
-    'Full body',
-    'Core',
-    'Core',
-    'Legs',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Arms',
-    'Back',
-    'Arms',
-    'Shoulders',
-    'Core',
-    'Cardio',
-    'Back',
-    'Arms',
-    'Cardio',
-    'Legs'
-  ];
-  List<Map<String, String>> exercisecat = [];
+  
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<Map<String, Map<String, dynamic>>> chosenExercises = [];
   List<Map<String, dynamic>> templates = [];
@@ -340,7 +85,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
   //     }
   //   }
   // ];
-  List<String> combinedtypesofcategory = [];
+
   String workoutname = '';
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   final _isHours = true;
@@ -351,10 +96,9 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
   @override
   void initState() {
     chosenExercises = widget.chosenExercises;
-    exercisenames = widget.exercisenames;
-    combinedtypesofcategory = widget.combinedtypesofcategory;
+   
     _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-    //templates = widget.templates;
+    
     super.initState();
   }
 
@@ -396,7 +140,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
       DatabaseHelper.workoutname: widget.workoutname,
       DatabaseHelper.columndate: DateTime.now().millisecondsSinceEpoch,
       DatabaseHelper.columnworkouttime: int.parse(currtime)
-      //DatabaseHelper.columnExperience:'Flutter Developer'
+      
     };
 
     final id = await dbHelper.insert(row);
@@ -422,17 +166,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
               addtemplate(templates);
               format(chosenExercises);
               await _insert();
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => WorkoutScreen(
-              //             templates,
-              //             widget.workoutname,
-              //             chosenExercises,
-              //             widget.exercisecat,
-              //             widget.categoryimages,
-              //             widget.combinedtypesofcategory,
-              //             widget.exercisenames)));
+             
             },
             icon: Icon(
               Icons.save,
@@ -489,10 +223,7 @@ class _TemplateWorkoutScreenState extends State<TemplateWorkoutScreen> {
                                 templates,
                                 chosenExercises,
                                 widget.workoutname,
-                                widget.exercisecat,
-                                widget.categoryimages,
-                                widget.combinedtypesofcategory,
-                                widget.exercisenames,
+                             
                                 1)),
                       );
                     },

@@ -2,7 +2,7 @@ import 'package:op_fitnessapp/WorkoutAndTemplateScreens/helpers/workouthelper.da
 import 'package:get/get.dart';
 
 class Records extends GetxController {
-  String workoutname;
+  String workoutname = '';
   final dbHelper = DatabaseHelper.instance;
   List<maxreps> maxrepsarr = <maxreps>[].obs;
   List<maxweight> maxweightarr = <maxweight>[].obs;
@@ -19,10 +19,14 @@ class Records extends GetxController {
   var maxweightvalue = 0.obs;
   var totalreps = 0.obs;
   var totalweightadded = 0.obs;
-  Records(this.workoutname);
+
+  void setworkoutname(String t) {
+    workoutname = t;
+  }
+
   Future<void> gettemplates() async {
     final allRows = await dbHelper.queryAllRows();
-
+    print('WALLLLEEE' + workoutname);
     repweightcombined = '';
     exercisecombined = '';
     workouthistorylist = [];
@@ -69,6 +73,7 @@ class Records extends GetxController {
                           ['reps'],
                       historydummy[i].values.toList()[0]['RepWeight'][j]
                           ['kg']));
+
                   if (historydummy[i].values.toList()[0]['RepWeight'][j]
                           ['reps'] >
                       maxrepscount) {
@@ -85,6 +90,8 @@ class Records extends GetxController {
             }
           }
           historydummy = [];
+          // print('ONONONO');
+          // print(workouthistorylist);
           if (l.isNotEmpty) {
             workouthistorylist.add({
               'name': row['workoutname'],
@@ -114,6 +121,7 @@ class Records extends GetxController {
     maxweightcount();
     // print('TOTAL REPS IS ' + totalreps.toString());
     // print('TOTAL REPS IS ' + totalweightadded.toString());
+    print(workouthistorylist);
   }
 
   List<maxreps> get maxrepsarray {

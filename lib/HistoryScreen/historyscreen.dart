@@ -16,10 +16,10 @@ import '../customwidgets/text.dart';
 class HistoryScreen extends StatefulWidget {
   String workoutname;
   List<Map<String, Map<String, dynamic>>> newtemplates = [];
-  List<Map<String, String>> exercisecat;
-  List<Image> categoryimages = [];
-  List<String> exercisenames = [];
-  List<String> combinedtypesofcategory = [];
+  //List<Map<String, String>> exercisecat;
+ // List<Image> categoryimages = [];
+  //List<String> exercisenames = [];
+ // List<String> combinedtypesofcategory = [];
   List<Map<String, dynamic>> templates = [
     // {Format of stored templates
     //   'name': 'Evening Workout',
@@ -55,10 +55,11 @@ class HistoryScreen extends StatefulWidget {
       this.templates,
       this.workoutname,
       this.newtemplates,
-      this.exercisecat,
-      this.categoryimages,
-      this.combinedtypesofcategory,
-      this.exercisenames);
+      // this.exercisecat,
+      // this.categoryimages,
+      // this.combinedtypesofcategory,
+      // this.exercisenames
+      );
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -300,10 +301,10 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
                       workouthistorylist,
                       historydummy,
                       widget.workoutname,
-                      widget.exercisecat,
-                      widget.categoryimages,
-                      widget.combinedtypesofcategory,
-                      widget.exercisenames,
+                      // widget.exercisecat,
+                      // widget.categoryimages,
+                      // widget.combinedtypesofcategory,
+                      // widget.exercisenames,
                     )
                   ],
                 ),
@@ -319,10 +320,10 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
       List<exercise> l,
       List<Map<String, Map<String, dynamic>>> chosenExercises,
       String workoutname,
-      List<Map<String, String>> exercisecat,
-      List<Image> categoryimages,
-      List<String> combinedtypesofcategory,
-      List<String> exercisenames,
+      // List<Map<String, String>> exercisecat,
+      // List<Image> categoryimages,
+      // List<String> combinedtypesofcategory,
+      // List<String> exercisenames,
       int index) {
     return InkWell(
       child: Container(
@@ -426,10 +427,10 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
     List<Map<String, dynamic>> l,
     List<Map<String, Map<String, dynamic>>> chosenExercises,
     String workoutname,
-    List<Map<String, String>> exercisecat,
-    List<Image> categoryimages,
-    List<String> combinedtypesofcategory,
-    List<String> exercisenames,
+    // List<Map<String, String>> exercisecat,
+    // List<Image> categoryimages,
+    // List<String> combinedtypesofcategory,
+    // List<String> exercisenames,
   ) {
     return Container(
       child: Expanded(
@@ -448,10 +449,10 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
                     l[item]['list'],
                     chosenExercises,
                     workoutname,
-                    exercisecat,
-                    categoryimages,
-                    combinedtypesofcategory,
-                    exercisenames,
+                    // exercisecat,
+                    // categoryimages,
+                    // combinedtypesofcategory,
+                    // exercisenames,
                     item),
                 SizedBox(
                   height: h * 0.02,
